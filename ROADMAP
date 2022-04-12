@@ -1,0 +1,50 @@
+Goals
+=====
+
++ Provide a software toolbox for use in the global management of the
+  radio-frequency spectrum and satellite orbits following ITU-R
+  recommendations
+
++ Provide open and transparent source code
+
++ Encourage peer review and community contributions
+
+
+Features
+========
+
++ Object orientation
+
++ Complete code documentation
+
++ Relevant external documentation
+
++ Comprehensive examples in main() methods
+
++ Complete test coverage
+
++ Multiple languages
+
+
+Backlog
+=======
+
+2014-08-26: Include Java version of SGP4
+
+
+To Do
+=====
+
+2014-08-26: Populate catalog using space-track.org API
+2014-08-26: Re-factor antenna patterns as classes
+2014-08-26: Map ITU database to classes and populate using ITU Ingres API
+
+
+Doing
+=====
+
+2014-08-26: Collect relevant documentation: regulation, recommendations, etc.
+
+
+Done
+====
