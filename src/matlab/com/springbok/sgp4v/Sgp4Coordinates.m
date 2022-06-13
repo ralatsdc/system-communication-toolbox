@@ -1,3 +1,18 @@
+% Copyright (C) 2022 Springbok LLC
+% 
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or (at
+% your option) any later version.
+% 
+% This program is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <https://www.gnu.org/licenses/>.
+% 
 classdef (Sealed = true) Sgp4Coordinates
 % Provides transformations between coordinate systems. The
 % following acronyms are used:
@@ -18,8 +33,6 @@ classdef (Sealed = true) Sgp4Coordinates
 % 
 % Author: Raymond LeClair
   
-% Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
-
   methods (Static = true)
     
     function r_ltp = gei2ltp(r_gei, sensor, dNm)
