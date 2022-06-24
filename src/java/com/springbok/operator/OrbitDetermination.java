@@ -13,16 +13,17 @@ General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.springbok.center;
+package com.springbok.operator;
 
 import java.io.Serializable;
 import java.util.EnumSet;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import Jama.Matrix;
 import com.celestrak.sgp4v.SatElsetException;
 import com.celestrak.sgp4v.ValueOutOfRangeException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.springbok.sgp4v.Sgp4Orbit;
 import com.springbok.twobody.Coordinates;
@@ -34,9 +35,7 @@ import com.springbok.twobody.ModJulianDate;
 @SuppressWarnings("serial")
 public class OrbitDetermination implements Serializable {
 
-	private static Logger logger = Logger.getLogger("com.springbok.center.OrbitDetermination");
-
-
+	public static Logger logger = LogManager.getLogger(OrbitDetermination.class.getName());
 
 	/**
 	 * Represents the result of a line search operation performed as part of a
@@ -84,7 +83,7 @@ public class OrbitDetermination implements Serializable {
 		/**
 		 * Constructs the result of an orbit determination operation.
 		 *
-		 * @param kepOrb
+		 * @param estOrb
 		 *            The orbit determined by the operation
 		 * @param status
 		 *            The status of the operation
@@ -324,7 +323,7 @@ public class OrbitDetermination implements Serializable {
 	public static DeterminationResult docNumerical(EstimatedOrbit popOrbP, ModJulianDate[] obs_dNm, Matrix[] obs_gei,
 			String option) throws SatElsetException, ValueOutOfRangeException {
 
-		logger.logp(Level.FINE, "OperationsCenter", "docNumerical", "== in ==");
+		logger.debug("== in ==");
 
 		EstimatedOrbit popOrbC = null;
 		String status = "differential correction diverged";
@@ -355,8 +354,7 @@ public class OrbitDetermination implements Serializable {
 
 		double cur_time_offset = (popOrb_ip1.get_M() - popOrb_i.get_M()) / popOrb_i.meanMotion();
 
-		logger.logp(Level.INFO, "OperationsCenter", "docNumerical",
-				String.format("Time offset ip1-i: %f (s) - nItn: %d", cur_time_offset, nItn));
+		logger.warn(String.format("Time offset ip1-i: %f (s) - nItn: %d", cur_time_offset, nItn));
 
 		/*
 		 * Continue to apply differential corrections until the mean anomaly is
@@ -370,7 +368,7 @@ public class OrbitDetermination implements Serializable {
 		while (Math.abs(cur_time_offset) > SimulationConstants.max_time_diff) {
 			nItn += 1;
 			if (nItn > SimulationConstants.max_iteration) {
-				logger.logp(Level.INFO, "OperationsCenter", "docNumerical", "Maximum iterations exceeded.");
+				logger.info("Maximum iterations exceeded.");
 				status = "maximum iterations exceeded";
 				break;
 			}
@@ -379,8 +377,7 @@ public class OrbitDetermination implements Serializable {
 				min_sSq = cur_sSq;
 
 			} else {
-				logger.logp(Level.INFO, "OperationsCenter", "docNumerical",
-						String.format("Differential correction diverging (%d).", nItn));
+				logger.info(String.format("Differential correction diverging (%d).", nItn));
 				if (popOrb_i instanceof KeplerianOrbit) {
 					popOrbC = new KeplerianOrbit((KeplerianOrbit) popOrb_i);
 				} else if (popOrb_i instanceof Sgp4Orbit) {
@@ -403,8 +400,7 @@ public class OrbitDetermination implements Serializable {
 
 			cur_time_offset = (popOrb_ip1.get_M() - popOrb_i.get_M()) / popOrb_i.meanMotion();
 
-			logger.logp(Level.INFO, "OperationsCenter", "docNumerical",
-					String.format("Time offset ip1-i: %f (s) - nItn: %d", cur_time_offset, nItn));
+			logger.info(String.format("Time offset ip1-i: %f (s) - nItn: %d", cur_time_offset, nItn));
 		}
 		popOrbC = popOrb_ip1;
 		return new DeterminationResult(popOrbC, status);
@@ -444,9 +440,9 @@ public class OrbitDetermination implements Serializable {
 	 *            Date numbers of measured position
 	 * @param obs_gei
 	 *            Measured geocentric equatorial inertial position
-	 * @param option
-	 *            The numerical technique used: 'Levenberg-Marquardt' or
-	 *            'Guass-Newton'
+	 * @param ctnRes
+     *            Result of a differential correction operation.
+     *
 	 * @return Line search result
 	 * @throws ValueOutOfRangeException
 	 * @throws SatElsetException
@@ -493,15 +489,15 @@ public class OrbitDetermination implements Serializable {
 	 * corresponding elements of the Jacobian, and the resulting differential
 	 * correction.
 	 * 
-	 * @param option
-	 *            The numerical technique used: 'Levenberg-Marquardt' or
-	 *            'Guass-Newton'
 	 * @param popOrb_i
 	 *            The orbit at step i
 	 * @param obs_dNm
 	 *            Date numbers of measured position
 	 * @param obs_gei
 	 *            Measured geocentric equatorial intertial position
+     * @param ctnRes
+     *            Result of a differential correction operation.
+     *
 	 * @throws ValueOutOfRangeException
 	 * @throws SatElsetException
 	 */

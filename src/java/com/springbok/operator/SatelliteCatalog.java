@@ -13,7 +13,7 @@ General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.springbok.center;
+package com.springbok.operator;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -29,8 +29,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Locale;
-import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.springbok.twobody.EarthConstants;
 import com.springbok.twobody.ModJulianDate;
@@ -38,7 +39,7 @@ import com.springbok.twobody.ModJulianDate;
 @SuppressWarnings("serial")
 public class SatelliteCatalog implements Serializable {
 
-	private static Logger logger = Logger.getLogger("com.springbok.center.OperationsCenter");
+	public static Logger logger = LogManager.getLogger(SatelliteCatalog.class.getName());
 
 	/**
 	 * Represents a two line element set.
@@ -339,7 +340,7 @@ public class SatelliteCatalog implements Serializable {
 					// throw new
 					// DataFormatException("Line 1 and 2 object numbers
 					// disagree.");
-					logger.warning("Line 1 and 2 object numbers disagree.");
+					logger.warn("Line 1 and 2 object numbers disagree.");
 				}
 
 				double i = Double.parseDouble(lineTwo.substring(8, 16));
@@ -462,7 +463,7 @@ public class SatelliteCatalog implements Serializable {
 		try {
 			writer = Files.newBufferedWriter(file, charset);
 		} catch (IOException e) {
-			logger.warning(e.getMessage());
+			logger.warn(e.getMessage());
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -528,7 +529,7 @@ public class SatelliteCatalog implements Serializable {
 		try {
 			writer.close();
 		} catch (IOException e) {
-			logger.warning(e.getMessage());
+			logger.warn(e.getMessage());
 			e.printStackTrace();
 			System.exit(1);
 		}

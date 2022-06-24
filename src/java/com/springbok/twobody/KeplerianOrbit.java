@@ -16,10 +16,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.springbok.twobody;
 
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import com.springbok.center.SimulationConstants;
+import com.springbok.operator.SimulationConstants;
 
 import Jama.Matrix;
 
@@ -32,7 +32,7 @@ import Jama.Matrix;
 @SuppressWarnings("serial")
 public class KeplerianOrbit implements Orbit, TwoBodyOrbit, EstimatedOrbit, Serializable {
 
-	private static Logger logger = Logger.getLogger("com.synterein.twobody.KeplerianOrbit");
+	public static Logger logger = LogManager.getLogger(KeplerianOrbit.class.getName());
 
 	/** Semi-major axis [er] */
 	private double a;
@@ -393,8 +393,7 @@ public class KeplerianOrbit implements Orbit, TwoBodyOrbit, EstimatedOrbit, Seri
 
 		// Alert the user if numerical precision issues might occur
 		if (this.e < 0.001) {
-			logger.logp(Level.WARNING, "KeplerianOrbit", "element_set",
-					"Method works poorly for eccentricity less than 0.001");
+			logger.warn("Method works poorly for eccentricity less than 0.001");
 		}
 
 		// Compute the areal velocity vector

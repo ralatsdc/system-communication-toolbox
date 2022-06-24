@@ -19,8 +19,6 @@ import com.springbok.utility.PatternUtility;
 
 import java.util.Map;
 
-import static com.springbok.utility.PatternUtility.warning;
-
 /**
  * Describes the ITU antenna pattern SRR_403V01.
  */
@@ -102,20 +100,15 @@ public class PatternSRR_403V01 implements SpacePattern, ReceivePattern {
 		double G0 = this.GainMax - 12 * Math.pow(phi_over_phi0, 2);
 		double G1 = this.GainMax - 17.5 - 25 * Math.log10(phi_over_phi0);
 
-		double G = PatternUtility.acceptOptionalValue(G0, 0 <= phi_over_phi0 && phi_over_phi0 < 1.3)
-				+ PatternUtility.acceptOptionalValue(G1, 1.3 <= phi_over_phi0);
-
+		double G = 0 <= phi_over_phi0 && phi_over_phi0 < 1.3 ? G0 : G1;
 		double Gx0 = this.GainMax - 30 - 12 * Math.pow(phi_over_phi0, 2);
 		double Gx1 = this.GainMax - 33;
 
-		double phix = Math.max(eps, phi_over_phi0 - 1);
-		double Gx2 = this.GainMax - 40 - 40 * Math.log10(phix);
+        double phix = Math.max(eps, phi_over_phi0 - 1);
+        double Gx2 = this.GainMax - 40 - 40 * Math.log10(phix);
+        double Gx = 0 <= phi_over_phi0 && phi_over_phi0 <= 0.5 ? Gx0 : 0.5 < phi_over_phi0 && phi_over_phi0 <= 1.67 ? Gx1 : Gx2;
 
-		double Gx = PatternUtility.acceptOptionalValue(Gx0, 0 <= phi_over_phi0 && phi_over_phi0 <= 0.5)
-				+ PatternUtility.acceptOptionalValue(Gx1, 0.5 < phi_over_phi0 && phi_over_phi0 <= 1.67)
-				+ PatternUtility.acceptOptionalValue(Gx2, 1.67 < phi_over_phi0);
-
-		// Apply "flooring" for absolute gain pattern.
+        // Apply "flooring" for absolute gain pattern.
 		if (absolute_pattern) {
 			G = Math.max(0, G);
 			Gx = Math.max(0, Gx);
@@ -124,7 +117,7 @@ public class PatternSRR_403V01 implements SpacePattern, ReceivePattern {
 
 		// Validate low level rules.
 		if (this.GainMax < 30 && absolute_pattern) {
-			warning("Springbok:InvalidResult", "GainMax is less than 30.");
+			PatternUtility.logger.warn("Springbok:InvalidResult", "GainMax is less than 30.");
 		}
 
 		// Validate output parameters.

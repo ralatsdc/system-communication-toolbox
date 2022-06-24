@@ -58,81 +58,7 @@ public class LinkTest {
 
     @Before
     public void setUp() throws ObjectDecayed {
-  /*      // = Wanted system
-        System wantedSystem = Gso_gso.getWntGsoSystem();
-        wantedSystem.assignBeams(0, 0, wantedSystem.getdNm(), new HashMap());
-
-        EarthStation earthStationA = wantedSystem.getNetworks()[0].getEarthStation();
-        SpaceStation spaceStationA = wantedSystem.getNetworks()[0].getSpaceStation();
-        Beam spaceStationBeam = wantedSystem.getNetworks()[0].getSpaceStationBeam();
-
-        earthStationA.set_doMultiplexing(true);
-        spaceStationBeam.set_multiplicity(2);
-
-        EarthStation earthStationB = new EarthStation(
-                earthStationA.getStationId(),
-                earthStationA.getTransmitAntenna(),
-                earthStationA.getReceiveAntenna(),
-                earthStationA.getEmission(),
-                earthStationA.getBeam(),
-                earthStationA.get_varphi(),
-                earthStationA.get_lambda(),
-                earthStationA.doMultiplexing());
-
-
-        EarthStation[] wsesp = Arrays.copyOf(wantedSystem.getEarthStations(), wantedSystem.getEarthStations().length + 1);
-        wsesp[wsesp.length - 1] = earthStationB;
-        wantedSystem.set_earthStations(wsesp);
-
-        wantedSystem.reset();
-
-        wantedSystem.assignBeams(0, 0, wantedSystem.getdNm(), new HashMap());
-    java.lang.System.out.println(333);
-        // = Interfering system
-
-        interferingSystem = Gso_gso.getIntGsoSystem();
-
-        interferingSystem.assignBeams(0, 0, interferingSystem.getdNm(), new HashMap());
-
-        earthStationA = interferingSystem.getNetworks()[0].getEarthStation();
-        spaceStationA = interferingSystem.getNetworks()[0].getSpaceStation();
-        spaceStationBeam = interferingSystem.getNetworks()[0].getSpaceStationBeam();
-
-        earthStationA.set_doMultiplexing(true);
-        spaceStationBeam.set_multiplicity(2);
-
-        earthStationB = new EarthStation(
-                earthStationA.getStationId(),
-                earthStationA.getTransmitAntenna(),
-                earthStationA.getReceiveAntenna(),
-                earthStationA.getEmission(),
-                earthStationA.getBeam(),
-                earthStationA.get_varphi(),
-                earthStationA.get_lambda(),
-                earthStationA.doMultiplexing());
-    java.lang.System.out.println(444);
-        wsesp = Arrays.copyOf(interferingSystem.getEarthStations(), interferingSystem.getEarthStations().length + 1);
-        wsesp[wsesp.length - 1] = earthStationB;
-        interferingSystem.set_earthStations(wsesp);
-
-        interferingSystem.reset();
-
-        interferingSystem.assignBeams(0, 0, interferingSystem.getdNm(), new HashMap());
-
-        // Assign inputs
-
-        transmitStation = wantedSystem.getSpaceStations()[0];
-        transmitStationBeam = wantedSystem.getSpaceStations()[0].getBeams()[0];
-        receiveStation = wantedSystem.getEarthStations()[0];
-        losses = new Object[0];
-
-        // Compute derived properties
-        this.link = new Link(this.transmitStation,
-                this.transmitStationBeam,
-                this.receiveStation,
-                this.losses,
-                new HashMap()
-        );*/
+        // TODO: Complete
     }
 
     /**
@@ -140,45 +66,13 @@ public class LinkTest {
      */
     @Test
     public void test_Link() {
-        Assert.assertEquals(this.link.getTransmitStation(), this.transmitStation);
-        Assert.assertEquals(this.link.getTransmitStationBeam(), this.transmitStationBeam);
-        Assert.assertEquals(this.link.getReceiveStation(), this.receiveStation);
-        Assert.assertEquals(this.link.getLosses(), this.losses);
-        Assert.assertEquals(this.link.isDoCheck(), true);
+        // TODO: Complete
     }
 
-    /*
     public void test_computePerformance() {
-    performance_expected = Performance(-183.7920554531003 - 10 * log10(2),
-                                             -206.8382560925405,
-                                             [-220.4414417558061; -220.4414417558061],
-                                             -217.4311417991658,
-                                             [-172.7123681232581; -172.7123681232581],
-                                             -169.7020681666177);
+        // TODO: Complete
+    }
 
-          warning("off");
-          performance_actual = this.link.computePerformance(
-              this.dNm, this.interferingSystem, 1, 1, this.ref_bw);
-          warning("on");
-
-          t = [];
-          t = [t; abs(performance_actual.C - performance_expected.C) < this.MEDIUM_PRECISION];
-          t = [t; abs(performance_actual.N - performance_expected.N) < this.MEDIUM_PRECISION];
-          t = [t; abs(performance_actual.i - performance_expected.i) < this.MEDIUM_PRECISION];
-          t = [t; abs(performance_actual.I - performance_expected.I) < this.MEDIUM_PRECISION];
-          t = [t; abs(performance_actual.epfd - performance_expected.epfd) < this.MEDIUM_PRECISION];
-          t = [t; abs(performance_actual.EPFD - performance_expected.EPFD) < this.MEDIUM_PRECISION];
-
-          this.assert_true(
-              "Link",
-              "computePerformance",
-              this.MEDIUM_PRECISION_DESC,
-              min(t));
-
-        end         // test_computePerformance()
-
-        }
-*/
     @Test
     public void test_computeDistance() {
         double[][] r_one = new double[3][1];
@@ -395,12 +289,16 @@ public class LinkTest {
         Assert.assertTrue(Math.abs(angle.getAzimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
         Assert.assertTrue(Math.abs(angle.getElevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
     }
-    //TODO: Test function [idxVisES, idxVisSS, r_ger_SS] = findIdxVisEStoSS(earthStations, spaceStations, dNm)
-    //TODO: Test function [idxVisSS_A, idxVisSS_B, r_ger_SS_A, r_ger_SS_B] = findIdxVisSStoSS(spaceStationsA, spaceStationsB, dNm)
-    //TODO: Test function is = isEmpty(this)
-/*
-public Gain findIdxVisEStoSS(double earthStations, double spaceStations, double dNm) { 
 
-}
-*/
+    public void test_findIdxVisEStoSS() {
+        // TODO: Complete
+    }
+    
+    public void test_findIdxVisSStoSS() {
+        // TODO: Complete
+    }
+
+    public void test_isEmpty() {
+        // TODO: Complete
+    }
 }
