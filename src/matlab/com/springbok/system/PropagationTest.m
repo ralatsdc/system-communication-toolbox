@@ -87,24 +87,14 @@ classdef PropagationTest < TestUtility
       FL_045_expected = 32.0;
       FL_050_expected = 35.0;
       FL_090_expected = 35.0;
-      % FL_130_expected = 35.0;
-      % FL_140_expected = 29.0;
-      % FL_145_expected = 26.0;
-      % FL_165_expected = 10.0;
-      % FL_175_expected =  5.0;
 
-      FL_005_actual = Propagation.computeFuselageLoss(5);
-      FL_010_actual = Propagation.computeFuselageLoss(10);
-      FL_025_actual = Propagation.computeFuselageLoss(25);
-      FL_035_actual = Propagation.computeFuselageLoss(35);
+      FL_005_actual = Propagation.computeFuselageLoss(85);
+      FL_010_actual = Propagation.computeFuselageLoss(80);
+      FL_025_actual = Propagation.computeFuselageLoss(65);
+      FL_035_actual = Propagation.computeFuselageLoss(55);
       FL_045_actual = Propagation.computeFuselageLoss(45);
-      FL_050_actual = Propagation.computeFuselageLoss(50);
-      FL_090_actual = Propagation.computeFuselageLoss(90);
-      % FL_130_actual = Propagation.computeFuselageLoss(130);
-      % FL_140_actual = Propagation.computeFuselageLoss(140);
-      % FL_145_actual = Propagation.computeFuselageLoss(145);
-      % FL_165_actual = Propagation.computeFuselageLoss(165);
-      % FL_175_actual = Propagation.computeFuselageLoss(175);
+      FL_050_actual = Propagation.computeFuselageLoss(40);
+      FL_090_actual = Propagation.computeFuselageLoss(0);
 
       t = [];
       t = [t; isequal(FL_005_actual, FL_005_expected)];
@@ -114,11 +104,6 @@ classdef PropagationTest < TestUtility
       t = [t; isequal(FL_045_actual, FL_045_expected)];
       t = [t; isequal(FL_050_actual, FL_050_expected)];
       t = [t; isequal(FL_090_actual, FL_090_expected)];
-      % t = [t; isequal(FL_130_actual, FL_130_expected)];
-      % t = [t; isequal(FL_140_actual, FL_140_expected)];
-      % t = [t; isequal(FL_145_actual, FL_145_expected)];
-      % t = [t; isequal(FL_165_actual, FL_165_expected)];
-      % t = [t; isequal(FL_175_actual, FL_175_expected)];
 
       this.assert_true( ...
           'Propagaton', ...
@@ -129,6 +114,23 @@ classdef PropagationTest < TestUtility
     end % test_computeFuselageLoss()
 
     % TODO: Test function building_loss = computeBuildingLoss( ...
+
+    function test_computeGaseousAttenuation(this)
+
+      GA_expected = 11.037328106150719;
+
+      GA_actual = Propagation.computeGaseousAttenuation(100.0, 28000.0);
+
+      t = [];
+      t = [t; abs(GA_actual - GA_expected) < this.HIGH_PRECISION];
+
+      this.assert_true( ...
+          'Propagaton', ...
+          'computeGaseousAttenuation', ...
+          this.HIGH_PRECISION_DESC, ...
+          min(t));
+
+    end % test_computeGaseousAttenuation()
 
   end % methods
 

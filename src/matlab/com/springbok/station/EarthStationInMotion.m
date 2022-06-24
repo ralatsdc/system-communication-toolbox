@@ -190,7 +190,7 @@ classdef EarthStationInMotion < Station
       this.lambda = lambda * pi / 180;  % [rad] = [deg] * [rad/deg]
       this.h = h / 3280.84 / EarthConstants.R_oplus;  % [er] = [ft] / [ft/km] / [km/er]
 
-    end % set_start_point()
+    end % set_start_waypoint()
 
     function add_stop_waypoint(this, speed, varphi, lambda, h, varargin);
     % Adds a waypoint at the end of the track. Note that standard
@@ -278,7 +278,7 @@ classdef EarthStationInMotion < Station
       this.lambda = [this.lambda, lambda];
       this.h = [this.h, h];
 
-    end % add_stop_point()
+    end % add_stop_waypoint()
 
     function set_dNm_s(this, dNm_s)
     % Set date numbers at which the position vector are specified.

@@ -53,17 +53,25 @@ classdef Propagation < handle
 
     end % computeSpreadingLoss()
 
-    function fuselage_loss = computeFuselageLoss(angle)
+    function fuselage_loss = computeFuselageLoss(angle_from_nadir)
     % Computes fuselage loss based on ITU-R Document 4A/??.
     %
     % Parameters
-    %   angle - Angle from local horizontal
+    %   angle_from_nadir - Angle from nadir
     %
     % Returns
     %   fuselage_loss - Fuselage loss [dB]
-      if angle < 0 || angle > 90
+
+      % Angle from local horizontal, positive underneath fuselage
+      angle = 90 - angle_from_nadir;
+      if angle < 0
+        % Above the fuslage
+        fuselage_loss = 0;
+        return;
+
+      elseif angle > 90
         MEx = MException('Springbok:IllegalArgumentException', ...
-                         'Angle from local horizontal must be between 0 and 90 inclusive');
+                         sprintf('Unexpected angle > 90'));
         throw(MEx);
 
       end % if
@@ -71,10 +79,7 @@ classdef Propagation < handle
           = (4 + (6 - 4) / (10 - 0) * (angle - 0)) * (angle < 10) ...
           + (6 + (26 - 6) / (35 - 10) * (angle - 10)) * (angle >= 10 && angle < 35) ...
           + (26 + (35 - 26) / (50 - 35) * (angle - 35)) * (angle >= 35 && angle < 50) ...
-          + (35) * (angle >= 50 && angle < 130) ...
-          + (35 + (35 - 26) / (130 - 145) * (angle - 130)) * (angle >= 130 && angle < 145) ...
-          + (26 + (26 - 6) / (145 - 170) * (angle - 145)) * (angle >= 145 && angle < 170) ...
-          + (6 + (6 - 4) / (170 - 180) * (angle - 170)) * (angle >= 170);
+          + (35) * (angle >= 50 && angle <= 90);
 
     end % computeFuselageLoss()
 
@@ -202,6 +207,24 @@ classdef Propagation < handle
       end % switch
 
     end % computeBuildingLoss()
+
+    function gaseous_attenuation = computeGaseousAttenuation(distance, frequency)
+    % Computes gaseous attenuation.
+    %
+    % Parameters
+    %   distance - propagation distances [km]
+    %   frequency - signal carrier frequency [MHz]
+    %
+    % Returns
+    %   gaseous_attenuation [dB]
+      distance = distance * 10^3;  % [m]
+      frequency = frequency * 10^6;  % [Hz]
+      temperature = 15;  % Air temperature [Celsius]
+      pressure = 101300.0;  % Dry air pressure [Pa]
+      density = 7.5;  % Water vapour density [g/m^3]
+      gaseous_attenuation = gaspl(distance, frequency, temperature, pressure, density);
+
+    end % computeGaseousAttenuation()
 
   end % methods (Static = true)
 

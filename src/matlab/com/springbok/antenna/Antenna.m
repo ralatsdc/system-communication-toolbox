@@ -38,7 +38,7 @@ classdef Antenna < handle
   
   methods
     
-    function this = Antenna(name, gain)
+    function this = Antenna(name, gain, varargin)
     % Constructs an Antenna.
     %
     % Parameters
@@ -51,14 +51,23 @@ classdef Antenna < handle
         
       end % if
 
+      % Parse variable input arguments
+      p = inputParser;
+      p.addParamValue('FeederLoss', 0);
+      p.addParamValue('BodyLoss', 0);
+      p.addParamValue('NoiseT', NaN);
+      p.addParamValue('XLtp', []);
+      p.addParamValue('ZLtp', []);
+      p.parse(varargin{:});
+
       % Assign properties
       this.set_name(name);
       this.set_gain(gain);
-      this.set_feeder_loss(0);
-      this.set_body_loss(0);
-      this.set_noise_t(NaN);
-      this.set_x_ltp([]);
-      this.set_z_ltp([]);
+      this.set_feeder_loss(p.Results.FeederLoss);
+      this.set_body_loss(p.Results.BodyLoss);
+      this.set_noise_t(p.Results.NoiseT);
+      this.set_x_ltp(p.Results.XLtp);
+      this.set_z_ltp(p.Results.ZLtp);
 
     end % Antenna()
 
@@ -132,7 +141,7 @@ classdef Antenna < handle
         throw(MEx)
 
       end % if
-      this.x_ltp = x_ltp;
+      this.x_ltp = x_ltp / sqrt(x_ltp' * x_ltp);
 
     end % set_x_ltp()
 
@@ -147,7 +156,7 @@ classdef Antenna < handle
         throw(MEx)
 
       end % if
-      this.z_ltp = z_ltp;
+      this.z_ltp = z_ltp / sqrt(z_ltp' * z_ltp);
 
     end % set_z_ltp()
 

@@ -18,7 +18,7 @@ classdef System < handle
 
   properties (Constant)
 
-    valid_losses = {'fuselage-loss'}
+    valid_losses = {'fuselage-loss', 'gaseous-attenuation'}
 
   end % properties (Constant)
     
