@@ -13,7 +13,7 @@ keyboard;
 
 pool = gcp;
 
-example.Simulate();
+simulate_gso_leo.Simulate();
 pause(1);
 close all
 

@@ -22,8 +22,8 @@ resulting directory and add the toolbox to the MATLAB search path:
 
 Run the example simulation and plot the results:
 
->> example.Simulate;
->> example.Plot;
+>> simulate_gso_leo.Simulate;
+>> simulate_gso_leo.Plot;
 
 Run the tests in a directory:
 
