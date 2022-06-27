@@ -1,6 +1,17 @@
 % Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
 
 function Plot(runLabel, wantedSystem, interferingSystem, upPerformance, isPerformance, dnPerformance)
+% Plot GSO Earth station receive and LEO space station transmit gain
+% patterns, EPFD up, inter-satellite, and down with Article 22 limits.
+%
+% Parameters
+%   wantedSystem - Wanted GSO system
+%   interferingSystem - Interfering LEO system
+%   upPerformance - Wanted system uplink performance
+%   isPerformance - Wanted system uplink performance in the presence
+%     of interfering system inter-satellite links
+%   dnPerformance - Wanted system downlink performance
+%   assignments - Interfering system beam assignments
 
   % Define Colors
   light_yellow = [254, 209,   0] / 256;

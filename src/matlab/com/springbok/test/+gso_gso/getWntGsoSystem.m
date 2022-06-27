@@ -1,6 +1,10 @@
 % Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
 
 function system = getWntGsoSystem()
+% Defines the wanted GSO system
+%
+% Returns
+%   system - The wanted GSO system
   
   % == Simulation constants
 

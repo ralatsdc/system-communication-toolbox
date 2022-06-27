@@ -1,6 +1,13 @@
 % Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
 
 function spaceStations = getIntLeoSpaceSegment(epoch_0)
+% Defines the interfering LEO space segments.
+%
+% Parameters
+%   epoch_0 - The epoch of the space station orbits
+%
+% Returns
+%   spaceStations - The space stations of the interfering LEO system
   
   % == Space stations
   

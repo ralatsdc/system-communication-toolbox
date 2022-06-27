@@ -1,6 +1,13 @@
 % Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
 
 function spaceStation = getWntGsoSpaceSegment(epoch_0)
+% Defines the wanted GSO space segment.
+%
+% Parameters
+%   epoch_0 - The epoch of the space station orbit
+%
+% Returns
+%   spaceStation - the space station of the wanted GSO system
   
   % == Space station
 

@@ -1,6 +1,13 @@
 % Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
 
 function earthStation = getWntGsoEarthSegment(spaceStation)
+% Defines the wanted GSO Earth segment.
+%
+% Parameters
+%   spaceStation - the space station of the wanted GSO system
+%
+% Returns
+%   earthStation - the Earth station of the wanted GSO system
   
   % == Earth station
   

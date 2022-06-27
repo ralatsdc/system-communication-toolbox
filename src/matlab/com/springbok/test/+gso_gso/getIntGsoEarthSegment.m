@@ -1,7 +1,15 @@
 % Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
 
 function earthStation = getIntGsoEarthSegment(varphi, lambda)
-  
+% Defines the interfering GSO Earth segment.
+%
+% Parameters
+%   varphi - Geodetic latitude of the Earth station [rad]
+%   lambda - Geodectic longitude of the Earth station [rad]
+%
+% Returns
+%   earthStation - The Earth station of the interfering GSO system
+    
   % = Interfering system
   
   % == Earth station

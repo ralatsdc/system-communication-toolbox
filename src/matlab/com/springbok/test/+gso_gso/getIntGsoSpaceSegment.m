@@ -1,6 +1,13 @@
 % Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
 
 function spaceStation = getIntGsoSpaceSegment(epoch_0)
+% Defines the interfering GSO space segment.
+%
+% Parameters
+%   epoch_0 - The epoch of the space station orbit
+%
+% Returns
+%   spaceStation - The space station of the interfering GSO system
   
   % = Interfering system
   

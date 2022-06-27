@@ -1,9 +1,10 @@
 % Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
 
 function [wantedSystem, interferingSystem] = getSystems()
-  
+% Defines the wanted GSO and interfering LEO systems
+
   % Assign simulation constants
-  
+
   epoch_0 = datenum(2014, 10, 20, 19, 5, 0); % Epoch date number
   
   % Define the wanted system

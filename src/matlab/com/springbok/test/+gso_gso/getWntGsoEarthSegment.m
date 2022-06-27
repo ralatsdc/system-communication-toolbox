@@ -1,6 +1,14 @@
 % Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
 
 function earthStation = getWntGsoEarthSegment(varphi, lambda)
+% Defines the wanted GSO Earth segment.
+%
+% Parameters
+%   varphi - Geodetic latitude of the Earth station [rad]
+%   lambda - Geodectic longitude of the Earth station [rad]
+%
+% Returns
+%   earthStation - The Earth station of the wanted GSO system
   
   % = Wanted system
   

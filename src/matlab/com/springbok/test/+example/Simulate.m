@@ -1,7 +1,22 @@
 % Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
 
 function [wantedSystem, interferingSystem, upPerformance, isPerformance, dnPerformance, assignments] = Simulate(doPlot)
-
+% Compute the uplink, inter-satellite, and downlink performance of a
+% wanted GSO system in the presence of an interfering LEO
+% constellation.
+%
+% Parameters
+%   doPlot - Flag to indicate plotting, or not
+%
+% Returns
+%   wantedSystem - Wanted GSO system
+%   interferingSystem - Interfering LEO system
+%   upPerformance - Wanted system uplink performance
+%   isPerformance - Wanted system uplink performance in the presence
+%     of interfering system inter-satellite links
+%   dnPerformance - Wanted system downlink performance
+%   assignments - Interfering system beam assignments
+    
   if nargin < 1
     doPlot = 1;
 

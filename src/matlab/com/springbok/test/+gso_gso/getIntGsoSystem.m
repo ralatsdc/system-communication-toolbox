@@ -1,6 +1,10 @@
 % Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
 
 function system = getIntGsoSystem()
+% Defines the interfering GSO system
+%
+% Returns
+%   system - The interfering GSO system
   
   % == Simulation constants
 

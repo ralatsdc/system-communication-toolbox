@@ -1,6 +1,13 @@
 % Copyright (C) 2016 Springbok LLC <http://springbok.io/> All rights reserved.
 
 function earthStations = getIntLeoEarthSegment(spaceStation)
+% Defines the interfering LEO Earth segments.
+%
+% Parameters
+%   spaceStation - The space station of the wanted GSO system
+%
+% Returns
+%   earthStations - The Earth stations of the interfering LEO system
   
   % = Interfering system
     
