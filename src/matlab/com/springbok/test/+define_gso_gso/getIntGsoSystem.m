@@ -16,7 +16,7 @@ function system = getIntGsoSystem()
   
   % == Space station
   
-  spaceStation = gso_gso.getIntGsoSpaceSegment(epoch_0);
+  spaceStation = define_gso_gso.getIntGsoSpaceSegment(epoch_0);
   
   % == Earth station
   
@@ -27,7 +27,7 @@ function system = getIntGsoSystem()
   varphi = 20.0 * pi / 180; % Geodetic latitude [rad]
   lambda = lla(2);          % Longitude [rad]
   
-  earthStation = gso_gso.getIntGsoEarthSegment(varphi, lambda);
+  earthStation = define_gso_gso.getIntGsoEarthSegment(varphi, lambda);
   
   % = Interfering system
   

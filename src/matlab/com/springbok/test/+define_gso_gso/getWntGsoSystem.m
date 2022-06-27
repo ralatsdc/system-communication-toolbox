@@ -16,7 +16,7 @@ function system = getWntGsoSystem()
   
   % == Space station
   
-  spaceStation = gso_gso.getWntGsoSpaceSegment(epoch_0);
+  spaceStation = define_gso_gso.getWntGsoSpaceSegment(epoch_0);
   
   % == Earth station
   
@@ -27,7 +27,7 @@ function system = getWntGsoSystem()
   varphi = 10.0 * pi / 180; % Geodetic latitude [rad]
   lambda = lla(2);          % Longitude [rad]
   
-  earthStation = gso_gso.getWntGsoEarthSegment(varphi, lambda);
+  earthStation = define_gso_gso.getWntGsoEarthSegment(varphi, lambda);
   
   % = Wanted system
   

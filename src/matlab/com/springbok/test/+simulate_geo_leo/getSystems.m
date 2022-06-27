@@ -9,8 +9,8 @@ function [wantedSystem, interferingSystem] = getSystems()
   
   % Define the wanted system
   
-  wantedSpaceStation = example.getWntGsoSpaceSegment(epoch_0);
-  wantedEarthStation = example.getWntGsoEarthSegment(wantedSpaceStation);
+  wantedSpaceStation = simulate_gso_leo.getWntGsoSpaceSegment(epoch_0);
+  wantedEarthStation = simulate_gso_leo.getWntGsoEarthSegment(wantedSpaceStation);
   
   losses = {};
   
@@ -19,8 +19,8 @@ function [wantedSystem, interferingSystem] = getSystems()
   
   % Define the interfering system
   
-  interferingSpaceStations = example.getIntLeoSpaceSegment(epoch_0);
-  interferingEarthStations = example.getIntLeoEarthSegment(wantedSpaceStation);
+  interferingSpaceStations = simulate_gso_leo.getIntLeoSpaceSegment(epoch_0);
+  interferingEarthStations = simulate_gso_leo.getIntLeoEarthSegment(wantedSpaceStation);
   
   losses = {};
   

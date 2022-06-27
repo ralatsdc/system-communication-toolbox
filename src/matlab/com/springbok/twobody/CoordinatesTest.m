@@ -165,7 +165,7 @@ classdef CoordinatesTest < TestUtility
       varphi = -22.239166666666666; % Geodetic latitude [rad]
       lambda = 114.0836111111111;   % Longitude [rad]
       
-      earthStation = gso_gso.getWntGsoEarthSegment(varphi, lambda);
+      earthStation = define_gso_gso.getWntGsoEarthSegment(varphi, lambda);
       
     end % setUp()
 

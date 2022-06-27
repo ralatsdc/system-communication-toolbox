@@ -37,7 +37,7 @@ function [wantedSystem, interferingSystem, upPerformance, isPerformance, dnPerfo
   ref_bw = 40; % Article 22 reference bandwith [kHz]
   
   % Construct systems
-  [wantedSystem, interferingSystem] = example.getSystems();
+  [wantedSystem, interferingSystem] = simulate_gso_leo.getSystems();
   
   % Assign a run label
   runLabel = input('Enter a run label [yyyy-mm-dd-HHMMSS]: ');
@@ -100,7 +100,7 @@ function [wantedSystem, interferingSystem, upPerformance, isPerformance, dnPerfo
   save(sprintf('mat/simulation-example-%s.mat', runLabel));
 
   if doPlot
-    example.Plot(runLabel, wantedSystem, interferingSystem, upPerformance, isPerformance, dnPerformance);
+    simulate_gso_leo.Plot(runLabel, wantedSystem, interferingSystem, upPerformance, isPerformance, dnPerformance);
 
   end % if
 

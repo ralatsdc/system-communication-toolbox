@@ -86,13 +86,13 @@ classdef SystemTest < TestUtility
 
       % = Wanted system
 
-      wantedSystem = gso_gso.getWntGsoSystem();
+      wantedSystem = define_gso_gso.getWntGsoSystem();
 
       wantedSystem.assignBeams([], [], wantedSystem.dNm);
 
       % = Interfering system
 
-      interferingSystem = gso_gso.getIntGsoSystem();
+      interferingSystem = define_gso_gso.getIntGsoSystem();
 
       interferingSystem.assignBeams([], [], interferingSystem.dNm);
 
@@ -134,7 +134,7 @@ classdef SystemTest < TestUtility
     
     function test_copy(this)
 
-      wantedSystemOne = gso_gso.getWntGsoSystem();
+      wantedSystemOne = define_gso_gso.getWntGsoSystem();
       
       wantedSystemTwo = wantedSystemOne.copy();
       
@@ -430,7 +430,7 @@ classdef SystemTest < TestUtility
 
       C_expected =  -157.8181333616310 - 10 * log10(2);
 
-      wantedSystem = gso_gso.getWntGsoSystem();
+      wantedSystem = define_gso_gso.getWntGsoSystem();
 
       wantedSystem.assignBeams([], [], wantedSystem.dNm);
 
@@ -469,7 +469,7 @@ classdef SystemTest < TestUtility
 
       I_expected = -197.6363768430820;
 
-      interferingSystem = gso_gso.getIntGsoSystem();
+      interferingSystem = define_gso_gso.getIntGsoSystem();
 
       interferingSystem.assignBeams([], [], interferingSystem.dNm);
 
@@ -547,7 +547,7 @@ classdef SystemTest < TestUtility
 
       C_expected = -183.7920554531003 - 10 * log10(2);
 
-      wantedSystem = gso_gso.getWntGsoSystem();
+      wantedSystem = define_gso_gso.getWntGsoSystem();
 
       wantedSystem.assignBeams([], [], wantedSystem.dNm);
 
@@ -587,7 +587,7 @@ classdef SystemTest < TestUtility
 
       I_expected = -217.4311417991658;
 
-      interferingSystem = gso_gso.getIntGsoSystem();
+      interferingSystem = define_gso_gso.getIntGsoSystem();
 
       interferingSystem.assignBeams([], [], interferingSystem.dNm);
 
@@ -665,7 +665,7 @@ classdef SystemTest < TestUtility
 
     function test_reset(this)
 
-      wantedSystemOne = gso_gso.getWntGsoSystem();
+      wantedSystemOne = define_gso_gso.getWntGsoSystem();
       
       wantedSystemTwo = wantedSystemOne.copy();
       
