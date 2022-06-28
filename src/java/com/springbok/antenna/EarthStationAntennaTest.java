@@ -39,7 +39,7 @@ public class EarthStationAntennaTest {
 	/**
 	 * Antenna pattern
 	 */
-	private static final EarthPattern PATTERN = new PatternELUX201V01();
+	private static final EarthPattern PATTERN = new PatternELUX201V01(GAIN);
 	/**
 	 * Antenna noise temperature [K]
 	 */

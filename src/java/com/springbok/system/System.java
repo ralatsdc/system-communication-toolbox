@@ -23,18 +23,22 @@ import com.springbok.station.SpaceStation;
 import com.springbok.twobody.EarthConstants;
 import com.springbok.twobody.ModJulianDate;
 import com.springbok.utility.MException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import static com.springbok.system.SystemUtils.randperm;
-import static com.springbok.utility.PatternUtility.warning;
 
 /**
  * Manages a set of networks.
  */
 public class System {
+
+    public static Logger logger = LogManager.getLogger(System.class.getName());
 
     // An Earth station array
     private EarthStation[] earthStations;
@@ -143,16 +147,12 @@ public class System {
      * @param spaceStations       A space station array
      * @param losses              Propagation loss models to apply
      * @param dNm                 Current date number
-     * @param TestAngleFromGsoArc Flag for avoiding GSO arc (default is
-     *                            1)
-     * @param AngleFromGsoArc     Angle for avoiding GSO arc [deg] (default
-     *                            is 10)
-     * @param TestAngleFromZenith Flag for avoiding low passes (default
-     *                            is 1)
-     * @param AngleFromZenith     Angle for avoiding low passes [deg]
-     *                            (default is 60)
+     * @param options             Map of options containing:
+     *                                TestAngleFromGsoArc Flag for avoiding GSO arc (default is 1)
+     *                                AngleFromGsoArc     Angle for avoiding GSO arc [deg] (default is 10)
+     *                                TestAngleFromZenith Flag for avoiding low passes (default is 1)
+     *                                AngleFromZenith     Angle for avoiding low passes [deg] (default is 60)
      */
-
     public System(EarthStation[] earthStations, SpaceStation[] spaceStations, Object[] losses, ModJulianDate dNm, Map options) {
         // Assign properties
         this.set_earthStations(earthStations);
@@ -339,10 +339,10 @@ public class System {
      * @param idxSelES Index of Earth stations selected for assignment
      * @param numSmpSS Number of samples of selected space stations
      * @param dNm      Date number of assignment
-     * @param Method   Method for assigning space to Earth stations:
-     *                 'MaxElv', 'MaxSep', 'MinSep', 'Random' (default is
-     *                 'MaxElv')
-     * @param DoCheck  Flag for checking input values (default is 1)
+     * @param options  Map of options containing:
+     *                     Method   Method for assigning space to Earth stations:
+     *                         'MaxElv', 'MaxSep', 'MinSep', 'Random' (default is 'MaxElv')
+     *                     DoCheck  Flag for checking input values (default is 1)
      * @return Beam assignment instance
      */
     public Assignment assignBeams(int[] idxSelES, int numSmpSS, ModJulianDate dNm, Map options) {
@@ -561,8 +561,7 @@ public class System {
 
         //Check the number of networks
         if (nNet != idxSelES.length) {
-            warning("Springbok:UnassignedStations",
-                    "The number of networks and selected Earth stations are not equal");
+            logger.warn("The number of networks and selected Earth stations are not equal");
         }
 
         //Create assignment, and set properties, for return
@@ -591,7 +590,8 @@ public class System {
      *                   cells high
      * @param numSmpBm   Number of samples of space station beams to
      *                   assign
-     * @param DoCheck    Flag for checking input values (default is 1)
+     * @param options    Map of options containing:
+     *                       DoCheck    Flag for checking input values (default is 1)
      */
     public void assignBeamsFromHigh(ModJulianDate dNm, Map<String, Object> cellsHigh, System systemHigh, int numSmpBm, Map options) {
         // Assign current date number

@@ -83,7 +83,7 @@ classdef LinkTest < TestUtility
       
       % = Wanted system
 
-      wantedSystem = gso_gso.getWntGsoSystem();
+      wantedSystem = define_gso_gso.getWntGsoSystem();
 
       wantedSystem.assignBeams([], [], wantedSystem.dNm);
 
@@ -112,7 +112,7 @@ classdef LinkTest < TestUtility
 
       % = Interfering system
 
-      interferingSystem = gso_gso.getIntGsoSystem();
+      interferingSystem = define_gso_gso.getIntGsoSystem();
 
       interferingSystem.assignBeams([], [], interferingSystem.dNm);
 
@@ -422,7 +422,7 @@ classdef LinkTest < TestUtility
 
     function test_computeAnglesForRecM2101_0(this)
 
-      wantedSystem = gso_gso.getWntGsoSystem();
+      wantedSystem = define_gso_gso.getWntGsoSystem();
 
       wantedSystem.assignBeams([], [], wantedSystem.dNm);
 

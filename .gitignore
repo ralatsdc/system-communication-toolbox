@@ -3,6 +3,7 @@
 *.mat
 *.nav
 *.out
+*.pdf
 *.snm
 *.toc
 *.vrb
@@ -16,5 +17,3 @@ src/java/com/Test/
 bin/
 jar/
 profile_results_*/
-system-planning-toolbox-*
-src/matlab/com/springbok/simulation/*/*.pdf

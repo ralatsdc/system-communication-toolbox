@@ -200,6 +200,8 @@ classdef Link < handle
     % Options
     %   PlDs - Polarization discrimination [dB]
     %     (optional, default is 0)
+    %   FuselageLossOffset - Fuselage loss offset [dB]
+    %     (optional, default is 0)
     %   DoIS - Flag for computing up link performance in the presence
     %     of inter-satellite interference (optional, default is 0)
     %   DoIE - Flag for computing link performance in the presence of
@@ -233,13 +235,15 @@ classdef Link < handle
       p.addParamValue('DoIS', 0);
       p.addParamValue('DoIE', 0);
       p.addParamValue('DoRI', 0);
+      p.addParamValue('DoScan', 1);
       p.addParamValue('FuselageLossOffset', 0);
       p.parse(varargin{:});
       PlDs = TypeUtility.set_numeric(p.Results.PlDs);
       doIS = TypeUtility.set_numeric(p.Results.DoIS);
       doIE = TypeUtility.set_numeric(p.Results.DoIE);
       doRI = TypeUtility.set_numeric(p.Results.DoRI);
-      fuselageLossOffset = TypeUtility.set_numeric(p.Results.FuselageLossOffset);
+      doScan = TypeUtility.set_numeric(p.Results.DoScan);
+      FsL_offset = TypeUtility.set_numeric(p.Results.FuselageLossOffset);
       if doIS && doIE
         MEx = MException('Springbok:IllegalArgumentException', ...
                          'Only one of IS and IE case can be specified');
@@ -398,8 +402,15 @@ classdef Link < handle
       elseif isa(trnStn_w.transmitAntenna.pattern, 'PatternERECM2101_0')
         [phi_t_w, theta_t_w, psi_t_w] = Link.computeAnglesForRecM2101_0( ...
             dNm, trnStn_w, trnStn_w.transmitAntenna, trnStn_w_r_ger, rcvStn_w_r_ger);
-        G_t_w_0 = trnStn_w.transmitAntenna.pattern.gain( ...
-            phi_t_w, theta_t_w, phi_t_w, psi_t_w);
+        if doScan
+          G_t_w_0 = trnStn_w.transmitAntenna.pattern.gain( ...
+              phi_t_w, theta_t_w, phi_t_w, psi_t_w);
+
+        else
+          G_t_w_0 = trnStn_w.transmitAntenna.pattern.gain( ...
+              phi_t_w, theta_t_w, 0, 0);
+
+        end % if
 
       else
         G_t_w_0 = trnStn_w.transmitAntenna.pattern.gain( ...
@@ -415,8 +426,15 @@ classdef Link < handle
       elseif isa(rcvStn_w.receiveAntenna.pattern, 'PatternERECM2101_0')
         [phi_r_w, theta_r_w, psi_r_w] = Link.computeAnglesForRecM2101_0( ...
             dNm, rcvStn_w, rcvStn_w.receiveAntenna, rcvStn_w_r_ger, trnStn_w_r_ger);
-        G_r_w_0 = rcvStn_w.transmitAntenna.pattern.gain( ...
-            phi_r_w, theta_r_w, phi_r_w, psi_r_w);
+        if doScan
+          G_r_w_0 = rcvStn_w.transmitAntenna.pattern.gain( ...
+              phi_r_w, theta_r_w, phi_r_w, psi_r_w);
+
+          else
+            G_r_w_0 = rcvStn_w.transmitAntenna.pattern.gain( ...
+                phi_r_w, theta_r_w, 0, 0);
+
+        end % if
 
       else
         G_r_w_0 = rcvStn_w.receiveAntenna.pattern.gain( ...
@@ -456,11 +474,12 @@ classdef Link < handle
         psi_r_w_s = NaN;
         G_t_i = NaN;
         FsL_t_i = NaN;
+        GA_t_i = NaN;
         PL_i = NaN;
         G_r_w = NaN;
 
       end % if
-      
+
       % Consider each interfering network
       i = -Inf;
       I = -Inf;
@@ -489,8 +508,15 @@ classdef Link < handle
                 dNm, trnStns_i(iNet), trnStns_i(iNet).transmitAntenna, trnStns_i_r_ger{iNet}, rcvStn_w_r_ger);
             [phi_t_i_s(iNet), theta_t_i_s, psi_t_i_s(iNet)] = Link.computeAnglesForRecM2101_0( ...
                 dNm, trnStns_i(iNet), trnStns_i(iNet).transmitAntenna, trnStns_i_r_ger{iNet}, rcvStns_i_r_ger{iNet});
-            G_t_i(iNet) = trnStns_i(iNet).transmitAntenna.pattern.gain( ...
-                phi_t_i_o(iNet), theta_t_i_o(iNet), phi_t_i_s(iNet), psi_t_i_s(iNet));
+            if doScan
+              G_t_i(iNet) = trnStns_i(iNet).transmitAntenna.pattern.gain( ...
+                  phi_t_i_o(iNet), theta_t_i_o(iNet), phi_t_i_s(iNet), psi_t_i_s(iNet));
+
+            else
+              G_t_i(iNet) = trnStns_i(iNet).transmitAntenna.pattern.gain( ...
+                  phi_t_i_o(iNet), theta_t_i_o(iNet), 0, 0);
+
+            end % if
 
           else
             theta_t_i(iNet) = Link.computeAngleBetweenVectors( ...
@@ -504,7 +530,11 @@ classdef Link < handle
           if ismember('fuselage-loss', this.losses)
             theta_t_i_f(iNet) = System.computeAngleFromNadir(rcvStn_w_r_ger, trnStns_i_r_ger{iNet});
             FsL_t_i(iNet) = max( ...
-                0, Propagation.computeFuselageLoss(90 - theta_t_i_f(iNet)) + fuselageLossOffset);
+                0, Propagation.computeFuselageLoss(theta_t_i_f(iNet)) + FsL_offset);
+
+          end % if
+          if ismember('gaseous-attenuation', this.losses)
+            GA_t_i(iNet) = Propagation.computeGaseousAttenuation(d_i_w(iNet), f_i(iNet));
 
           end % if
           SL_i_w(iNet) = Propagation.computeSpreadingLoss(d_i_w(iNet));
@@ -519,8 +549,15 @@ classdef Link < handle
                 dNm, rcvStn_w, rcvStn_w.receiveAntenna, rcvStn_w_r_ger, trnStns_i_r_ger{iNet});
             [phi_r_w_s(iNet), theta_r_w_s, psi_r_w_s(iNet)] = Link.computeAnglesForRecM2101_0( ...
                 dNm, rcvStn_w, rcvStn_w.receiveAntenna, rcvStn_w_r_ger, trnStn_w_r_ger);
-            G_r_w(iNet) = rcvStn_w.transmitAntenna.pattern.gain( ...
-                phi_r_w_o(iNet), theta_r_w_o(iNet), phi_r_w_s(iNet), psi_r_w_s(iNet));
+            if doScan
+              G_r_w(iNet) = rcvStn_w.transmitAntenna.pattern.gain( ...
+                  phi_r_w_o(iNet), theta_r_w_o(iNet), phi_r_w_s(iNet), psi_r_w_s(iNet));
+
+            else
+              G_r_w(iNet) = rcvStn_w.transmitAntenna.pattern.gain( ...
+                  phi_r_w_o(iNet), theta_r_w_o(iNet), 0, 0);
+
+            end % if
 
           else
             theta_r_w(iNet) = Link.computeAngleBetweenVectors( ...
@@ -537,8 +574,15 @@ classdef Link < handle
                   phi_t_i(iNet), 0, phi_t_i(iNet), trnStns_i(iNet).transmitAntenna.options{:});
 
             elseif isa(trnStns_i(iNet).transmitAntenna.pattern, 'PatternERECM2101_0')
-              G_t_i_0(iNet) = trnStn_w.transmitAntenna.pattern.gain( ...
-                  phi_t_i_o(iNet), theta_t_i_o(iNet), phi_t_i_s(iNet), theta_t_i_s);
+              if doScan
+                G_t_i_0(iNet) = trnStn_w.transmitAntenna.pattern.gain( ...
+                    phi_t_i_o(iNet), theta_t_i_o(iNet), phi_t_i_s(iNet), theta_t_i_s);
+
+              else
+                G_t_i_0(iNet) = trnStn_w.transmitAntenna.pattern.gain( ...
+                    phi_t_i_o(iNet), theta_t_i_o(iNet), 0, 0);
+
+              end % if
 
             else
               G_t_i_0(iNet) = trnStns_i(iNet).transmitAntenna.pattern.gain( ...
@@ -562,6 +606,10 @@ classdef Link < handle
             i(iNet) = i(iNet) - FsL_t_i(iNet);
 
           end % if
+          if ismember('gaseous-attenuation', this.losses)
+            i(iNet) = i(iNet) - GA_t_i(iNet);
+
+          end % if
           i(iNet) = i(iNet) - PL_i(iNet) + G_r_w(iNet) - FdL_r_w(iNet) - BdL_r_w(iNet) - PlDs;
           i(iNet) = i(iNet) - ML_i(iNet) - DCL_i(iNet);  % Due to multiplexing and dutycycle
           i(iNet) = i(iNet) + 10 * log10(numSmpES * numSmpBm);  % Due to sampling
@@ -571,6 +619,10 @@ classdef Link < handle
           epfd(iNet) = PwDn_i(iNet) + G_t_i(iNet) - FdL_t_i(iNet);
           if ismember('fuselage-loss', this.losses)
             epfd(iNet) = epfd(iNet) - FsL_t_i(iNet);
+
+          end % if
+          if ismember('gaseous-attenuation', this.losses)
+            epfd(iNet) = epfd(iNet) - GA_t_i(iNet);
 
           end % if
           epfd(iNet) = epfd(iNet) - SL_i_w(iNet) + G_r_w(iNet) - FdL_r_w(iNet) - PlDs - G_r_w_0 + 10 * log10(ref_bw * 1000);
@@ -598,6 +650,7 @@ classdef Link < handle
         results.psi_r_w_s = psi_r_w_s;
         results.G_t_i = G_t_i;
         results.FsL_t_i = FsL_t_i;
+        results.GA_t_i = GA_t_i;
         results.PL_i = PL_i;
         results.G_r_w = G_r_w;
 
@@ -852,9 +905,13 @@ classdef Link < handle
 
         for iES = 1:nES
           r_ger_ES = earthStations(iES).compute_r_ger(dNm);
+
+          alpha = acosd(1 / (1 + earthStations(iES).h));
+          beta = Link.computeAngleBetweenVectors([0; 0; 0], r_ger_S{iS}, r_ger_ES);
           theta = System.computeAngleFromZenith(r_ger_S{iS}, r_ger_ES);
 
-          if theta < 90
+          if beta < alpha ...  % Visible on the ground and up
+                || theta < 90 + alpha  % Visible if above the tangent line
             tmpVisES(iES) = iES;
             tmpVisS(iES) = iS;
 

@@ -1,29 +1,37 @@
-                     System Planning Toolbox
+                   System Communication Toolbox
 
-The System Planning Toolbox performs the engineering analysis required
-for the coordination of communication networks under national and
-international regulatory criteria with a focus on the
+The system communication toolbox performs the engineering analysis
+required for the coordination of communication networks under national
+and international regulatory criteria with a focus on the
 Radiocommunication Sector Space Services.
 
-The System Planning Toolbox is implemented in MATLAB, and as such, a
-license for MATLAB is required to use the toolbox. No other toolboxes
-provided by The Mathworks are, however, required for calculating
-equivalent power flux density (EPFD) up, down, and inter-satellite for
-comparison with Article 22 limits.
+The system communicaiton toolbox is implemented in MATLAB, and as
+such, a license for MATLAB is required to use the toolbox. No other
+toolboxes provided by The Mathworks are, however, required for
+calculating equivalent power flux density (EPFD) up, down, and
+inter-satellite for comparison with Article 22 limits. Test coverage
+is quite complete.
+
+The system communication toolbox is also immplemented in Java,
+however, some features, and test coverage is incomplete. Contributions
+welcome!
 
 Toolbox and relevant ITU documentation can be found in the "doc"
-directory, and an example simulation script can be found in the
-"src/matlab/com/springbok/simulation/+example" directory.
+directory, and example simulation scripts can be found in the
+"src/matlab/com/springbok/test" directory.
 
 To use the package, unzip the archive, then in MATLAB, navigate to the
 resulting directory and add the toolbox to the MATLAB search path:
 
 >> addpath(genpath(‘src/matlab’);
 
-Run the example simulation and plot the results:
+Run the example simulations and plot the results:
 
->> example.Simulate;
->> example.Plot;
+>> MatlabExamples;
+
+Run the test suite:
+
+>> MatlabTestSuite;
 
 Run the tests in a directory:
 

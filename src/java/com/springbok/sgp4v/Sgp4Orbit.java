@@ -26,8 +26,8 @@ import com.celestrak.sgp4v.Sgp4Data;
 import com.celestrak.sgp4v.Sgp4Unit;
 import com.celestrak.sgp4v.ValueOutOfRangeException;
 
-import com.springbok.center.OrbitDetermination;
-import com.springbok.center.SatelliteCatalog;
+import com.springbok.operator.OrbitDetermination;
+import com.springbok.operator.SatelliteCatalog;
 import com.springbok.twobody.EstimatedOrbit;
 import com.springbok.twobody.EarthConstants;
 import com.springbok.twobody.KeplerianOrbit;

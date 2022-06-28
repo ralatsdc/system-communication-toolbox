@@ -51,7 +51,7 @@ public class SpaceStationTest {
             "transmit", 50, 1, new PatternSRR_405V01(3));
     // Receive antenna gain, pattern, and noise temperature
     private final EarthStationAntenna receiveAntenna = new EarthStationAntenna(
-            "transmit", 50, 1, new PatternELUX201V01());
+            "transmit", 50, 1, new PatternELUX201V01(50));
 
     // Signal power, frequency, and requirement
     private final Emission emission = new Emission(design_emi, pwr_ds_max, pwr_ds_min, freq_mhz, c_to_n, pwr_flx_ds);

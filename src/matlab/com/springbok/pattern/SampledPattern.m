@@ -88,7 +88,7 @@ classdef SampledPattern < EarthPattern & SpacePattern & TransmitPattern & Receiv
     % Parameters:
     %   None
 
-      data = load(this.patternFNm);
+      load(this.patternFNm, "data");
 
       this.phi = data.steered_angles;
       azimuth = data.azs;

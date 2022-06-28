@@ -17,7 +17,7 @@ package com.springbok.twobody;
 
 import java.io.Serializable;
 
-import com.springbok.center.SimulationConstants;
+import com.springbok.operator.SimulationConstants;
 
 import Jama.Matrix;
 
