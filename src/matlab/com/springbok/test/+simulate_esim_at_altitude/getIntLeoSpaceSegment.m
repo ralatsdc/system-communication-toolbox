@@ -10,11 +10,11 @@ function spaceStations = getIntLeoSpaceSegment(epoch_0)
 %   spaceStations - The space stations of the interfering LEO system
 
   % = Interfering system
-  
+
   % == Space stations
-  
+
   % === Transmit pattern
-  
+
   % Maximum antenna gain [dB]
   GainMax = NaN;
   % Cross-sectional half-power beamwidth, degrees

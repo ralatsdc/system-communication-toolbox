@@ -15,14 +15,11 @@ function [wantedUserEquipmentLink, wantedBaseStationLink, userEquipment, baseSta
 %   baseStation - The wanted base station of the terrestrial network
 
   % Define the wanted user equipment and base station
-
   userEquipment = simulate_esim_at_altitude.getWntTerUserEquipment();  % Transmit station
   baseStation = simulate_esim_at_altitude.getWntTerBaseStation();  % Receive station
 
   % Define the links of the terrestrial network
-  
   losses = {'fuselage-loss'};
-
   wantedUserEquipmentLink = Link(baseStation, baseStation.beam, userEquipment, losses, 'doCheck', doCheck);
   wantedBaseStationLink = Link(userEquipment, userEquipment.beam, baseStation, losses, 'doCheck', doCheck);
 

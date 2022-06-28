@@ -153,7 +153,7 @@ classdef SystemTest < TestUtility
 
     function test_assignBeams_by_maximum_elevation_without_multiplexing(this)
 
-      [wantedSystem, interferingSystem] = gso_leo.getSystems();
+      [wantedSystem, interferingSystem] = define_gso_leo.getSystems();
 
       wantedSystem.assignBeams([], [], wantedSystem.dNm);
       interferingSystem.assignBeams([], [], interferingSystem.dNm);
@@ -200,7 +200,7 @@ classdef SystemTest < TestUtility
 
     function test_assignBeams_randomly(this)
 
-      [wantedSystem, interferingSystem] = gso_leo.getSystems();
+      [wantedSystem, interferingSystem] = define_gso_leo.getSystems();
 
       wantedSystem.assignBeams([], [], wantedSystem.dNm);
       interferingSystem.assignBeams([], [], interferingSystem.dNm);
@@ -258,7 +258,7 @@ classdef SystemTest < TestUtility
 
     function test_assignBeams_by_maximum_separation(this)
 
-      [wantedSystem, interferingSystem] = gso_leo.getSystems();
+      [wantedSystem, interferingSystem] = define_gso_leo.getSystems();
 
       wantedSystem.assignBeams([], [], wantedSystem.dNm);
       interferingSystem.assignBeams([], [], interferingSystem.dNm, 'method', 'maxsep');
@@ -301,7 +301,7 @@ classdef SystemTest < TestUtility
 
     function test_assignBeams_by_minimum_separation(this)
 
-      [wantedSystem, interferingSystem] = gso_leo.getSystems();
+      [wantedSystem, interferingSystem] = define_gso_leo.getSystems();
 
       wantedSystem.assignBeams([], [], wantedSystem.dNm);
       interferingSystem.assignBeams([], [], interferingSystem.dNm, 'method', 'minsep');
@@ -348,7 +348,7 @@ classdef SystemTest < TestUtility
 
     function test_assignBeams_by_maximum_elevation_with_multiplexing(this)
 
-      [wantedSystem, interferingSystem] = gso_leo.getSystems();
+      [wantedSystem, interferingSystem] = define_gso_leo.getSystems();
 
       wantedSystem.assignBeams([], [], wantedSystem.dNm);
       interferingSystem.assignBeams([], [], interferingSystem.dNm);
@@ -633,7 +633,7 @@ classdef SystemTest < TestUtility
 
     function test_apply(this)
 
-      [wantedSystemOne, interferingSystemOne] = gso_leo.getSystems();
+      [wantedSystemOne, interferingSystemOne] = define_gso_leo.getSystems();
 
       wantedAssignment = wantedSystemOne.assignBeams([], [], wantedSystemOne.dNm);
       

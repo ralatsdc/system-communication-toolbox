@@ -6,7 +6,7 @@ function userEquipment = getWntTerUserEquipment()
 % Returns
 %   userEquipment - The user equipment of the wanted terrestrial
 %     network
-    
+
   % = Wanted system
 
   % == Earth station

@@ -2,7 +2,7 @@
 
 function [wantedUserEquipmentLink, wantedBaseStationLink, interferingSystem, ...
           assignments, uePerformance, bsPerformance] = Simulate(h_start, fuselage_loss_offset)
-% Simulate terrestrial network performance in the presences on an
+% Simulate terrestrial network performance in the presence of an
 % interfering LEO system with an ESIM at altitude.
 %
 % Parameters
