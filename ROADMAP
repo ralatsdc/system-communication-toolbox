@@ -29,22 +29,4 @@ Features
 Backlog
 =======
 
-2014-08-26: Include Java version of SGP4
-
-
-To Do
-=====
-
-2014-08-26: Populate catalog using space-track.org API
-2014-08-26: Re-factor antenna patterns as classes
-2014-08-26: Map ITU database to classes and populate using ITU Ingres API
-
-
-Doing
-=====
-
-2014-08-26: Collect relevant documentation: regulation, recommendations, etc.
-
-
-Done
-====
++ Complete the Java system package and tests
