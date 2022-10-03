@@ -1,9 +1,11 @@
-                   System Communication Toolbox
+# System Communication Toolbox
 
 The system communication toolbox performs the engineering analysis
 required for the coordination of communication networks under national
 and international regulatory criteria with a focus on the
 Radiocommunication Sector Space Services.
+
+## Implementation
 
 The system communicaiton toolbox is implemented in MATLAB, and as
 such, a license for MATLAB is required to use the toolbox. No other
@@ -16,26 +18,32 @@ The system communication toolbox is also immplemented in Java,
 however, some features, and test coverage is incomplete. Contributions
 welcome!
 
+## Documentation
+
 Toolbox and relevant ITU documentation can be found in the "doc"
 directory, and example simulation scripts can be found in the
 "src/matlab/com/springbok/test" directory.
 
+## Using the toolbox
+
 To use the package, unzip the archive, then in MATLAB, navigate to the
 resulting directory and add the toolbox to the MATLAB search path:
 
->> addpath(genpath(‘src/matlab’);
+`>> addpath(genpath(‘src/matlab’);`
 
 Run the example simulations and plot the results:
 
->> MatlabExamples;
+`>> MatlabExamples;`
 
 Run the test suite:
 
->> MatlabTestSuite;
+`>> MatlabTestSuite;`
 
 Run the tests in a directory:
 
->> TestUtility.testDir('src/matlab/com/springbok/antenna');
+`>> TestUtility.testDir('src/matlab/com/springbok/antenna');`
+
+# Getting help
 
 For help using MATLAB, The Mathworks provides excellent online
 documentation at: http://www.mathworks.com/help/matlab/index.html.
