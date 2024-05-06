@@ -232,7 +232,6 @@ public class Link {
 
     public Performance computePerformance(ModJulianDate dNm, System interferingSystem, double numSmpES, double numSmpBm,
                                           double ref_bw, Map options) throws ObjectDecayed {
-    /*    Performance performance;
         if (this.isEmpty()) {
             return new Performance();
         }
@@ -245,6 +244,7 @@ public class Link {
         Beam trnStnBm_w = this.transmitStationBeam;
         Station rcvStn_w = this.receiveStation;
 
+    /*    Performance performance;
         Matrix trnStn_w_r_ger;
         Matrix rcvStn_w_r_ger;
         // Assign positions for the wanted stations

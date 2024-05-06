@@ -20,5 +20,5 @@ package com.springbok.pattern;
  * transmitting and receiving.
  */
 public interface SpacePattern extends Pattern {
-	public SpacePattern copy();
+    public SpacePattern copy();
 }

@@ -19,6 +19,7 @@ import com.springbok.pattern.PatternSF__601V01;
 import com.springbok.pattern.SpacePattern;
 import com.springbok.utility.TestUtility;
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -27,23 +28,19 @@ import static org.junit.Assert.assertTrue;
  */
 public class SpaceStationAntennaTest {
 
-    private static final double Phi0_input = 2;
+    private static final double Phi0_input = 3;
 
     // Antenna name
     private static final String name = "RM";
-
     // Antenna gain [dB]
     private static final double gain = 28.000000000000000;
-
     // Antenna pattern identifier
     private static final long pattern_id = 94L;
-
     // Antenna pattern
     private static final SpacePattern pattern = new PatternSF__601V01(Phi0_input);
 
     // Antenna noise temperature [K]
     private static final double noise_t = 525D;
-
 
     /**
      * Test the SpaceStationAntenna constructor.
