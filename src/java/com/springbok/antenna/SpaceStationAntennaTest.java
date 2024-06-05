@@ -38,7 +38,6 @@ public class SpaceStationAntennaTest {
     private static final long pattern_id = 94L;
     // Antenna pattern
     private static final SpacePattern pattern = new PatternSF__601V01(Phi0_input);
-
     // Antenna noise temperature [K]
     private static final double noise_t = 525D;
 
@@ -47,13 +46,7 @@ public class SpaceStationAntennaTest {
      */
     @Test
     public void testSpaceStationAntennaConstructor() {
-        SpaceStationAntenna antenna = new SpaceStationAntenna(
-                name,
-                gain,
-                pattern_id,
-                pattern,
-                noise_t
-        );
+        SpaceStationAntenna antenna = new SpaceStationAntenna(name, gain, pattern_id, pattern, noise_t);
         assertEquals(name, antenna.get_name());
         assertTrue(TestUtility.isDoublesEquals(gain, antenna.get_gain()));
         assertEquals(pattern_id, antenna.get_pattern_id());

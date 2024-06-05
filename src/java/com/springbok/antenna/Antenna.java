@@ -22,18 +22,11 @@ package com.springbok.antenna;
  */
 public class Antenna {
 
-    /**
-     * Antenna name
-     */
+    // Antenna name
     private String name;
-    /**
-     * Antenna gain [dB]
-     */
+    // Antenna gain [dB]
     private double gain;
-
-    /**
-     * Antenna noise temperature [K]
-     */
+    // Antenna noise temperature [K]
     private double noise_t;
 
     /**

@@ -22,6 +22,11 @@ import org.junit.Test;
 import com.springbok.pattern.EarthPattern;
 import com.springbok.pattern.PatternELUX201V01;
 
+/**
+ * Tests methods of EarthStationAntenna class.
+ *
+ * @author raymondleclair
+ */
 public class EarthStationAntennaTest {
 
     // Antenna name
@@ -32,7 +37,6 @@ public class EarthStationAntennaTest {
     private static final long PATTERN_ID = 94;
     // Antenna pattern
     private static final EarthPattern PATTERN = new PatternELUX201V01(GAIN);
-
     // Antenna noise temperature [K]
     private static final double NOISE_T = Double.NaN;
 
