@@ -28,10 +28,8 @@ public class EarthStationAntenna extends Antenna {
 
     // Antenna pattern identifier
     private long pattern_id;
-
     // Antenna pattern
     private EarthPattern pattern;
-
     // Gain function options
     private Map options;
 
@@ -115,8 +113,7 @@ public class EarthStationAntenna extends Antenna {
      */
     public EarthStationAntenna copy() {
         EarthStationAntenna that = new EarthStationAntenna(this.get_name(), this.get_gain(), this.get_pattern_id(),
-                this.pattern.copy(), this.get_noise_t());
-        that.set_options(this.options);
+                this.pattern.copy(), this.get_noise_t(), this.get_options());
         return that;
     }
 
