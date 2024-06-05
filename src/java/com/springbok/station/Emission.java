@@ -38,27 +38,111 @@ public class Emission {
     // Power flux density [dBW/Hz/m2]
     private double pwr_flx_ds;
 
-    public String getDesign_emi() {
+    /**
+     * Sets emission designator.
+     *
+     * @param design_emi Emission designator
+     */
+    public void set_design_emi(String design_emi) {
+        this.design_emi = design_emi;
+    }
+
+    /**
+     * Gets the emission designator.
+     *
+     * @return The emission designator
+     */
+    public String get_design_emi() {
         return design_emi;
     }
 
-    public double getPwr_ds_max() {
+    /**
+     * Sets maximum power density [dBW/Hz].
+     *
+     * @param pwr_ds_max Maximum power density [dBW/Hz]
+     */
+    public void set_pwr_ds_max(double pwr_ds_max) {
+        this.pwr_ds_max = pwr_ds_max;
+    }
+
+    /**
+     * Gets the maximum power density [dBW/Hz].
+     *
+     * @return The maximum power density [dBW/Hz]
+     */
+    public double get_pwr_ds_max() {
         return pwr_ds_max;
     }
 
-    public double getPwr_ds_min() {
+    /**
+     * Sets minimum power density [dBW/Hz].
+     *
+     * @param pwr_ds_min Minimum power density [dBW/Hz]
+     */
+    public void set_pwr_ds_min(double pwr_ds_min) {
+        this.pwr_ds_min = pwr_ds_min;
+    }
+
+    /**
+     * Gets the minimum power density [dBW/Hz].
+     *
+     * @return The minimum power density [dBW/Hz]
+     */
+    public double get_pwr_ds_min() {
         return pwr_ds_min;
     }
 
-    public double getFreq_mhz() {
+    /**
+     * Sets center frequency [MHz].
+     *
+     * @param freq_mhz Center frequency [MHz]
+     */
+    public void set_freq_mhz(double freq_mhz) {
+        this.freq_mhz = freq_mhz;
+    }
+
+    /**
+     * Gets the center frequency [MHz].
+     *
+     * @return The center frequency [MHz]
+     */
+    public double get_freq_mhz() {
         return freq_mhz;
     }
 
-    public double getC_to_n() {
+    /**
+     * Sets required C/N [dB].
+     *
+     * @param c_to_n Required C/N [dB]
+     */
+    public void set_c_to_n(double c_to_n) {
+        this.c_to_n = c_to_n;
+    }
+
+    /**
+     * Gets the required C/N [dB].
+     *
+     * @return The required C/N [dB]
+     */
+    public double get_c_to_n() {
         return c_to_n;
     }
 
-    public double getPwr_flx_ds() {
+    /**
+     * Sets power flux density [dBW/Hz/m2].
+     *
+     * @param pwr_flx_ds Power flux density [dBW/Hz/m2]
+     */
+    public void set_pwr_flx_ds(double pwr_flx_ds) {
+        this.pwr_flx_ds = pwr_flx_ds;
+    }
+
+    /**
+     * Gets the power flux density [dBW/Hz/m2].
+     *
+     * @return The power flux density [dBW/Hz/m2]
+     */
+    public double get_pwr_flx_ds() {
         return pwr_flx_ds;
     }
 
@@ -83,6 +167,7 @@ public class Emission {
 
     /**
      * Copies an Emission.
+     *
      * @return A new Emission instance
      */
     public Emission copy() {
@@ -91,55 +176,9 @@ public class Emission {
     }
 
     /**
-     * Sets emission designator.
-     * @param design_emi Emission designator
-     */
-    public void set_design_emi(String design_emi) {
-        this.design_emi = design_emi;
-    }
-
-    /**
-     * Sets maximum power density [dBW/Hz].
-     * @param pwr_ds_max Maximum power density [dBW/Hz]
-     */
-    public void set_pwr_ds_max(double pwr_ds_max) {
-        this.pwr_ds_max = pwr_ds_max;
-    }
-
-    /**
-     * Sets minimum power density [dBW/Hz].
-     * @param pwr_ds_min Minimum power density [dBW/Hz]
-     */
-    public void set_pwr_ds_min(double pwr_ds_min) {
-        this.pwr_ds_min = pwr_ds_min;
-    }
-
-    /**
-     * Sets center frequency [MHz].
-     * @param freq_mhz Center frequency [MHz]
-     */
-    public void set_freq_mhz(double freq_mhz) {
-        this.freq_mhz = freq_mhz;
-    }
-
-    /**
-     * Sets required C/N [dB].
-     * @param c_to_n Required C/N [dB]
-     */
-    public void set_c_to_n(double c_to_n) {
-        this.c_to_n = c_to_n;
-    }
-
-    /**
-     * Sets power flux density [dBW/Hz/m2].
-     * @param pwr_flx_ds Power flux density [dBW/Hz/m2]
-     */
-    public void set_pwr_flx_ds(double pwr_flx_ds) {
-        this.pwr_flx_ds = pwr_flx_ds;
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
+     * Returns a hash code value for the object.
+     *
+     * @return A hash code value for this object
      */
     @Override
     public int hashCode() {
@@ -159,8 +198,11 @@ public class Emission {
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
+    /**
+     * Indicates whether some other object is equal to this one.
+     *
+     * @param obj the reference object with which to compare
+     * @return true if this object is the same as the obj argument; false otherwise
      */
     @Override
     public boolean equals(Object obj) {

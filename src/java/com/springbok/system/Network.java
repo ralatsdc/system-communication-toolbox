@@ -173,7 +173,7 @@ public class Network {
      * @param spaceStationBeam A space station beam
      */
     public void set_spaceStationBeam(Beam spaceStationBeam) {
-        if (this.doCheck && !Arrays.asList(this.spaceStation.getBeams()).contains(spaceStationBeam)) {
+        if (this.doCheck && !Arrays.asList(this.spaceStation.get_beams()).contains(spaceStationBeam)) {
             throw new MException("Springbok:IllegalArgumentException",
                     "The Beam must be a member of the space station beam array");
         }
@@ -216,7 +216,7 @@ public class Network {
      * Constructs links
      */
     public void set_links() {
-        this.earthStationBeam = this.earthStation.getBeam();
+        this.earthStationBeam = this.earthStation.get_beam();
         switch (this.type) {
             case "up":
                 this.up_Link.set_transmitStation(this.earthStation);

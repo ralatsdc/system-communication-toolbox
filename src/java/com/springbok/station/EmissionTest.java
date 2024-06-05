@@ -50,11 +50,11 @@ public class EmissionTest {
         this.emission = new Emission(this.design_emi, this.pwr_ds_max, this.pwr_ds_min,
                 this.freq_mhz, this.c_to_n, this.pwr_flx_ds);
 
-        assertTrue(this.emission.getDesign_emi().equals(design_emi));
-        assertTrue(TestUtility.isDoublesEquals(pwr_ds_max, this.emission.getPwr_ds_max()));
-        assertTrue(((Double) this.emission.getPwr_ds_min()).isNaN());
-        assertTrue(TestUtility.isDoublesEquals(freq_mhz, this.emission.getFreq_mhz()));
-        assertTrue(((Double) this.emission.getPwr_ds_min()).isNaN());
-        assertTrue(TestUtility.isDoublesEquals(pwr_flx_ds, this.emission.getPwr_flx_ds()));
+        assertTrue(this.emission.get_design_emi().equals(design_emi));
+        assertTrue(TestUtility.isDoublesEquals(pwr_ds_max, this.emission.get_pwr_ds_max()));
+        assertTrue(((Double) this.emission.get_pwr_ds_min()).isNaN());
+        assertTrue(TestUtility.isDoublesEquals(freq_mhz, this.emission.get_freq_mhz()));
+        assertTrue(((Double) this.emission.get_pwr_ds_min()).isNaN());
+        assertTrue(TestUtility.isDoublesEquals(pwr_flx_ds, this.emission.get_pwr_flx_ds()));
     }
 }

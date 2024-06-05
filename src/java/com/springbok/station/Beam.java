@@ -40,27 +40,119 @@ public class Beam {
     // Number of divisions in use
     private int divisions;
 
-    public String getName() {
+    /**
+     * Sets beam name.
+     *
+     * @param name Beam name
+     */
+    public void set_name(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Gets the name of the station.
+     *
+     * @return The name of the station
+     */
+    public String get_Name() {
         return name;
     }
 
-    public int getMultiplicity() {
+    /**
+     * Sets maximum number of divisions allowed.
+     *
+     * @param multiplicity Maximum number of divisions allowed
+     */
+    public void set_multiplicity(int multiplicity) {
+        this.multiplicity = multiplicity;
+    }
+
+    /**
+     * Gets the multiplicity of the station.
+     *
+     * @return The multiplicity of the station
+     */
+    public int get_Multiplicity() {
         return multiplicity;
     }
 
-    public double getDutyCycle() {
+    /**
+     * Sets duty cycle [%].
+     *
+     * @param dutyCycle Duty cycle [%]
+     */
+    public void set_dutyCycle(double dutyCycle) {
+        if (dutyCycle < 0 || dutyCycle > 100) {
+            throw new MException("Springbok:IllegalArgumentException",
+                    "Duty cycle must be between 0 and 100");
+        }
+        this.dutyCycle = dutyCycle;
+    }
+
+    /**
+     * Gets the duty cycle of the station.
+     *
+     * @return The duty cycle of the station
+     */
+    public double get_DutyCycle() {
         return dutyCycle;
     }
 
+    /**
+     * Sets flag indicating if the beam is available, or not.
+     *
+     * @param isAvailable Flag indicating if the beam is available, or not
+     */
+    public void set_isAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
+    /**
+     * Checks if the station is available.
+     *
+     * @return true if the station is available; false otherwise
+     */
     public boolean isAvailable() {
         return isAvailable;
     }
 
-    public boolean isMultiplexed() {
+    /**
+     * Sets flag indicating if the beam is multiplexed, or not.
+     *
+     * @param isMultiplexed Flag indicating if the beam is multiplexed or not
+     */
+    public void set_isMultiplexed(boolean isMultiplexed) {
+        this.isMultiplexed = isMultiplexed;
+    }
+
+    /**
+     * Checks if the station is multiplexed.
+     *
+     * @return true if the station is multiplexed; false otherwise
+     */
+    public boolean is_Multiplexed() {
         return isMultiplexed;
     }
 
-    public int getDivisions() {
+    /**
+     * Sets number of divisions in use.
+     *
+     * @param divisions Number of divisions in use
+     */
+    public void set_divisions(int divisions) {
+        if (divisions < 0) {
+            throw new MException("Springbok:IllegalArgumentException",
+                    "Divisions must be a non-negative integer");
+        }
+        this.divisions = divisions;
+    }
+
+    /**
+     * Gets the number of divisions of the station.
+     *
+     * @return The number of divisions of the station
+     */
+    public int get_Divisions() {
         return divisions;
     }
 
@@ -91,68 +183,6 @@ public class Beam {
      */
     public Beam copy() {
         return new Beam(this.name, this.multiplicity, this.dutyCycle);
-    }
-
-    /**
-     * Sets beam name.
-     *
-     * @param name Beam name
-     */
-    public void set_name(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Sets maximum number of divisions allowed.
-     *
-     * @param multiplicity Maximum number of divisions allowed
-     */
-    public void set_multiplicity(int multiplicity) {
-        this.multiplicity = multiplicity;
-    }
-
-    /**
-     * Sets duty cycle [%].
-     *
-     * @param dutyCycle Duty cycle [%]
-     */
-    public void set_dutyCycle(double dutyCycle) {
-        if (dutyCycle < 0 || dutyCycle > 100) {
-            throw new MException("Springbok:IllegalArgumentException",
-                    "Duty cycle must be between 0 and 100");
-        }
-        this.dutyCycle = dutyCycle;
-    }
-
-    /**
-     * Sets flag indicating if the beam is available, or not.
-     *
-     * @param isAvailable Flag indicating if the beam is available, or not
-     */
-    public void set_isAvailable(boolean isAvailable) {
-        this.isAvailable = isAvailable;
-    }
-
-    /**
-     * Sets flag indicating if the beam is multiplexed, or not.
-     *
-     * @param isMultiplexed Flag indicating if the beam is multiplexed or not
-     */
-    public void set_isMultiplexed(boolean isMultiplexed) {
-        this.isMultiplexed = isMultiplexed;
-    }
-
-    /**
-     * Sets number of divisions in use.
-     *
-     * @param divisions Number of divisions in use
-     */
-    public void set_divisions(int divisions) {
-        if (divisions < 0) {
-            throw new MException("Springbok:IllegalArgumentException",
-                    "Divisions must be a non-negative integer");
-        }
-        this.divisions = divisions;
     }
 
     /**
@@ -225,9 +255,11 @@ public class Beam {
         this.divisions = 0;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
+    /**
+     * Returns a hash code value for the object.
+     *
+     * @return A hash code value for this object
+     */    @Override
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -240,8 +272,11 @@ public class Beam {
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
+    /**
+     * Indicates whether some other object is equal to this one.
+     *
+     * @param obj the reference object with which to compare
+     * @return true if this object is the same as the obj argument; false otherwise
      */
     @Override
     public boolean equals(Object obj) {

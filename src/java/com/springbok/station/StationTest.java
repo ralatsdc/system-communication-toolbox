@@ -46,7 +46,7 @@ public class StationTest {
 
 		String stationId_expected = this.stationId_input;
 
-		String stationId_actual = this.station.getStationId();
+		String stationId_actual = this.station.get_station_id();
 
 		assertTrue(stationId_actual.equals(stationId_expected));
 	}
@@ -59,7 +59,7 @@ public class StationTest {
 
 		this.station.set_stationId(this.stationId_input);
 
-		String stationId_actual = this.station.getStationId();
+		String stationId_actual = this.station.get_station_id();
 
 		assertTrue(stationId_actual.equals(stationId_expected));
 	}
