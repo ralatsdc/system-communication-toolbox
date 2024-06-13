@@ -80,7 +80,7 @@ public class SpaceStationTest {
      */
     @Test
     public void test_SpaceStation() {
-        assertTrue(this.spaceStation.get_station_id().equals(stationId));
+        assertTrue(this.spaceStation.get_stationId().equals(stationId));
         assertEquals(transmitAntenna, spaceStation.get_transmitAntenna());
         assertEquals(receiveAntenna, spaceStation.get_receiveAntenna());
         assertEquals(emission, spaceStation.get_emission());

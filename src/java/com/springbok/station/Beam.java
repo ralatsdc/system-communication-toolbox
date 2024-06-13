@@ -19,6 +19,8 @@ import com.springbok.utility.MException;
 
 /**
  * Describes a space or an Earth station beam.
+ *
+ * @author raymondleclair
  */
 public class Beam {
 
@@ -259,7 +261,7 @@ public class Beam {
      * Returns a hash code value for the object.
      *
      * @return A hash code value for this object
-     */    @Override
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -276,6 +278,7 @@ public class Beam {
      * Indicates whether some other object is equal to this one.
      *
      * @param obj the reference object with which to compare
+     *
      * @return true if this object is the same as the obj argument; false otherwise
      */
     @Override

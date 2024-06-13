@@ -26,6 +26,8 @@ import java.util.Arrays;
 
 /**
  * Describes a space station
+ *
+ * @author raymondleclair
  */
 public class SpaceStation extends Station {
 
@@ -230,7 +232,7 @@ public class SpaceStation extends Station {
         for (int i = 0; i < this.beams.length; i++) {
             beams[i] = this.beams[i].copy();
         }
-        SpaceStation that = new SpaceStation(this.get_station_id(), this.get_transmitAntenna().copy(), this.get_receiveAntenna().copy(),
+        SpaceStation that = new SpaceStation(this.get_stationId(), this.get_transmitAntenna().copy(), this.get_receiveAntenna().copy(),
                 this.get_emission().copy(), beams, this.orbit.copy());
         that.set_isAvailable(this.isAvailable);
         try {
@@ -245,7 +247,7 @@ public class SpaceStation extends Station {
      * Assign this station by assigning the first available beam.
      *
      * @param doMultiplexing Flag indicating whether to do
-     * @param multiplexing, or not
+     * multiplexing, or not
      *
      * @return The assigned beam, or an empty array, if no beam
      */
@@ -313,6 +315,7 @@ public class SpaceStation extends Station {
      * Indicates whether some other object is equal to this one.
      *
      * @param obj the reference object with which to compare
+     *
      * @return true if this object is the same as the obj argument; false otherwise
      */
     @Override

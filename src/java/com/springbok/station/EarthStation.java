@@ -142,6 +142,7 @@ public class EarthStation extends Station implements Serializable {
 	 * Sets the Beam object for the Earth station.
 	 *
 	 * @param beam The Beam object to set
+	 *
 	 * @throws MException if the multiplicity of the Beam object is not equal to 1
 	 */
 	public void set_beam(Beam beam) {
@@ -184,6 +185,7 @@ public class EarthStation extends Station implements Serializable {
 	 * Computes the position vector in the Geocentric Equatorial Inertial (GEI) frame at a given modified Julian date.
 	 *
 	 * @param dNm The modified Julian date for which to compute the position vector
+	 *
 	 * @return The position vector in the GEI frame
 	 */
 	public Matrix compute_r_gei(ModJulianDate dNm) {
@@ -239,7 +241,7 @@ public class EarthStation extends Station implements Serializable {
 	 * @return A new EarthStation instance
 	 */
 	public EarthStation copy() {
-	    EarthStation that = new EarthStation(this.get_station_id(), this.get_transmitAntenna().copy(), this.get_receiveAntenna().copy(),
+	    EarthStation that = new EarthStation(this.get_stationId(), this.get_transmitAntenna().copy(), this.get_receiveAntenna().copy(),
                 this.get_emission().copy(), this.beam.copy(), this.varphi, this.lambda, this.doMultiplexing);
 	    that.compute_r_gei(that.dNm);
 

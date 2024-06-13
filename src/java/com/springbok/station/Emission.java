@@ -17,6 +17,8 @@ package com.springbok.station;
 
 /**
  * Describes an emission.
+ *
+ * @author raymondleclair
  */
 public class Emission {
 
@@ -202,6 +204,7 @@ public class Emission {
      * Indicates whether some other object is equal to this one.
      *
      * @param obj the reference object with which to compare
+     *
      * @return true if this object is the same as the obj argument; false otherwise
      */
     @Override
