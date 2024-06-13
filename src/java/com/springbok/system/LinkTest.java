@@ -171,9 +171,9 @@ public class LinkTest {
 
         Link.Angle angle = link.computeAngles(new EarthStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
-        Assert.assertTrue(Math.abs(angle.getPhi() - phi_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getAzimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getElevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_elevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
 
         r_one[0][0] = 1;
         r_one[1][0] = 0;
@@ -189,9 +189,9 @@ public class LinkTest {
 
         angle = link.computeAngles(new EarthStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
-        Assert.assertTrue(Math.abs(angle.getPhi() - phi_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getAzimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getElevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_elevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
 
         r_two[0][0] = 0;
         r_two[1][0] = Math.sqrt(3);
@@ -203,9 +203,9 @@ public class LinkTest {
 
         angle = link.computeAngles(new EarthStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
-        Assert.assertTrue(Math.abs(angle.getPhi() - phi_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getAzimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getElevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_elevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
 
         r_two[0][0] = 0;
         r_two[1][0] = -Math.sqrt(3);
@@ -217,9 +217,9 @@ public class LinkTest {
 
         angle = link.computeAngles(new EarthStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
-        Assert.assertTrue(Math.abs(angle.getPhi() - phi_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getAzimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getElevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_elevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
 
         r_ref[0][0] = 0;
         r_ref[1][0] = 0;
@@ -239,9 +239,9 @@ public class LinkTest {
 
         angle = link.computeAngles(new SpaceStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
-        Assert.assertTrue(Math.abs(angle.getPhi() - phi_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getAzimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getElevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_elevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
 
         r_one[0][0] = 1;
         r_one[1][0] = 0;
@@ -257,9 +257,9 @@ public class LinkTest {
 
         angle = link.computeAngles(new SpaceStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
-        Assert.assertTrue(Math.abs(angle.getPhi() - phi_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getAzimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getElevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_elevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
 
         r_two[0][0] = 0;
         r_two[1][0] = Math.sqrt(3);
@@ -271,9 +271,9 @@ public class LinkTest {
 
         angle = link.computeAngles(new SpaceStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
-        Assert.assertTrue(Math.abs(angle.getPhi() - phi_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getAzimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getElevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_elevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
 
         r_two[0][0] = 0;
         r_two[1][0] = -Math.sqrt(3);
@@ -285,9 +285,9 @@ public class LinkTest {
 
         angle = link.computeAngles(new SpaceStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
-        Assert.assertTrue(Math.abs(angle.getPhi() - phi_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getAzimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(Math.abs(angle.getElevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(Math.abs(angle.get_elevation() - elv_expected) < TestUtility.MEDIUM_PRECISION);
     }
 
     public void test_findIdxVisEStoSS() {

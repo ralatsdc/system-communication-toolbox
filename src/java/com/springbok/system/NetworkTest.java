@@ -68,10 +68,10 @@ public class NetworkTest {
     }
 
     private void checkLink(Link expected, Link actual) {
-        Assert.assertEquals(expected.isDoCheck(), actual.isDoCheck());
-        Assert.assertEquals(expected.getReceiveStation(), actual.getReceiveStation());
-        Assert.assertEquals(expected.getTransmitStation(), actual.getTransmitStation());
-        Assert.assertEquals(expected.getTransmitStationBeam(), actual.getTransmitStationBeam());
-        Assert.assertEquals(expected.getLosses(), actual.getLosses());
+        Assert.assertEquals(expected.doCheck(), actual.doCheck());
+        Assert.assertEquals(expected.get_receiveStation(), actual.get_receiveStation());
+        Assert.assertEquals(expected.get_transmitStation(), actual.get_transmitStation());
+        Assert.assertEquals(expected.get_transmitStationBeam(), actual.get_transmitStationBeam());
+        Assert.assertEquals(expected.get_losses(), actual.get_losses());
     }
 }

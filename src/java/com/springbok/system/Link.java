@@ -35,84 +35,101 @@ import java.util.Map;
  */
 public class Link {
 
+    /**
+     * Describes angles between two stations.
+     */
     protected static class Angle {
-        //angle [deg]
+
+        // Angle [deg]
         private double phi;
-        //azm - Azimuth [deg]
+        // Azimuth [deg]
         private double azm;
-        //elv - Elevation [deg]
+        // Elevation [deg]
         private double elv;
 
+        /**
+         * Constructs an Angle.
+         *
+         * @param phi Angle
+         * @param azm Azimuth
+         * @param elv Elevation
+         */
         public Angle(double phi, double azm, double elv) {
             this.phi = phi;
             this.azm = azm;
             this.elv = elv;
         }
 
+        /**
+         * Constructs an Angle.
+         */
         public Angle() {
         }
 
-        public double getPhi() {
-            return phi;
-        }
-
-        public void setPhi(double phi) {
+        /**
+         * Set angle.
+         *
+         * @param phi Angle
+         */
+        public void set_phi(double phi) {
             this.phi = phi;
         }
 
-        public double getAzimuth() {
-            return azm;
+        /**
+         * Gets angle
+         *
+         * @return Angle
+         */
+        public double get_phi() {
+            return phi;
         }
 
-        public void setAzimuth(double azm) {
+        /**
+         * Sets azimuth.
+         *
+         * @param azm Azimuth
+         */
+        public void set_azimuth(double azm) {
             this.azm = azm;
         }
 
-        public double getElevation() {
-            return elv;
+        /** Gets azimuth
+         *
+         * @return Azimuth
+         */
+        public double get_azimuth() {
+            return this.azm;
         }
 
-        public void setElevation(double elv) {
+        /**
+         *  Sets elevation.
+         *
+         * @param elv
+         */
+        public void set_elevation(double elv) {
             this.elv = elv;
         }
 
+        /**
+         * Gets elevation.
+         *
+         * @return Elevation
+         */
+        public double get_elevation() {
+            return this.elv;
+        }
     }
-
 
     // A transmit station
     private Station transmitStation;
-
     // A transmit station beam
     private Beam transmitStationBeam;
-
     // A receive station
     private Station receiveStation;
-
     // Propagation loss models to apply
     private Object[] losses;
-
     // Flag to check input arguments, or not
     private boolean doCheck;
-
-    public Station getTransmitStation() {
-        return transmitStation;
-    }
-
-    public Beam getTransmitStationBeam() {
-        return transmitStationBeam;
-    }
-
-    public Station getReceiveStation() {
-        return receiveStation;
-    }
-
-    public Object[] getLosses() {
-        return losses;
-    }
-
-    public boolean isDoCheck() {
-        return doCheck;
-    }
 
     /**
      * Constructs a Link.
@@ -121,14 +138,10 @@ public class Link {
      * @param transmitStationBeam A transmit station beam
      * @param receiveStation      A receive station
      * @param losses              Propagation loss models to apply
-     * @param DoCheck             Flag for checking input values (default is 1)
+     * @param options             TODO: complete
      */
-
-    public Link() {
-        this.doCheck = true;
-    }
-
     public Link(Station transmitStation, Beam transmitStationBeam, Station receiveStation, Object[] losses, Map options) {
+
         // Parse variable input arguments
         this.set_doCheck((boolean) options.getOrDefault("DoCheck", true));
 
@@ -137,6 +150,13 @@ public class Link {
         this.set_transmitStationBeam(transmitStationBeam);
         this.set_receiveStation(receiveStation);
         this.set_losses(losses);
+    }
+
+    /**
+     * Constructs a Link.
+     */
+    public Link() {
+        this.doCheck = true;
     }
 
     /**
@@ -166,6 +186,15 @@ public class Link {
     }
 
     /**
+     * Gets the transmit station.
+     *
+     * @return A transmit station
+     */
+    public Station get_transmitStation() {
+        return transmitStation;
+    }
+
+    /**
      * Sets the transmit station beam.
      *
      * @param transmitStationBeam A transmit station beam
@@ -186,12 +215,30 @@ public class Link {
     }
 
     /**
+     * Gets the transmit station beam.
+     *
+     * @return A transmit station beam
+     */
+    public Beam get_transmitStationBeam() {
+        return transmitStationBeam;
+    }
+
+    /**
      * Sets the receive station.
      *
      * @param receiveStation A receive station
      */
     public void set_receiveStation(Station receiveStation) {
         this.receiveStation = receiveStation;
+    }
+
+    /**
+     * Gets the receive station.
+     *
+     * @return A receive station
+     */
+    public Station get_receiveStation() {
+        return receiveStation;
     }
 
     /**
@@ -204,6 +251,15 @@ public class Link {
     }
 
     /**
+     * Gets propagation loss models to apply
+     *
+     * @return Propagation loss models to apply
+     */
+    public Object[] get_losses() {
+        return losses;
+    }
+
+    /**
      * Sets flag to check input arguments, or not.
      *
      * @param doCheck Flag to check input arguments, or not
@@ -211,6 +267,15 @@ public class Link {
     public void set_doCheck(boolean doCheck) {
         this.doCheck = doCheck;
 
+    }
+
+    /**
+     * Gets flag to check input arguments, or not.
+     *
+     * @return Flag to check input arguments, or not
+     */
+    public boolean doCheck() {
+        return doCheck;
     }
 
     /**
@@ -228,8 +293,6 @@ public class Link {
      *                          default is 0)
      * @return Link performance
      */
-
-
     public Performance computePerformance(ModJulianDate dNm, System interferingSystem, double numSmpES, double numSmpBm,
                                           double ref_bw, Map options) throws ObjectDecayed {
         if (this.isEmpty()) {

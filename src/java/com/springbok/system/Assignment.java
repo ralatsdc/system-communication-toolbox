@@ -27,40 +27,26 @@ public class Assignment {
 
     // Current date number
     private ModJulianDate dNm;
-
-    // Angle between space station position vector relative to the
-
-    // Earth station and GSO arc
+    // Angle between space station position vector relative to the Earth station and GSO arc
     private double[][] theta_g;
-
-    // Angle between space station position vector relative to the
-    // Earth station and Earth station zenith direction
+    // Angle between space station position vector relative to the Earth station and Earth station zenith direction
     private double[][] theta_z;
-
     // Metric used to select space station for each Earth station
     private double[][] metrics;
-
     // A network array
     private Network[] networks;
-
     // Index of each Earth station assigned to a network
     private int[] idxNetES;
-
     // Index of each space station assigned to a network
     private int[] idxNetSS;
-
     // Flag array indicating if the station is available, or not
     private boolean[] isAvailable_SS;
-
     // Flag array indicating if the beam is available, or not
     private boolean[] isAvailable_SS_Bm;
-
     // Flag array indicating if the beam is multiplexed, or not
     private boolean[] isMultiplexed_SS_Bm;
-
     // Number of divisions in use array
     private int[] divisions_SS_Bm;
-
     // Duty cycle array
     private double[] dutyCycle_ES_Bm;
 
@@ -108,54 +94,6 @@ public class Assignment {
         this.set_dutyCycle_ES_Bm(dutyCycle_ES_Bm);
     }
 
-    public ModJulianDate getdNm() {
-        return dNm;
-    }
-
-    public double[][] getTheta_g() {
-        return theta_g;
-    }
-
-    public double[][] getTheta_z() {
-        return theta_z;
-    }
-
-    public double[][] getMetrics() {
-        return metrics;
-    }
-
-    public Network[] getNetworks() {
-        return networks;
-    }
-
-    public int[] getIdxNetES() {
-        return idxNetES;
-    }
-
-    public int[] getIdxNetSS() {
-        return idxNetSS;
-    }
-
-    public boolean[] getIsAvailable_SS() {
-        return isAvailable_SS;
-    }
-
-    public boolean[] getIsAvailable_SS_Bm() {
-        return isAvailable_SS_Bm;
-    }
-
-    public boolean[] getIsMultiplexed_SS_Bm() {
-        return isMultiplexed_SS_Bm;
-    }
-
-    public int[] getDivisions_SS_Bm() {
-        return divisions_SS_Bm;
-    }
-
-    public double[] getDutyCycle_ES_Bm() {
-        return dutyCycle_ES_Bm;
-    }
-
     /**
      * Copies a Assignment.
      *
@@ -180,6 +118,15 @@ public class Assignment {
     }
 
     /**
+     * Gets current date number.
+     *
+     * @return Current date number
+     */
+    public ModJulianDate get_dNm() {
+        return this.dNm;
+    }
+
+    /**
      * Sets Angle between space station position vector relative to
      * the Earth station and GSO arc.
      *
@@ -188,6 +135,17 @@ public class Assignment {
      */
     public void set_theta_g(double[][] theta_g) {
         this.theta_g = theta_g;
+    }
+
+    /**
+     * Gets Angle between space station position vector relative to
+     * the Earth station and GSO arc.
+     *
+     * @return Angle between space station position vector
+     * relative to the Earth station and GSO arc
+     */
+    public double[][] get_theta_g() {
+        return this.theta_g;
     }
 
     /**
@@ -203,6 +161,18 @@ public class Assignment {
     }
 
     /**
+     * Gets Angle between space station position vector relative to
+     * the Earth station and Earth station zenith direction.
+     *
+     * @return Angle between space station position vector
+     * relative to the Earth station and Earth station zenith
+     * direction
+     */
+    public double[][] get_theta_z() {
+        return this.theta_z;
+    }
+
+    /**
      * Sets metric used to select space station for each Earth
      * station.
      *
@@ -214,12 +184,32 @@ public class Assignment {
     }
 
     /**
+     * Gets metric used to select space station for each Earth
+     * station.
+     *
+     * @return Metric used to select space station for each
+     * Earth station
+     */
+    public double[][] get_metrics() {
+        return this.metrics;
+    }
+
+    /**
      * Sets a network array.
      *
      * @param networks A network array
      */
     public void set_networks(Network[] networks) {
         this.networks = networks;
+    }
+
+    /**
+     * Gets a network array.
+     *
+     * @return A network array
+     */
+    public Network[] get_networks() {
+        return this.networks;
     }
 
     /**
@@ -233,6 +223,16 @@ public class Assignment {
     }
 
     /**
+     * Gets index of each Earth station assigned to a network.
+     *
+     * @return Index of each Earth station assigned to a
+     * network
+     */
+    public int[] get_idxNetES() {
+        return this.idxNetES;
+    }
+
+    /**
      * Sets index of each space station assigned to a network.
      *
      * @param idxNetSS Index of each space station assigned to a
@@ -240,6 +240,16 @@ public class Assignment {
      */
     public void set_idxNetSS(int[] idxNetSS) {
         this.idxNetSS = idxNetSS;
+    }
+
+    /**
+     * Gets index of each space station assigned to a network.
+     *
+     * @return Index of each space station assigned to a
+     * network
+     */
+    public int[] get_idxNetSS() {
+        return this.idxNetSS;
     }
 
     /**
@@ -254,6 +264,17 @@ public class Assignment {
     }
 
     /**
+     * Gets flag array indicating if the station is available, or
+     * not.
+     *
+     * @return Flag array indicating if the station is
+     * available, or not
+     */
+    public boolean[] isAvailable_SS() {
+        return this.isAvailable_SS;
+    }
+
+    /**
      * Sets flag array indicating if the beam is available, or not.
      *
      * @param isAvailable_SS_Bm Flag array indicating if the beam is
@@ -261,6 +282,16 @@ public class Assignment {
      */
     public void set_isAvailable_SS_Bm(boolean[] isAvailable_SS_Bm) {
         this.isAvailable_SS_Bm = isAvailable_SS_Bm;
+    }
+
+    /**
+     * Gets flag array indicating if the beam is available, or not.
+     *
+     * @return Flag array indicating if the beam is
+     * available, or not
+     */
+    public boolean[] isAvailable_SS_Bm() {
+        return this.isAvailable_SS_Bm;
     }
 
     /**
@@ -275,6 +306,17 @@ public class Assignment {
     }
 
     /**
+     * Gets flag array indicating if the beam is multiplexed, or
+     * not.
+     *
+     * @return Flag array indicating if the beam is
+     * multiplexed, or not
+     */
+    public boolean[] isMultiplexed_SS_Bm() {
+        return this.isMultiplexed_SS_Bm;
+    }
+
+    /**
      * Sets number of divisions in use array.
      *
      * @param divisions_SS_Bm Number of divisions in use array
@@ -284,12 +326,30 @@ public class Assignment {
     }
 
     /**
+     * Gets number of divisions in use array.
+     *
+     * @return Number of divisions in use array
+     */
+    public int[] get_divisions_SS_Bm() {
+        return this.divisions_SS_Bm;
+    }
+
+    /**
      * Sets duty cycle array.
      *
      * @param dutyCycle_ES_Bm Duty cycle array
      */
     public void set_dutyCycle_ES_Bm(double[] dutyCycle_ES_Bm) {
         this.dutyCycle_ES_Bm = dutyCycle_ES_Bm;
+    }
+
+    /**
+     * Gets duty cycle array.
+     *
+     * @return Duty cycle array
+     */
+    public double[] get_dutyCycle_ES_Bm() {
+        return this.dutyCycle_ES_Bm;
     }
 
     /* (non-Javadoc)

@@ -549,13 +549,13 @@ public class System {
         for (int iNet = 0; iNet < nNet; iNet++) {
             //Compute duty cycle for the Earth station of each
             this.networks[iNet].getEarthStation().getBeam().set_dutyCycle(100.0
-                    / this.networks[iNet].getSpaceStationBeam().getDivisions());
+                    / this.networks[iNet].getSpaceStationBeam().get_divisions());
 
             //Collect assignement properties
             isAvailable_SS[iNet] = this.networks[iNet].getSpaceStation().isAvailable();
             isAvailable_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().isAvailable();
             isMultiplexed_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().isMultiplexed();
-            divisions_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().getDivisions();
+            divisions_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().get_divisions();
             dutyCycle_ES_Bm[iNet] = this.networks[iNet].getEarthStationBeam().getDutyCycle();
         }
 
@@ -666,13 +666,13 @@ public class System {
         double[] dutyCycle_ES_Bm = new double[nNet];
         for (int iNet = 0; iNet < nNet; iNet++) {
             this.networks[iNet].getEarthStation().getBeam().set_dutyCycle(
-                    100.0 / this.networks[iNet].getSpaceStationBeam().getDivisions());
+                    100.0 / this.networks[iNet].getSpaceStationBeam().get_divisions());
 
             // Collect assignement properties
             isAvailable_SS[iNet] = this.networks[iNet].getSpaceStation().isAvailable();
             isAvailable_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().isAvailable();
             isMultiplexed_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().isMultiplexed();
-            divisions_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().getDivisions();
+            divisions_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().get_divisions();
             dutyCycle_ES_Bm[iNet] = this.networks[iNet].getEarthStationBeam().getDutyCycle();
 
         }
@@ -763,24 +763,24 @@ public class System {
         // to be tested here
 
         // Set derived properties of this System instance
-        this.dNm = assignment.getdNm();
-        this.theta_g = assignment.getTheta_g();
-        this.theta_z = assignment.getTheta_z();
-        this.metrics = assignment.getMetrics();
-        this.networks = assignment.getNetworks();
-        this.idxNetES = assignment.getIdxNetES();
-        this.idxNetSS = assignment.getIdxNetSS();
+        this.dNm = assignment.get_dNm();
+        this.theta_g = assignment.get_theta_g();
+        this.theta_z = assignment.get_theta_z();
+        this.metrics = assignment.get_metrics();
+        this.networks = assignment.get_networks();
+        this.idxNetES = assignment.get_idxNetES();
+        this.idxNetSS = assignment.get_idxNetSS();
 
         // Consider each network
-        int nNet = assignment.getNetworks().length;
+        int nNet = assignment.get_networks().length;
         for (int iNet = 0; iNet < nNet; iNet++) {
             // Set derived properties of the associated space station,
             // space station beam, and Earth station beam instances.
-            this.networks[iNet].getSpaceStation().set_isAvailable(assignment.getIsAvailable_SS()[iNet]);
-            this.networks[iNet].getSpaceStationBeam().set_isAvailable(assignment.getIsAvailable_SS_Bm()[iNet]);
-            this.networks[iNet].getSpaceStationBeam().set_isMultiplexed(assignment.getIsMultiplexed_SS_Bm()[iNet]);
-            this.networks[iNet].getSpaceStationBeam().set_divisions(assignment.getDivisions_SS_Bm()[iNet]);
-            this.networks[iNet].getEarthStationBeam().set_dutyCycle(assignment.getDutyCycle_ES_Bm()[iNet]);
+            this.networks[iNet].getSpaceStation().set_isAvailable(assignment.isAvailable_SS()[iNet]);
+            this.networks[iNet].getSpaceStationBeam().set_isAvailable(assignment.isAvailable_SS_Bm()[iNet]);
+            this.networks[iNet].getSpaceStationBeam().set_isMultiplexed(assignment.isMultiplexed_SS_Bm()[iNet]);
+            this.networks[iNet].getSpaceStationBeam().set_divisions(assignment.get_divisions_SS_Bm()[iNet]);
+            this.networks[iNet].getEarthStationBeam().set_dutyCycle(assignment.get_dutyCycle_ES_Bm()[iNet]);
         }
 
         // Consider each space station, assigned, or not, in order to
