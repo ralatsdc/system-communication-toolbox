@@ -93,7 +93,7 @@ public class EarthStationTest {
         double varphi_expected = this.varphi;
         double lambda_expected = this.lambda;
 
-        String stationId_actual = this.earthStation.getStationId();
+        String stationId_actual = this.earthStation.get_stationId();
         double varphi_actual = this.earthStation.varphi;
         double lambda_actual = this.earthStation.lambda;
 

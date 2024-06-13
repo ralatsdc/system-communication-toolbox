@@ -203,9 +203,9 @@ public class Link {
         if (this.doCheck) {
             if (
                     this.transmitStation instanceof EarthStation
-                            && !((EarthStation) this.transmitStation).getBeam().equals(transmitStationBeam)
+                            && !((EarthStation) this.transmitStation).get_beam().equals(transmitStationBeam)
                             || this.transmitStation instanceof SpaceStation
-                            && !Arrays.asList(((SpaceStation) this.transmitStation).getBeams()).contains(transmitStationBeam)
+                            && !Arrays.asList(((SpaceStation) this.transmitStation).get_beams()).contains(transmitStationBeam)
             ) {
                 throw new MException("Springbok:IllegalArgumentException",
                         "Invalid transmit station beam");

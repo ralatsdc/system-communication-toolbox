@@ -32,15 +32,22 @@ import com.springbok.utility.MException;
 @SuppressWarnings("serial")
 public class EarthStation extends Station implements Serializable {
 
+	// Describes a space or an Earth station beam.
 	private Beam beam;
+
 	/** Geodetic Latitude [rad] */
 	protected double varphi;
+
 	/** Longitude [rad] */
 	protected double lambda;
-	//Flag indicating whether to do multiplexing, or not
+
+	// Flag indicating whether to do multiplexing, or not
 	private boolean doMultiplexing;
+
 	// Date number at which the position vector occurs
     private ModJulianDate dNm;
+
+
     // Geocentric equatorial inertial position vector [er]
     private Matrix r_gei;
 
@@ -85,13 +92,16 @@ public class EarthStation extends Station implements Serializable {
 		this.R_ger = compute_R_ger();
 	}
 
+	/**
+	 * Constructs an EarthStation.
+	 */
 	public EarthStation() {
 		super();
 	}
 
 	/**
 	 * Sets geodetic latitude [rad].
-	 * 
+	 *
 	 * @param varphi The geodetic latitude [rad]
 	 */
 	public void set_varphi(double varphi) {
@@ -99,22 +109,9 @@ public class EarthStation extends Station implements Serializable {
 		this.R_ger = compute_R_ger();
 	}
 
-	public Beam getBeam() {
-		return beam;
-	}
-
-	public void set_beam(Beam beam) {
-		if (beam.getMultiplicity() != 1) {
-	        throw new MException("Springbok:IllegalArgumentException",
-                    "An Earth station beam must have multiplicity one");
-        }
-		this.beam = beam;
-	    this.beam.assign(this.doMultiplexing);
-	}
-
 	/**
 	 * Gets geodetic latitude [rad].
-	 * 
+	 *
 	 * @return The geodetic latitude [rad]
 	 */
 	public double get_varphi() {
@@ -123,9 +120,9 @@ public class EarthStation extends Station implements Serializable {
 
 	/**
 	 * Sets longitude [rad]
-	 * 
+	 *
 	 * @param lambda The longitude [rad]
-	 * 
+	 *
 	 */
 	public void set_lambda(double lambda) {
 		this.lambda = lambda;
@@ -134,11 +131,70 @@ public class EarthStation extends Station implements Serializable {
 
 	/**
 	 * Gets longitude [rad]
-	 * 
+	 *
 	 * @return The longitude [rad]
 	 */
 	public double get_lambda() {
 		return lambda;
+	}
+
+	/**
+	 * Sets the Beam object for the Earth station.
+	 *
+	 * @param beam The Beam object to set
+	 *
+	 * @throws MException if the multiplicity of the Beam object is not equal to 1
+	 */
+	public void set_beam(Beam beam) {
+		if (beam.get_Multiplicity() != 1) {
+			throw new MException("Springbok:IllegalArgumentException",
+					"An Earth station beam must have multiplicity one");
+		}
+		this.beam = beam;
+		this.beam.assign(this.doMultiplexing);
+	}
+
+	/**
+	 * Gets the beam object.
+	 *
+	 * @return The beam object
+	 */
+	public Beam get_beam() {
+		return beam;
+	}
+
+	/**
+	 * Sets the flag indicating whether to perform multiplexing or not.
+	 *
+	 * @param bool Flag indicating if to perform multiplexing, or not
+	 */
+	public void set_doMultiplexing(boolean bool) {
+		doMultiplexing = bool;
+	}
+
+	/**
+	 * Checks if multiplexing is enabled.
+	 *
+	 * @return true if multiplexing is enabled, false otherwise.
+	 */
+	public boolean do_multiplexing() {
+		return this.doMultiplexing;
+	}
+
+	/**
+	 * Computes the position vector in the Geocentric Equatorial Inertial (GEI) frame at a given modified Julian date.
+	 *
+	 * @param dNm The modified Julian date for which to compute the position vector
+	 *
+	 * @return The position vector in the GEI frame
+	 */
+	public Matrix compute_r_gei(ModJulianDate dNm) {
+		if (dNm != null && this.dNm != null && !dNm.equals(this.dNm)) {
+			this.dNm = dNm;
+			this.r_gei = Coordinates.ger2gei(this.R_ger, dNm);
+		}
+
+		return this.r_gei;
 	}
 
 	/**
@@ -179,28 +235,16 @@ public class EarthStation extends Station implements Serializable {
 		return R_ger;
 	}
 
+	/**
+	 * Copies an EarthStation.
+	 *
+	 * @return A new EarthStation instance
+	 */
 	public EarthStation copy() {
-	    EarthStation that = new EarthStation(this.getStationId(), this.getTransmitAntenna().copy(), this.getReceiveAntenna().copy(),
-                this.getEmission().copy(), this.beam.copy(), this.varphi, this.lambda, this.doMultiplexing);
+	    EarthStation that = new EarthStation(this.get_stationId(), this.get_transmitAntenna().copy(), this.get_receiveAntenna().copy(),
+                this.get_emission().copy(), this.beam.copy(), this.varphi, this.lambda, this.doMultiplexing);
 	    that.compute_r_gei(that.dNm);
 
 	    return that;
     }
-
-    public Matrix compute_r_gei(ModJulianDate dNm) {
-        if (dNm != null && this.dNm != null && !dNm.equals(this.dNm)) {
-            this.dNm = dNm;
-            this.r_gei = Coordinates.ger2gei(this.R_ger, dNm);
-        }
-
-        return this.r_gei;
-    }
-
-    public void set_doMultiplexing(boolean value) {
-		doMultiplexing = value;
-	}
-
-	public boolean doMultiplexing() {
-		return this.doMultiplexing;
-	}
 }

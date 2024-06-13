@@ -19,6 +19,8 @@ import com.springbok.antenna.Antenna;
 
 /**
  * Describes a space or Earth station.
+ *
+ * @author raymondleclair
  */
 public class Station {
 
@@ -62,42 +64,28 @@ public class Station {
         this.set_emission(emission);
     }
 
+    /**
+     * Constructs a Station.
+     */
     public Station() {}
 
-    public String getStationId() {
-        return stationId;
-    }
-
-    public Antenna getTransmitAntenna() {
-        return transmitAntenna;
-    }
-
-    public Antenna getReceiveAntenna() {
-        return receiveAntenna;
-    }
-
-    public Emission getEmission() {
-        return emission;
-    }
-
-    /**
-     * Copies a Station.
-     *
-     * @return A new Station instance
-     */
-    public Station copy() {
-        return new Station(this.stationId, this.transmitAntenna.copy(),
-                this.receiveAntenna.copy(),
-                this.emission.copy());
-    }
 
     /**
      * Sets the identifier station.
      *
-     * @param stationId Identifier for station.
+     * @param stationId Identifier for station
      */
     public void set_stationId(String stationId) {
         this.stationId = stationId;
+    }
+
+    /**
+     * Gets the stationId.
+     *
+     * @return Identifier for station
+     */
+    public String get_stationId() {
+        return stationId;
     }
 
     /**
@@ -115,6 +103,15 @@ public class Station {
     }
 
     /**
+     * Gets the transmit antenna.
+     *
+     * @return Transmit antenna
+     */
+    public Antenna get_transmitAntenna() {
+        return transmitAntenna;
+    }
+
+    /**
      * Sets the receive antenna.
      *
      * @param receiveAntenna Receive antenna
@@ -129,6 +126,15 @@ public class Station {
     }
 
     /**
+     * Gets the receive antenna.
+     *
+     * @return Receive antenna
+     */
+    public Antenna get_receiveAntenna() {
+        return receiveAntenna;
+    }
+
+    /**
      * Sets the emission.
      *
      * @param emission Signal power, frequency, and requirement
@@ -137,8 +143,30 @@ public class Station {
         this.emission = emission;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
+    /**
+     * Getter for emission.
+     *
+     * @return Signal power, frequency, and requirement
+     */
+    public Emission get_emission() {
+        return emission;
+    }
+
+    /**
+     * Copies a Station.
+     *
+     * @return A new Station instance
+     */
+    public Station copy() {
+        return new Station(this.stationId, this.transmitAntenna.copy(),
+                this.receiveAntenna.copy(),
+                this.emission.copy());
+    }
+
+    /**
+     * Returns a hash code value for the object.
+     *
+     * @return A hash code value for this object
      */
     @Override
     public int hashCode() {
@@ -159,8 +187,12 @@ public class Station {
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
+    /**
+     * Indicates whether some other object is equal to this one.
+     *
+     * @param obj the reference object with which to compare
+     *
+     * @return true if this object is the same as the obj argument; false otherwise
      */
     @Override
     public boolean equals(Object obj) {

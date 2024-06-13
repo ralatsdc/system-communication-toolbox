@@ -17,7 +17,6 @@ package com.springbok.system;
 
 import Jama.Matrix;
 import com.celestrak.sgp4v.ObjectDecayed;
-import com.springbok.antenna.Antenna;
 import com.springbok.antenna.EarthStationAntenna;
 import com.springbok.antenna.SpaceStationAntenna;
 import com.springbok.pattern.*;
@@ -149,7 +148,7 @@ public class Gso_gso {
         // == Earth station
 
         Matrix lla = Coordinates.gei2lla(
-                spaceStation.getOrbit().r_gei(spaceStation.getOrbit().getEpoch()), spaceStation.getOrbit().getEpoch());
+                spaceStation.get_orbit().r_gei(spaceStation.get_orbit().getEpoch()), spaceStation.get_orbit().getEpoch());
 
         double varphi = 10.0 * Math.PI / 180; // Geodetic latitude [rad]
         double lambda = lla.get(1, 0);          // Longitude [rad]
@@ -462,8 +461,8 @@ public class Gso_gso {
         // == Earth station
 
         Matrix lla = Coordinates.gei2lla(
-                spaceStation.getOrbit().r_gei(
-                        spaceStation.getOrbit().getEpoch()), spaceStation.getOrbit().getEpoch());
+                spaceStation.get_orbit().r_gei(
+                        spaceStation.get_orbit().getEpoch()), spaceStation.get_orbit().getEpoch());
 
         double varphi = 20.0 * Math.PI / 180; // Geodetic latitude [rad]
         double lambda = lla.get(1, 0);          // Longitude [rad]
@@ -569,8 +568,8 @@ public class Gso_gso {
         // == Earth station
         Matrix lla = null;
         try {
-            lla = Coordinates.gei2lla(spaceStation.getOrbit().r_gei(spaceStation.getOrbit().getEpoch()),
-                    spaceStation.getOrbit().getEpoch());
+            lla = Coordinates.gei2lla(spaceStation.get_orbit().r_gei(spaceStation.get_orbit().getEpoch()),
+                    spaceStation.get_orbit().getEpoch());
         } catch (ObjectDecayed objectDecayed) {
             objectDecayed.printStackTrace();
         }
@@ -782,8 +781,8 @@ public class Gso_gso {
         //(124°46 " W) 
         Matrix lla = null;
         try {
-            lla = Coordinates.gei2lla(spaceStation.getOrbit().r_gei(spaceStation.getOrbit().getEpoch()),
-                    spaceStation.getOrbit().getEpoch());
+            lla = Coordinates.gei2lla(spaceStation.get_orbit().r_gei(spaceStation.get_orbit().getEpoch()),
+                    spaceStation.get_orbit().getEpoch());
         } catch (ObjectDecayed objectDecayed) {
             objectDecayed.printStackTrace();
         }

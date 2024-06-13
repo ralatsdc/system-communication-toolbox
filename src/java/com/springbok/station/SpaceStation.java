@@ -26,6 +26,8 @@ import java.util.Arrays;
 
 /**
  * Describes a space station
+ *
+ * @author raymondleclair
  */
 public class SpaceStation extends Station {
 
@@ -38,44 +40,155 @@ public class SpaceStation extends Station {
     // Date number at which the inertial position vector occurs
     private ModJulianDate dNm_i;
 
-    // Geocentric equatorial inertial position vector [er]
-    private Matrix r_gei;
-
     // Date number at which the rotation position vector occurs
     private ModJulianDate dNm_r;
-
-    // Geocentric equatorial rotating position vector [er]
-    private Matrix r_ger;
 
     // Flag indicating if the station is available, or not
     private boolean isAvailable;
 
-    public Beam[] getBeams() {
+
+    // Geocentric equatorial inertial position vector [er]
+    private Matrix r_gei;
+
+    // Geocentric equatorial rotating position vector [er]
+    private Matrix r_ger;
+
+    /**
+     * Sets beam array.
+     *
+     * @param beams Beam array
+     */
+    public void set_beams(Beam[] beams) {
+        this.beams = beams;
+    }
+
+    /**
+     * Gets the beam array.
+     *
+     * @return The beam array
+     */
+    public Beam[] get_beams() {
         return beams;
     }
 
-    public Orbit getOrbit() {
+    /**
+     * Set the satellite orbit
+     *
+     * @param orbit The satellite orbit
+     */
+    public void set_orbit(Orbit orbit) {
+        this.orbit = orbit;
+    }
+
+    /**
+     * Gets the satellite orbit.
+     *
+     * @return The satellite orbit
+     */
+    public Orbit get_orbit() {
         return orbit;
     }
 
-    public ModJulianDate getdNm_i() {
+    /**
+     * Sets the dNm_i value.
+     *
+     * @param dNm_i dNm_i
+     */
+    public void set_dNm_i(ModJulianDate dNm_i) {
+        this.dNm_i = dNm_i;
+    }
+
+    /**
+     * Gets the dNm_i value.
+     *
+     * @return The dNm_i value
+     */
+    public ModJulianDate get_dNm_i() {
         return dNm_i;
     }
 
-    public Matrix getR_gei() {
-        return r_gei;
+    /**
+     * Sets the dNm_r value.
+     *
+     * @param dNm_r dNm_r
+     */
+    public void set_dNm_r(ModJulianDate dNm_r) {
+        this.dNm_r = dNm_r;
     }
 
-    public ModJulianDate getdNm_r() {
+    /**
+     * Gets the dNm_r value.
+     *
+     * @return The dNm_r value
+     */
+    public ModJulianDate get_dNm_r() {
         return dNm_r;
     }
 
-    public Matrix getR_ger() {
-        return r_ger;
+    /**
+     * Sets flag indicating if the station is available, or not.
+     *
+     * @param isAvailable Flag indicating if the station is available, or not
+     */
+    public void set_isAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
     }
 
+    /**
+     * Checks if the station is available.
+     *
+     * @return true if the station is available; false otherwise
+     */
     public boolean isAvailable() {
         return isAvailable;
+    }
+
+    /**
+     * Computes geocentric equatorial inertial position vector.
+     *
+     * @param dNm Date number at which the position vector occurs
+     *
+     * @return Geocentric equatorial inertial position vector [er]
+     */
+    public Matrix compute_r_gei(ModJulianDate dNm) throws ObjectDecayed {
+        if (!dNm.equals(this.dNm_i)) {
+            this.dNm_i = dNm;
+            this.r_gei = this.orbit.r_gei(dNm);
+        }
+        return this.r_gei;
+    }
+
+    /**
+     * Gets the r_gei matrix.
+     *
+     * @return The r_gei matrix
+     */
+    public Matrix get_r_gei() {
+        return r_gei;
+    }
+
+    /**
+     * Computes the geocentric equatorial rotating position vector.
+     *
+     * @param dNm Date number at which the position vector occurs
+     *
+     * @return Geocentric equatorial rotating position vector [er]
+     */
+    public Matrix compute_r_ger(ModJulianDate dNm) throws ObjectDecayed {
+        if (dNm != null && this.dNm_r != null && !dNm.equals(this.dNm_r)) {
+            this.dNm_r = dNm;
+            this.r_ger = Coordinates.gei2ger(this.compute_r_gei(dNm), dNm);
+        }
+        return this.r_ger;
+    }
+
+    /**
+     * Gets the r_ger matrix.
+     *
+     * @return The r_ger matrix
+     */
+    public Matrix get_r_ger() {
+        return r_ger;
     }
 
     /**
@@ -102,6 +215,9 @@ public class SpaceStation extends Station {
         this.isAvailable = true;
     }
 
+    /**
+     * Constructs a SpaceStation.
+     */
     public SpaceStation(){
         super();
     }
@@ -116,8 +232,8 @@ public class SpaceStation extends Station {
         for (int i = 0; i < this.beams.length; i++) {
             beams[i] = this.beams[i].copy();
         }
-        SpaceStation that = new SpaceStation(this.getStationId(), this.getTransmitAntenna().copy(), this.getReceiveAntenna().copy(),
-                this.getEmission().copy(), beams, this.orbit.copy());
+        SpaceStation that = new SpaceStation(this.get_stationId(), this.get_transmitAntenna().copy(), this.get_receiveAntenna().copy(),
+                this.get_emission().copy(), beams, this.orbit.copy());
         that.set_isAvailable(this.isAvailable);
         try {
             that.compute_r_ger(this.dNm_r);
@@ -128,37 +244,10 @@ public class SpaceStation extends Station {
     }
 
     /**
-     * Sets beam array.
-     *
-     * @param beams Beam array
-     */
-    public void set_beams(Beam[] beams) {
-        this.beams = beams;
-    }
-
-    /**
-     * Set the satellite orbit
-     *
-     * @param orbit The satellite orbit
-     */
-    public void set_orbit(Orbit orbit) {
-        this.orbit = orbit;
-    }
-
-    /**
-     * Sets flag indicating if the station is available, or not.
-     *
-     * @param isAvailable Flag indicating if the station is available, or not
-     */
-    public void set_isAvailable(boolean isAvailable) {
-        this.isAvailable = isAvailable;
-    }
-
-    /**
      * Assign this station by assigning the first available beam.
      *
      * @param doMultiplexing Flag indicating whether to do
-     * @param multiplexing, or not
+     * multiplexing, or not
      *
      * @return The assigned beam, or an empty array, if no beam
      */
@@ -180,36 +269,6 @@ public class SpaceStation extends Station {
     }
 
     /**
-     * Computes geocentric equatorial inertial position vector.
-     *
-     * @param dNm Date number at which the position vector occurs
-     *
-     * @return Geocentric equatorial inertial position vector [er]
-     */
-    public Matrix compute_r_gei(ModJulianDate dNm) throws ObjectDecayed {
-        if (!dNm.equals(this.dNm_i)) {
-            this.dNm_i = dNm;
-            this.r_gei = this.orbit.r_gei(dNm);
-        }
-        return this.r_gei;
-    }
-
-    /**
-     * Computes the geocentric equatorial rotating position vector.
-     *
-     * @param dNm Date number at which the position vector occurs
-     *
-     * @return Geocentric equatorial rotating position vector [er]
-     */
-    public Matrix compute_r_ger(ModJulianDate dNm) throws ObjectDecayed {
-        if (dNm != null && this.dNm_r != null && !dNm.equals(this.dNm_r)) {
-            this.dNm_r = dNm;
-            this.r_ger = Coordinates.gei2ger(this.compute_r_gei(dNm), dNm);
-        }
-        return this.r_ger;
-    }
-
-    /**
      * Reset derived properties of associated beams and this to
      * initial values.
      */
@@ -225,8 +284,10 @@ public class SpaceStation extends Station {
         this.isAvailable = true;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
+    /**
+     * Returns a hash code value for the object.
+     *
+     * @return A hash code value for this object
      */
     @Override
     public int hashCode() {
@@ -250,8 +311,12 @@ public class SpaceStation extends Station {
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
+    /**
+     * Indicates whether some other object is equal to this one.
+     *
+     * @param obj the reference object with which to compare
+     *
+     * @return true if this object is the same as the obj argument; false otherwise
      */
     @Override
     public boolean equals(Object obj) {

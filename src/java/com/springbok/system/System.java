@@ -513,7 +513,7 @@ public class System {
 
             //Assign a space station to the current Earth station
             if (iSS_sel != null) { //todo I'm not sure about iSS_sel
-                Beam beam = this.spaceStations[idxSelSS[iSS_sel[0]]].assign(this.earthStations[iES].doMultiplexing());
+                Beam beam = this.spaceStations[idxSelSS[iSS_sel[0]]].assign(this.earthStations[iES].do_multiplexing());
                 Map map = new HashMap();
                 map.put("doCheck", doCheck);
                 this.networks[iES] = new Network(this.earthStations[iES],
@@ -548,15 +548,15 @@ public class System {
 
         for (int iNet = 0; iNet < nNet; iNet++) {
             //Compute duty cycle for the Earth station of each
-            this.networks[iNet].getEarthStation().getBeam().set_dutyCycle(100.0
-                    / this.networks[iNet].getSpaceStationBeam().get_divisions());
+            this.networks[iNet].getEarthStation().get_beam().set_dutyCycle(100.0
+                    / this.networks[iNet].getSpaceStationBeam().get_Divisions());
 
             //Collect assignement properties
             isAvailable_SS[iNet] = this.networks[iNet].getSpaceStation().isAvailable();
             isAvailable_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().isAvailable();
-            isMultiplexed_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().isMultiplexed();
-            divisions_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().get_divisions();
-            dutyCycle_ES_Bm[iNet] = this.networks[iNet].getEarthStationBeam().getDutyCycle();
+            isMultiplexed_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().is_Multiplexed();
+            divisions_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().get_Divisions();
+            dutyCycle_ES_Bm[iNet] = this.networks[iNet].getEarthStationBeam().get_DutyCycle();
         }
 
         //Check the number of networks
@@ -637,7 +637,7 @@ public class System {
             for (int iES = 0; iES < idxBinES.length; iES += numSmpBm) {
 
 
-                Beam beam = this.spaceStations[iSS].assign(this.earthStations[iES].doMultiplexing());
+                Beam beam = this.spaceStations[iSS].assign(this.earthStations[iES].do_multiplexing());
                 Map map = new HashMap();
                 map.put("doCheck", doCheck);
                 this.networks[iES] = new Network(this.earthStations[iES], this.spaceStations[iSS], beam, this.losses, map);
@@ -672,8 +672,9 @@ public class System {
             isAvailable_SS[iNet] = this.networks[iNet].getSpaceStation().isAvailable();
             isAvailable_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().isAvailable();
             isMultiplexed_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().isMultiplexed();
-            divisions_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().get_divisions();
-            dutyCycle_ES_Bm[iNet] = this.networks[iNet].getEarthStationBeam().getDutyCycle();
+            isMultiplexed_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().is_Multiplexed();
+            divisions_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().get_Divisions();
+            dutyCycle_ES_Bm[iNet] = this.networks[iNet].getEarthStationBeam().get_DutyCycle();
 
         }
 

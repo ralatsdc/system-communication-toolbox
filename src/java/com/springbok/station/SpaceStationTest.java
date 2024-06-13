@@ -80,12 +80,12 @@ public class SpaceStationTest {
      */
     @Test
     public void test_SpaceStation() {
-        assertTrue(this.spaceStation.getStationId().equals(stationId));
-        assertEquals(transmitAntenna, spaceStation.getTransmitAntenna());
-        assertEquals(receiveAntenna, spaceStation.getReceiveAntenna());
-        assertEquals(emission, spaceStation.getEmission());
-        assertArrayEquals(beams, spaceStation.getBeams());
-        assertEquals(orbit, spaceStation.getOrbit());
+        assertTrue(this.spaceStation.get_stationId().equals(stationId));
+        assertEquals(transmitAntenna, spaceStation.get_transmitAntenna());
+        assertEquals(receiveAntenna, spaceStation.get_receiveAntenna());
+        assertEquals(emission, spaceStation.get_emission());
+        assertArrayEquals(beams, spaceStation.get_beams());
+        assertEquals(orbit, spaceStation.get_orbit());
 
     }
 
@@ -137,7 +137,7 @@ public class SpaceStationTest {
         assertEquals(beam, beams[0]);
         assertTrue(this.spaceStation.isAvailable());
 
-        for (int idx = 0; idx < this.beams[1].getMultiplicity() - 1; idx++) {
+        for (int idx = 0; idx < this.beams[1].get_Multiplicity() - 1; idx++) {
             beam = this.spaceStation.assign(doMultiplexing);
             assertEquals(beam, beams[1]);
             assertTrue(this.spaceStation.isAvailable());
@@ -148,7 +148,7 @@ public class SpaceStationTest {
         assertEquals(beam, beams[1]);
         assertTrue(this.spaceStation.isAvailable());
 
-        for (int idx = 0; idx < this.beams[2].getMultiplicity() - 1; idx++) {
+        for (int idx = 0; idx < this.beams[2].get_Multiplicity() - 1; idx++) {
             beam = this.spaceStation.assign(doMultiplexing);
             assertEquals(beam, beams[2]);
             assertTrue(this.spaceStation.isAvailable());
@@ -196,10 +196,10 @@ public class SpaceStationTest {
 
         this.spaceStation.reset();
 
-        for (Beam beamItem : this.spaceStation.getBeams()) {
+        for (Beam beamItem : this.spaceStation.get_beams()) {
             assertTrue(beamItem.isAvailable());
-            assertFalse(beamItem.isMultiplexed());
-            assertTrue(TestUtility.isDoublesEquals(0, beamItem.getDivisions()));
+            assertFalse(beamItem.is_Multiplexed());
+            assertTrue(TestUtility.isDoublesEquals(0, beamItem.get_Divisions()));
         }
 
         assertTrue(this.spaceStation.isAvailable());
