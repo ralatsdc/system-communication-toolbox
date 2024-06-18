@@ -33,25 +33,71 @@ public class SpaceStation extends Station {
 
     // Beam array
     private Beam[] beams;
-
     // A satellite orbit
     private Orbit orbit;
-
     // Date number at which the inertial position vector occurs
     private ModJulianDate dNm_i;
-
     // Date number at which the rotation position vector occurs
     private ModJulianDate dNm_r;
 
     // Flag indicating if the station is available, or not
     private boolean isAvailable;
-
-
     // Geocentric equatorial inertial position vector [er]
     private Matrix r_gei;
-
     // Geocentric equatorial rotating position vector [er]
     private Matrix r_ger;
+
+    /**
+     * Constructs a SpaceStation.
+     *
+     * @param stationId Identifier for station
+     * @param transmitAntenna Transmit antenna gain, and pattern
+     * @param receiveAntenna Receive antenna gain, pattern, and noise temperature
+     * @param emission Signal power, frequency, and requirement
+     * @param beams Beam array
+     * @param orbit A satellite orbit
+     */
+    public SpaceStation(String stationId, Antenna transmitAntenna, Antenna receiveAntenna, Emission emission, Beam[] beams,
+                        Orbit orbit) {
+        super(stationId, transmitAntenna, receiveAntenna, emission);
+
+        // Assign properties
+        this.set_transmitAntenna(transmitAntenna);
+        this.set_receiveAntenna(receiveAntenna);
+        this.set_beams(beams);
+        this.set_orbit(orbit);
+
+        // Derive properties
+        this.isAvailable = true;
+    }
+
+    /**
+     * Constructs a SpaceStation.
+     */
+    public SpaceStation(){
+        super();
+    }
+
+    /**
+     * Constructs a SpaceStation.
+     *
+     * @return A new SpaceStation instance
+     */
+    public SpaceStation copy() {
+        Beam[] beams = new Beam[this.beams.length];
+        for (int i = 0; i < this.beams.length; i++) {
+            beams[i] = this.beams[i].copy();
+        }
+        SpaceStation that = new SpaceStation(this.get_stationId(), this.get_transmitAntenna().copy(), this.get_receiveAntenna().copy(),
+                this.get_emission().copy(), beams, this.orbit.copy());
+        that.set_isAvailable(this.isAvailable);
+        try {
+            that.compute_r_ger(this.dNm_r);
+        } catch (ObjectDecayed objectDecayed) {
+            objectDecayed.printStackTrace();
+        }
+        return that;
+    }
 
     /**
      * Sets beam array.
@@ -192,58 +238,6 @@ public class SpaceStation extends Station {
     }
 
     /**
-     * Constructs a SpaceStation.
-     *
-     * @param stationId Identifier for station
-     * @param transmitAntenna Transmit antenna gain, and pattern
-     * @param receiveAntenna Receive antenna gain, pattern, and noise temperature
-     * @param emission Signal power, frequency, and requirement
-     * @param beams Beam array
-     * @param orbit A satellite orbit
-     */
-    public SpaceStation(String stationId, Antenna transmitAntenna, Antenna receiveAntenna, Emission emission, Beam[] beams,
-                        Orbit orbit) {
-        super(stationId, transmitAntenna, receiveAntenna, emission);
-
-        // Assign properties
-        this.set_transmitAntenna(transmitAntenna);
-        this.set_receiveAntenna(receiveAntenna);
-        this.set_beams(beams);
-        this.set_orbit(orbit);
-
-        // Derive properties
-        this.isAvailable = true;
-    }
-
-    /**
-     * Constructs a SpaceStation.
-     */
-    public SpaceStation(){
-        super();
-    }
-
-    /**
-     * Constructs a SpaceStation.
-     *
-     * @return A new SpaceStation instance
-     */
-    public SpaceStation copy() {
-        Beam[] beams = new Beam[this.beams.length];
-        for (int i = 0; i < this.beams.length; i++) {
-            beams[i] = this.beams[i].copy();
-        }
-        SpaceStation that = new SpaceStation(this.get_stationId(), this.get_transmitAntenna().copy(), this.get_receiveAntenna().copy(),
-                this.get_emission().copy(), beams, this.orbit.copy());
-        that.set_isAvailable(this.isAvailable);
-        try {
-            that.compute_r_ger(this.dNm_r);
-        } catch (ObjectDecayed objectDecayed) {
-            objectDecayed.printStackTrace();
-        }
-        return that;
-    }
-
-    /**
      * Assign this station by assigning the first available beam.
      *
      * @param doMultiplexing Flag indicating whether to do
@@ -351,7 +345,6 @@ public class SpaceStation extends Station {
         if (isAvailable != other.isAvailable) {
             return false;
         }
-
         return true;
     }
 }

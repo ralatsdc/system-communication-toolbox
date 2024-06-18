@@ -39,9 +39,9 @@ public class BeamTest {
 
         Beam beam = new Beam(this.name, multiplicity, dutyCycle);
 
-        assertTrue(beam.get_Name().equals(name));
-        assertEquals(multiplicity, beam.get_Multiplicity());
-        assertTrue(TestUtility.isDoublesEquals(dutyCycle, beam.get_DutyCycle()));
+        assertTrue(beam.get_name().equals(name));
+        assertEquals(multiplicity, beam.get_multiplicity());
+        assertTrue(TestUtility.isDoublesEquals(dutyCycle, beam.get_dutyCycle()));
     }
 
     @Test
@@ -53,22 +53,22 @@ public class BeamTest {
         Beam beam = new Beam(this.name, multiplicity, dutyCycle);
 
         assertTrue(beam.isAvailable());
-        assertFalse(beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(0, beam.get_Divisions()));
+        assertFalse(beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(0, beam.get_divisions()));
 
         boolean isAssigned = beam.assign(doMultiplexing);
 
         assertTrue(isAssigned);
         assertFalse(beam.isAvailable());
-        assertEquals(doMultiplexing, beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(1, beam.get_Divisions()));
+        assertEquals(doMultiplexing, beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(1, beam.get_divisions()));
 
         isAssigned = beam.assign(doMultiplexing);
 
         assertFalse(isAssigned);
         assertFalse(beam.isAvailable());
-        assertEquals(doMultiplexing, beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(1, beam.get_Divisions()));
+        assertEquals(doMultiplexing, beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(1, beam.get_divisions()));
     }
 
     @Test
@@ -80,22 +80,22 @@ public class BeamTest {
         Beam beam = new Beam(this.name, multiplicity, dutyCycle);
 
         assertTrue(beam.isAvailable());
-        assertFalse(beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(0, beam.get_Divisions()));
+        assertFalse(beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(0, beam.get_divisions()));
 
         boolean isAssigned = beam.assign(doMultiplexing);
 
         assertTrue(isAssigned);
         assertFalse(beam.isAvailable());
-        assertEquals(doMultiplexing, beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(1, beam.get_Divisions()));
+        assertEquals(doMultiplexing, beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(1, beam.get_divisions()));
 
         isAssigned = beam.assign(doMultiplexing);
 
         assertFalse(isAssigned);
         assertFalse(beam.isAvailable());
-        assertEquals(doMultiplexing, beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(1, beam.get_Divisions()));
+        assertEquals(doMultiplexing, beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(1, beam.get_divisions()));
     }
 
     @Test
@@ -107,22 +107,22 @@ public class BeamTest {
         Beam beam = new Beam(this.name, multiplicity, dutyCycle);
 
         assertTrue(beam.isAvailable());
-        assertFalse(beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(0, beam.get_Divisions()));
+        assertFalse(beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(0, beam.get_divisions()));
 
         boolean isAssigned = beam.assign(doMultiplexing);
 
         assertTrue(isAssigned);
         assertFalse(beam.isAvailable());
-        assertEquals(doMultiplexing, beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(1, beam.get_Divisions()));
+        assertEquals(doMultiplexing, beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(1, beam.get_divisions()));
 
         isAssigned = beam.assign(doMultiplexing);
 
         assertFalse(isAssigned);
         assertFalse(beam.isAvailable());
-        assertEquals(doMultiplexing, beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(1, beam.get_Divisions()));
+        assertEquals(doMultiplexing, beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(1, beam.get_divisions()));
     }
 
     @Test
@@ -134,31 +134,31 @@ public class BeamTest {
         Beam beam = new Beam(this.name, multiplicity, dutyCycle);
 
         assertTrue(beam.isAvailable());
-        assertFalse(beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(0, beam.get_Divisions()));
+        assertFalse(beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(0, beam.get_divisions()));
 
         for (int idx = 1; idx < multiplicity; idx++) {
             boolean isAssigned = beam.assign(doMultiplexing);
 
             assertTrue(isAssigned);
             assertTrue(beam.isAvailable());
-            assertEquals(doMultiplexing, beam.is_Multiplexed());
-            assertTrue(TestUtility.isDoublesEquals(idx, beam.get_Divisions()));
+            assertEquals(doMultiplexing, beam.isMultiplexed());
+            assertTrue(TestUtility.isDoublesEquals(idx, beam.get_divisions()));
         }
 
         boolean isAssigned = beam.assign(doMultiplexing);
 
         assertTrue(isAssigned);
         assertFalse(beam.isAvailable());
-        assertEquals(doMultiplexing, beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(multiplicity, beam.get_Divisions()));
+        assertEquals(doMultiplexing, beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(multiplicity, beam.get_divisions()));
 
         isAssigned = beam.assign(doMultiplexing);
 
         assertFalse(isAssigned);
         assertFalse(beam.isAvailable());
-        assertEquals(doMultiplexing, beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(multiplicity, beam.get_Divisions()));
+        assertEquals(doMultiplexing, beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(multiplicity, beam.get_divisions()));
     }
 
     @Test
@@ -170,20 +170,20 @@ public class BeamTest {
         Beam beam = new Beam(this.name, multiplicity, dutyCycle);
 
         assertTrue(beam.isAvailable());
-        assertFalse(beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(0, beam.get_Divisions()));
+        assertFalse(beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(0, beam.get_divisions()));
 
         boolean isAssigned = beam.assign(doMultiplexing);
 
         assertTrue(isAssigned);
         assertFalse(beam.isAvailable());
-        assertEquals(doMultiplexing, beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(1, beam.get_Divisions()));
+        assertEquals(doMultiplexing, beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(1, beam.get_divisions()));
 
         beam.reset();
 
         assertTrue(beam.isAvailable());
-        assertFalse(beam.is_Multiplexed());
-        assertTrue(TestUtility.isDoublesEquals(0, beam.get_Divisions()));
+        assertFalse(beam.isMultiplexed());
+        assertTrue(TestUtility.isDoublesEquals(0, beam.get_divisions()));
     }
 }

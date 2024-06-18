@@ -34,24 +34,18 @@ public class EarthStation extends Station implements Serializable {
 
 	// Describes a space or an Earth station beam.
 	private Beam beam;
-
-	/** Geodetic Latitude [rad] */
+	// Geodetic Latitude [rad]
 	protected double varphi;
-
-	/** Longitude [rad] */
+	// Longitude [rad]
 	protected double lambda;
-
 	// Flag indicating whether to do multiplexing, or not
 	private boolean doMultiplexing;
-
 	// Date number at which the position vector occurs
     private ModJulianDate dNm;
-
-
     // Geocentric equatorial inertial position vector [er]
     private Matrix r_gei;
 
-	/** Geocentric equatorial rotating position [er] */
+	// Geocentric equatorial rotating position [er]
 	protected Matrix R_ger;
 
 	/**
@@ -97,6 +91,19 @@ public class EarthStation extends Station implements Serializable {
 	 */
 	public EarthStation() {
 		super();
+	}
+
+	/**
+	 * Copies an EarthStation.
+	 *
+	 * @return A new EarthStation instance
+	 */
+	public EarthStation copy() {
+		EarthStation that = new EarthStation(this.get_stationId(), this.get_transmitAntenna().copy(), this.get_receiveAntenna().copy(),
+				this.get_emission().copy(), this.beam.copy(), this.varphi, this.lambda, this.doMultiplexing);
+		that.compute_r_gei(that.dNm);
+
+		return that;
 	}
 
 	/**
@@ -146,7 +153,7 @@ public class EarthStation extends Station implements Serializable {
 	 * @throws MException if the multiplicity of the Beam object is not equal to 1
 	 */
 	public void set_beam(Beam beam) {
-		if (beam.get_Multiplicity() != 1) {
+		if (beam.get_multiplicity() != 1) {
 			throw new MException("Springbok:IllegalArgumentException",
 					"An Earth station beam must have multiplicity one");
 		}
@@ -177,7 +184,7 @@ public class EarthStation extends Station implements Serializable {
 	 *
 	 * @return true if multiplexing is enabled, false otherwise.
 	 */
-	public boolean do_multiplexing() {
+	public boolean doMultiplexing() {
 		return this.doMultiplexing;
 	}
 
@@ -235,16 +242,4 @@ public class EarthStation extends Station implements Serializable {
 		return R_ger;
 	}
 
-	/**
-	 * Copies an EarthStation.
-	 *
-	 * @return A new EarthStation instance
-	 */
-	public EarthStation copy() {
-	    EarthStation that = new EarthStation(this.get_stationId(), this.get_transmitAntenna().copy(), this.get_receiveAntenna().copy(),
-                this.get_emission().copy(), this.beam.copy(), this.varphi, this.lambda, this.doMultiplexing);
-	    that.compute_r_gei(that.dNm);
-
-	    return that;
-    }
 }

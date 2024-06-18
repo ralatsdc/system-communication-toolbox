@@ -24,21 +24,45 @@ public class Emission {
 
     // Emission designator
     private String design_emi;
-
     // Maximum power density [dBW/Hz]
     private double pwr_ds_max;
-
     // Minimum power density [dBW/Hz]
     private double pwr_ds_min;
-
     // Center frequency [MHz]
     private double freq_mhz;
-
     // Required C/N [dB]
     private double c_to_n;
-
     // Power flux density [dBW/Hz/m2]
     private double pwr_flx_ds;
+
+    /**
+     * Constructs an Emission.
+     * @param design_emi Emission designator
+     * @param pwr_ds_max Maximum power density [dBW/Hz]
+     * @param pwr_ds_min Minimum power density [dBW/Hz]
+     * @param freq_mhz Center frequency [MHz]
+     * @param c_to_n Required C/N [dB]
+     * @param pwr_flx_ds Power flux density [dBW/Hz/m2]
+     */
+    public Emission(String design_emi, double pwr_ds_max, double pwr_ds_min, double freq_mhz, double c_to_n, double pwr_flx_ds) {
+        // Assign properties
+        this.set_design_emi(design_emi);
+        this.set_pwr_ds_max(pwr_ds_max);
+        this.set_pwr_ds_min(pwr_ds_min);
+        this.set_freq_mhz(freq_mhz);
+        this.set_c_to_n(c_to_n);
+        this.set_pwr_flx_ds(pwr_flx_ds);
+    }
+
+    /**
+     * Copies an Emission.
+     *
+     * @return A new Emission instance
+     */
+    public Emission copy() {
+        return new Emission(this.design_emi, this.pwr_ds_max, this.pwr_ds_min,
+                this.freq_mhz, this.c_to_n, this.pwr_flx_ds);
+    }
 
     /**
      * Sets emission designator.
@@ -149,35 +173,6 @@ public class Emission {
     }
 
     /**
-     * Constructs an Emission.
-     * @param design_emi Emission designator
-     * @param pwr_ds_max Maximum power density [dBW/Hz]
-     * @param pwr_ds_min Minimum power density [dBW/Hz]
-     * @param freq_mhz Center frequency [MHz]
-     * @param c_to_n Required C/N [dB]
-     * @param pwr_flx_ds Power flux density [dBW/Hz/m2]
-     */
-    public Emission(String design_emi, double pwr_ds_max, double pwr_ds_min, double freq_mhz, double c_to_n, double pwr_flx_ds) {
-        // Assign properties
-        this.set_design_emi(design_emi);
-        this.set_pwr_ds_max(pwr_ds_max);
-        this.set_pwr_ds_min(pwr_ds_min);
-        this.set_freq_mhz(freq_mhz);
-        this.set_c_to_n(c_to_n);
-        this.set_pwr_flx_ds(pwr_flx_ds);
-    }
-
-    /**
-     * Copies an Emission.
-     *
-     * @return A new Emission instance
-     */
-    public Emission copy() {
-        return new Emission(this.design_emi, this.pwr_ds_max, this.pwr_ds_min,
-                this.freq_mhz, this.c_to_n, this.pwr_flx_ds);
-    }
-
-    /**
      * Returns a hash code value for the object.
      *
      * @return A hash code value for this object
@@ -239,7 +234,6 @@ public class Emission {
                 .doubleToLongBits(other.pwr_flx_ds)) {
             return false;
         }
-
         return true;
     }
 }

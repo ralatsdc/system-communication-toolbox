@@ -26,16 +26,12 @@ public class Station {
 
     // Identifier for station
     private String stationId;
-
     // Transmit antenna gain, and pattern
     private Antenna transmitAntenna;
-
     // Receive antenna gain, pattern, and noise temperature
     private Antenna receiveAntenna;
-
     // Signal power, frequency, and requirement
     private Emission emission;
-
 
     /**
      * Constructs a Station.
@@ -68,7 +64,6 @@ public class Station {
      * Constructs a Station.
      */
     public Station() {}
-
 
     /**
      * Sets the identifier station.

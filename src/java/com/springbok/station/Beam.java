@@ -26,21 +26,46 @@ public class Beam {
 
     // Beam name
     private String name;
-
     // Maximum number of divisions allowed
     private int multiplicity;
-
     // Duty cycle
     private double dutyCycle;
-
     // Flag indicating if the beam is available, or not
-    private boolean isAvailable;
 
+    private boolean isAvailable;
     // Flag indicating if the beam is multiplexed, or not
     private boolean isMultiplexed;
-
     // Number of divisions in use
     private int divisions;
+
+    /**
+     * Constructs a Beam.
+     *
+     * @param name Beam name
+     * @param multiplicity Maximum number of divisions allowed
+     * @param dutyCycle Duty cycle [%]
+     */
+    public Beam(String name, int multiplicity, double dutyCycle) {
+
+        // Assign properties
+        this.set_name(name);
+        this.set_multiplicity(multiplicity);
+        this.set_dutyCycle(dutyCycle);
+
+        // Derive properties
+        this.isAvailable = true;
+        this.isMultiplexed = false;
+        this.divisions = 0;
+    }
+
+    /**
+     * Copies a Beam.
+     *
+     * @return A new Beam instance
+     */
+    public Beam copy() {
+        return new Beam(this.name, this.multiplicity, this.dutyCycle);
+    }
 
     /**
      * Sets beam name.
@@ -56,7 +81,7 @@ public class Beam {
      *
      * @return The name of the station
      */
-    public String get_Name() {
+    public String get_name() {
         return name;
     }
 
@@ -74,7 +99,7 @@ public class Beam {
      *
      * @return The multiplicity of the station
      */
-    public int get_Multiplicity() {
+    public int get_multiplicity() {
         return multiplicity;
     }
 
@@ -96,7 +121,7 @@ public class Beam {
      *
      * @return The duty cycle of the station
      */
-    public double get_DutyCycle() {
+    public double get_dutyCycle() {
         return dutyCycle;
     }
 
@@ -132,8 +157,8 @@ public class Beam {
      *
      * @return true if the station is multiplexed; false otherwise
      */
-    public boolean is_Multiplexed() {
-        return isMultiplexed;
+    public boolean isMultiplexed() {
+        return this.isMultiplexed;
     }
 
     /**
@@ -154,37 +179,8 @@ public class Beam {
      *
      * @return The number of divisions of the station
      */
-    public int get_Divisions() {
+    public int get_divisions() {
         return divisions;
-    }
-
-    /**
-     * Constructs a Beam.
-     *
-     * @param name Beam name
-     * @param multiplicity Maximum number of divisions allowed
-     * @param dutyCycle Duty cycle [%]
-     */
-    public Beam(String name, int multiplicity, double dutyCycle) {
-
-        // Assign properties
-        this.set_name(name);
-        this.set_multiplicity(multiplicity);
-        this.set_dutyCycle(dutyCycle);
-
-        // Derive properties
-        this.isAvailable = true;
-        this.isMultiplexed = false;
-        this.divisions = 0;
-    }
-
-    /**
-     * Copies a Beam.
-     *
-     * @return A new Beam instance
-     */
-    public Beam copy() {
-        return new Beam(this.name, this.multiplicity, this.dutyCycle);
     }
 
     /**
