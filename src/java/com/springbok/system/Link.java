@@ -81,7 +81,7 @@ public class Link {
          * @return Angle
          */
         public double get_phi() {
-            return phi;
+            return this.phi;
         }
 
         /**
@@ -191,7 +191,7 @@ public class Link {
      * @return A transmit station
      */
     public Station get_transmitStation() {
-        return transmitStation;
+        return this.transmitStation;
     }
 
     /**
@@ -220,7 +220,7 @@ public class Link {
      * @return A transmit station beam
      */
     public Beam get_transmitStationBeam() {
-        return transmitStationBeam;
+        return this.transmitStationBeam;
     }
 
     /**
@@ -238,7 +238,7 @@ public class Link {
      * @return A receive station
      */
     public Station get_receiveStation() {
-        return receiveStation;
+        return this.receiveStation;
     }
 
     /**
@@ -256,7 +256,7 @@ public class Link {
      * @return Propagation loss models to apply
      */
     public Object[] get_losses() {
-        return losses;
+        return this.losses;
     }
 
     /**

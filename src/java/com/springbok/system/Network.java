@@ -32,65 +32,32 @@ public class Network {
 
     // An Earth station
     private EarthStation earthStation;
-
     // A space station
     private SpaceStation spaceStation;
-
     // A space station beam
     private Beam spaceStationBeam;
-
     // Propagation loss models to apply
     private Object[] losses;
 
     // Link direction: 'up', 'down', or 'both' (the default)
     private String type;
-
     // Flag to check input arguments, or not (check by default)
     private boolean doCheck;
-
     // An Earth station beam
     private Beam earthStationBeam;
-
     // An up link
     private Link up_Link;
-
     // A down link
     private Link dn_Link;
 
-    public EarthStation getEarthStation() {
-        return earthStation;
-    }
-
-    public SpaceStation getSpaceStation() {
-        return spaceStation;
-    }
-
-    public Beam getSpaceStationBeam() {
-        return spaceStationBeam;
-    }
-
-    public Object[] getLosses() {
-        return losses;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public boolean isDoCheck() {
-        return doCheck;
-    }
-
-    public Beam getEarthStationBeam() {
-        return earthStationBeam;
-    }
-
-    public Link getUp_Link() {
-        return up_Link;
-    }
-
-    public Link getDn_Link() {
-        return dn_Link;
+    /**
+     * Constructs a Network.
+     */
+    public Network() {
+        this.type = "both";
+        this.doCheck = true;
+        this.up_Link = new Link();
+        this.dn_Link = new Link();
     }
 
     /**
@@ -100,17 +67,11 @@ public class Network {
      * @param spaceStation     A space station
      * @param spaceStationBeam A space station beam
      * @param losses           Propagation loss models to apply
-     * @param Type             Link direction: 'up', 'down', or 'both' (the
+     * TODO: Document options
+     * @ param Type             Link direction: 'up', 'down', or 'both' (the
      *                         default)
-     * @param DoCheck          Flag for checking input values (default is 1)
+     * @ param DoCheck          Flag for checking input values (default is 1)
      */
-    public Network() {
-        this.type = "both";
-        this.doCheck = true;
-        this.up_Link = new Link();
-        this.dn_Link = new Link();
-    }
-
     public Network(EarthStation earthStation, SpaceStation spaceStation, Beam spaceStationBeam, Object[] losses, Map options) {
         // Parse variable input arguments
         this.set_type((String) options.getOrDefault("Type", "both"));
@@ -150,12 +111,48 @@ public class Network {
     }
 
     /**
-     * Set the Earth station.
+     * Sets the Earth station.
      *
      * @param earthStation The Earth station
      */
     public void set_earthStation(EarthStation earthStation) {
         this.earthStation = earthStation;
+    }
+
+    /**
+     * Gets the Earth station.
+     *
+     * @return earthStation The Earth station
+     */
+    public EarthStation get_earthStation() {
+        return this.earthStation;
+    }
+
+    /**
+     * Gets the Earth station beam.
+     *
+     * @return The Earth station beam
+     */
+    public Beam get_earthStationBeam() {
+        return this.earthStationBeam;
+    }
+
+    /**
+     * Gets the up link.
+     *
+     * @return The up link
+     */
+    public Link get_up_Link() {
+        return this.up_Link;
+    }
+
+    /**
+     * Gets the down link.
+     *
+     * @return The down link
+     */
+    public Link get_dn_Link() {
+        return this.dn_Link;
     }
 
     /**
@@ -165,6 +162,15 @@ public class Network {
      */
     public void set_spaceStation(SpaceStation spaceStation) {
         this.spaceStation = spaceStation;
+    }
+
+    /**
+     * Get the space station.
+     *
+     * @return The space station
+     */
+    public SpaceStation get_spaceStation() {
+        return this.spaceStation;
     }
 
     /**
@@ -181,12 +187,30 @@ public class Network {
     }
 
     /**
-     * Sets propagation loss models to apply
+     * Get the space station beam.
      *
-     * @param losses - Propagation loss models to apply
+     * @return The space station beam
+     */
+    public Beam get_spaceStationBeam() {
+        return this.spaceStationBeam;
+    }
+
+    /**
+     * Sets propagation loss models to apply.
+     *
+     * @param losses Propagation loss models to apply
      */
     public void set_losses(Object[] losses) {
         this.losses = losses;
+    }
+
+    /**
+     * Gets propagation loss models to apply.
+     *
+     * @return losses Propagation loss models to apply
+     */
+    public Object[] get_losses() {
+        return this.losses;
     }
 
     /**
@@ -204,12 +228,31 @@ public class Network {
     }
 
     /**
+     * Gets link direction: 'up', 'down', or 'both' (the default).
+     *
+     * @return the Link direction: 'up', 'down', or 'both' (the
+     *             default)
+     */
+    public String get_type() {
+        return this.type;
+    }
+
+    /**
      * Sets flag to check input arguments, or not.
      *
      * @param doCheck Flag to check input arguments, or not
      */
     public void set_doCheck(boolean doCheck) {
         this.doCheck = doCheck;
+    }
+
+    /**
+     * Gets flag to check input arguments, or not.
+     *
+     * @return Flag to check input arguments, or not
+     */
+    public boolean doCheck() {
+        return this.doCheck;
     }
 
     /**

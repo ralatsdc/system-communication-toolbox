@@ -24,45 +24,16 @@ public class Performance {
 
     // Carrier power density [dBW/Hz]
     private double C;
-
     // Noise power density [dBW/Hz]
     private double N;
-
     // Interference power density for each network [dBW/Hz]
     private double[] i;
-
     // Interference power density total [dBW/Hz]
     private double I;
-
     // Equivalent power flux density for each network [dBW/m^2 in reference bandwidth]
     private double[] epfd;
-
     // Equivalent power flux density total [dBW/m^2 in reference bandwidth]
     private double EPFD;
-
-    public double getC() {
-        return C;
-    }
-
-    public double getN() {
-        return N;
-    }
-
-    public double[] get_i() {
-        return i;
-    }
-
-    public double getI() {
-        return I;
-    }
-
-    public double[] getEpfd() {
-        return epfd;
-    }
-
-    public double getEPFD() {
-        return EPFD;
-    }
 
     /**
      * Constructs a Performance.
@@ -109,12 +80,30 @@ public class Performance {
     }
 
     /**
+     * Gets carrier power density [dBW/Hz].
+     *
+     * @return Carrier power density [dBW/Hz]
+     */
+    public double get_C() {
+        return this.C;
+    }
+
+    /**
      * Sets noise power density [dBW/Hz].
      *
      * @param N Noise power density [dBW/Hz]
      */
     public void set_N(double N) {
         this.N = N;
+    }
+
+    /**
+     * Gets noise power density [dBW/Hz].
+     *
+     * @return Noise power density [dBW/Hz]
+     */
+    public double get_N() {
+        return this.N;
     }
 
     /**
@@ -127,6 +116,15 @@ public class Performance {
     }
 
     /**
+     * Gets interference power density for each network [dBW/Hz].
+     *
+     * @return Interference power density for each network [dBW/Hz]
+     */
+    public double[] get_i() {
+        return this.i;
+    }
+
+    /**
      * Sets interference power density total [dBW/Hz].
      *
      * @param I Interference power density total [dBW/Hz]
@@ -136,14 +134,34 @@ public class Performance {
     }
 
     /**
+     * Gets interference power density total [dBW/Hz].
+     *
+     * @return Interference power density total [dBW/Hz]
+     */
+    public double get_I() {
+        return this.I;
+    }
+
+    /**
      * Sets equivalent power flux density for each network [dBW/m^2
      * in reference bandwidth].
      *
-     * @param EPFD Equivalent power flux density for each network
+     * @param epfd Equivalent power flux density for each network
      *             [dBW/m^2 in reference bandwidth]
      */
     public void set_epfd(double[] epfd) {
         this.epfd = epfd;
+    }
+
+    /**
+     * Gets equivalent power flux density for each network [dBW/m^2
+     * in reference bandwidth].
+     *
+     * @return Equivalent power flux density for each network
+     *             [dBW/m^2 in reference bandwidth]
+     */
+    public double[] get_epfd() {
+        return this.epfd;
     }
 
     /**
@@ -155,6 +173,17 @@ public class Performance {
      */
     public void set_EPFD(double EPFD) {
         this.EPFD = EPFD;
+    }
+
+    /**
+     * Gets equivalent power flux density total [dBW/m^2 in
+     * reference bandwidth].
+     *
+     * @return Equivalent power flux density total [dBW/m^2 in
+     *             reference bandwidth]
+     */
+    public double get_EPFD() {
+        return this.EPFD;
     }
 
     /* (non-Javadoc)

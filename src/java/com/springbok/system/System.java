@@ -38,107 +38,42 @@ import static com.springbok.system.SystemUtils.randperm;
  */
 public class System {
 
+    // TODO: Is this the only use of a logger?
     public static Logger logger = LogManager.getLogger(System.class.getName());
 
     // An Earth station array
     private EarthStation[] earthStations;
-
     // A space station array
     private SpaceStation[] spaceStations;
-
     // Propagation loss models to apply
     private Object[] losses;
-
-    // Flag for avoiding GSO arc
-    private boolean testAngleFromGsoArc;
-
-    // Angle for avoiding GSO arc
-    private double angleFromGsoArc;
-
-    // Flag for avoiding low passes
-    private boolean testAngleFromZenith;
-
-    // Angle for avoiding low passes
-    private double angleFromZenith;
-
     // Current date number
     private ModJulianDate dNm;
 
-    // Angle between space station position vector relative to the
-    // Earth station and GSO arc
-    private double[][] theta_g;
-
-    // Angle between space station position vector relative to the
-    // Earth station and Earth station zenith direction
-    private double[][] theta_z;
-
-    // Metric used to select space station for each Earth station
-    private double[][] metrics;
+    // Flag for avoiding GSO arc
+    private boolean testAngleFromGsoArc;
+    // Angle for avoiding GSO arc
+    private double angleFromGsoArc;
+    // Flag for avoiding low passes
+    private boolean testAngleFromZenith;
+    // Angle for avoiding low passes
+    private double angleFromZenith;
 
     // A network array
     private Network[] networks;
 
+    // Angle between space station position vector relative to the
+    // Earth station and GSO arc
+    private double[][] theta_g;
+    // Angle between space station position vector relative to the
+    // Earth station and Earth station zenith direction
+    private double[][] theta_z;
+    // Metric used to select space station for each Earth station
+    private double[][] metrics;
     // Index of each Earth station assigned to a network
     private int[] idxNetES;
-
     // Index of each space station assigned to a network
     private int[] idxNetSS;
-
-    public ModJulianDate getdNm() {
-        return dNm;
-    }
-
-    public Network[] getNetworks() {
-        return networks;
-    }
-
-    public EarthStation[] getEarthStations() {
-        return earthStations;
-    }
-
-    public SpaceStation[] getSpaceStations() {
-        return spaceStations;
-    }
-
-    public Object[] getLosses() {
-        return losses;
-    }
-
-    public boolean isTestAngleFromGsoArc() {
-        return testAngleFromGsoArc;
-    }
-
-    public double getAngleFromGsoArc() {
-        return angleFromGsoArc;
-    }
-
-    public boolean isTestAngleFromZenith() {
-        return testAngleFromZenith;
-    }
-
-    public double getAngleFromZenith() {
-        return angleFromZenith;
-    }
-
-    public double[][] getTheta_g() {
-        return theta_g;
-    }
-
-    public double[][] getTheta_z() {
-        return theta_z;
-    }
-
-    public double[][] getMetrics() {
-        return metrics;
-    }
-
-    public int[] getIdxNetES() {
-        return idxNetES;
-    }
-
-    public int[] getIdxNetSS() {
-        return idxNetSS;
-    }
 
     /**
      * Constructs a System.
@@ -158,8 +93,7 @@ public class System {
         this.set_earthStations(earthStations);
         this.set_spaceStations(spaceStations);
         this.set_losses(losses);
-        this.dNm = dNm;         // Set on construction,
-        // or assignment only
+        this.dNm = dNm;  // Set on construction, or assignment only
 
         // Parse variable input arguments
         this.testAngleFromGsoArc = (boolean) options.getOrDefault("TestAngleFromGsoArc", true);
@@ -186,19 +120,21 @@ public class System {
         for (int iSS = 0; iSS < nES; iSS++) {
             spaceStations[iSS] = this.spaceStations[iSS].copy();
         }
+
         Map options = new HashMap();
         options.put("testAngleFromGsoArc", this.testAngleFromGsoArc);
         options.put("testAngleFromZenith", this.testAngleFromZenith);
         System that = new System(earthStations, spaceStations, this.losses, this.dNm, options);
 
-        that.set_theta_g(this.theta_g);
-        that.set_theta_z(this.theta_z);
-        that.set_metrics(this.metrics);
         int nNet = this.networks.length;
         for (int iNet = 0; iNet < nNet; iNet++) {
             networks[iNet] = this.networks[iNet].copy();
         }
         that.set_networks(networks);
+
+        that.set_theta_g(this.theta_g);
+        that.set_theta_z(this.theta_z);
+        that.set_metrics(this.metrics);
         that.set_idxNetES(this.idxNetES);
         that.set_idxNetSS(this.idxNetSS);
 
@@ -206,7 +142,7 @@ public class System {
     }
 
     /**
-     * Set the Earth stations.
+     * Sets the Earth stations.
      *
      * @param earthStations The Earth stations
      */
@@ -215,7 +151,16 @@ public class System {
     }
 
     /**
-     * Set the space stations.
+     * Gets the Earth stations.
+     *
+     * @return The Earth stations
+     */
+    public EarthStation[] get_earthStations() {
+        return this.earthStations;
+    }
+
+    /**
+     * Sets the space stations.
      *
      * @param spaceStations The space stations
      */
@@ -224,12 +169,93 @@ public class System {
     }
 
     /**
-     * Sets propagation loss models to apply
+     * Gets the space stations.
+     *
+     * @return The space stations
+     */
+    public SpaceStation[] get_spaceStations() {
+        return this.spaceStations;
+    }
+
+    /**
+     * Sets propagation loss models to apply.
      *
      * @param losses Propagation loss models to apply
      */
     public void set_losses(Object[] losses) {
         this.losses = losses;
+    }
+
+    /**
+     * Gets propagation loss models to apply.
+     *
+     * @return Propagation loss models to apply
+     */
+    public Object[] get_losses() {
+        return this.losses;
+    }
+
+    /**
+     * Gets current date number.
+     *
+     * @return Current date number
+     */
+    public ModJulianDate get_dNm() {
+        return dNm;
+    }
+
+    /**
+     * Gets flag for avoiding GSO arc.
+     *
+     * @return Flag for avoiding GSO arc
+     */
+    public boolean doTestAngleFromGsoArc() {
+        return this.testAngleFromGsoArc;
+    }
+
+    /**
+     * Gets angle for avoiding GSO arc
+     *
+     * @return Angle for avoiding GSO arc
+     */
+    public double get_angleFromGsoArc() {
+        return this.angleFromGsoArc;
+    }
+
+    /**
+     * Gets flag for avoiding low passes.
+     *
+     * @return Flag for avoiding low passes
+     */
+    public boolean doTestAngleFromZenith() {
+        return this.testAngleFromZenith;
+    }
+
+    /**
+     * Gets angle for avoiding low passes.
+     *
+     * @return Angle for avoiding low passes
+     */
+    public double get_angleFromZenith() {
+        return angleFromZenith;
+    }
+
+    /**
+     * Sets a network array.
+     *
+     * @param networks A network array
+     */
+    public void set_networks(Network[] networks) {
+        this.networks = networks;
+    }
+
+    /**
+     * Gets a network array.
+     *
+     * @return A network array
+     */
+    public Network[] get_networks() {
+        return this.networks;
     }
 
     /**
@@ -241,6 +267,17 @@ public class System {
      */
     public void set_theta_g(double[][] theta_g) {
         this.theta_g = theta_g;
+    }
+
+    /**
+     * Gets Angle between space station position vector relative to
+     * the Earth station and GSO arc.
+     *
+     * @return Angle between space station position vector
+     *                relative to the Earth station and GSO arc
+     */
+    public double[][] get_theta_g() {
+        return theta_g;
     }
 
     /**
@@ -256,6 +293,18 @@ public class System {
     }
 
     /**
+     * Gets Angle between space station position vector relative to
+     * the Earth station and Earth station zenith direction.
+     *
+     * @return Angle between space station position vector
+     *                relative to the Earth station and Earth station zenith
+     *                direction
+     */
+    public double[][] get_theta_z() {
+        return theta_z;
+    }
+
+    /**
      * Sets metric used to select space station for each Earth
      * station.
      *
@@ -267,12 +316,14 @@ public class System {
     }
 
     /**
-     * Sets a network array.
+     * Gets metric used to select space station for each Earth
+     * station.
      *
-     * @param networks A network array
+     * @return Metric used to select space station for each
+     *                Earth station
      */
-    public void set_networks(Network[] networks) {
-        this.networks = networks;
+    public double[][] get_metrics() {
+        return metrics;
     }
 
     /**
@@ -283,6 +334,16 @@ public class System {
      */
     public void set_idxNetES(int[] idxNetES) {
         this.idxNetES = idxNetES;
+    }
+
+    /**
+     * Gets index of each Earth station assigned to a network.
+     *
+     * @return Index of each Earth station assigned to a
+     *                 network
+     */
+    public int[] get_idxNetES() {
+        return idxNetES;
     }
 
     /**
@@ -297,12 +358,22 @@ public class System {
     }
 
     /**
+     * Gets index of each space station assigned to a network.
+     *
+     * @return Index of each space station assigned to a
+     *                 network
+     */
+    public int[] get_idxNetSS() {
+        return idxNetSS;
+    }
+
+    /**
      * Gets assigned Earth stations as a column vector.
      *
      * @return An array of Earth stations
      */
     public EarthStation[] get_assignedEarthStations() {
-        return new EarthStation[]{this.networks[0].getEarthStation()};
+        return new EarthStation[]{this.networks[0].get_earthStation()};
     }
 
     /**
@@ -311,7 +382,7 @@ public class System {
      * @return An array of Earth station beams
      */
     public Beam[] get_assignedEarthStationBeams() {
-        return new Beam[]{this.networks[0].getEarthStationBeam()};
+        return new Beam[]{this.networks[0].get_earthStationBeam()};
     }
 
     /**
@@ -320,7 +391,7 @@ public class System {
      * @return An array of space stations
      */
     public SpaceStation[] get_assignedSpaceStations() {
-        return new SpaceStation[]{this.networks[0].getSpaceStation()};
+        return new SpaceStation[]{this.networks[0].get_spaceStation()};
     }
 
     /**
@@ -329,7 +400,7 @@ public class System {
      * @return An array of space station beams
      */
     public Beam[] get_assignedSpaceStationBeams() {
-        return new Beam[]{this.networks[0].getSpaceStationBeam()};
+        return new Beam[]{this.networks[0].get_spaceStationBeam()};
     }
 
     /**
@@ -513,7 +584,7 @@ public class System {
 
             //Assign a space station to the current Earth station
             if (iSS_sel != null) { //todo I'm not sure about iSS_sel
-                Beam beam = this.spaceStations[idxSelSS[iSS_sel[0]]].assign(this.earthStations[iES].do_multiplexing());
+                Beam beam = this.spaceStations[idxSelSS[iSS_sel[0]]].assign(this.earthStations[iES].doMultiplexing());
                 Map map = new HashMap();
                 map.put("doCheck", doCheck);
                 this.networks[iES] = new Network(this.earthStations[iES],
@@ -548,15 +619,15 @@ public class System {
 
         for (int iNet = 0; iNet < nNet; iNet++) {
             //Compute duty cycle for the Earth station of each
-            this.networks[iNet].getEarthStation().get_beam().set_dutyCycle(100.0
-                    / this.networks[iNet].getSpaceStationBeam().get_Divisions());
+            this.networks[iNet].get_earthStation().get_beam().set_dutyCycle(100.0
+                    / this.networks[iNet].get_spaceStationBeam().get_divisions());
 
             //Collect assignement properties
-            isAvailable_SS[iNet] = this.networks[iNet].getSpaceStation().isAvailable();
-            isAvailable_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().isAvailable();
-            isMultiplexed_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().is_Multiplexed();
-            divisions_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().get_Divisions();
-            dutyCycle_ES_Bm[iNet] = this.networks[iNet].getEarthStationBeam().get_DutyCycle();
+            isAvailable_SS[iNet] = this.networks[iNet].get_spaceStation().isAvailable();
+            isAvailable_SS_Bm[iNet] = this.networks[iNet].get_spaceStationBeam().isAvailable();
+            isMultiplexed_SS_Bm[iNet] = this.networks[iNet].get_spaceStationBeam().isMultiplexed();
+            divisions_SS_Bm[iNet] = this.networks[iNet].get_spaceStationBeam().get_divisions();
+            dutyCycle_ES_Bm[iNet] = this.networks[iNet].get_earthStationBeam().get_dutyCycle();
         }
 
         //Check the number of networks
@@ -629,7 +700,7 @@ public class System {
             int[] idxBinES = ((int[][][]) cellsHigh.get("lonValIdx"))[iLatBin][iLonBin];
 
             // System high and low space station indexes agree by design
-            int iSS = systemHigh.getIdxNetSS()[iNet];
+            int iSS = systemHigh.get_idxNetSS()[iNet];
 
             // Assign the space station to each Earth station in the
             // bin. Bins contain no more Earth stations than can be
@@ -637,7 +708,7 @@ public class System {
             for (int iES = 0; iES < idxBinES.length; iES += numSmpBm) {
 
 
-                Beam beam = this.spaceStations[iSS].assign(this.earthStations[iES].do_multiplexing());
+                Beam beam = this.spaceStations[iSS].assign(this.earthStations[iES].doMultiplexing());
                 Map map = new HashMap();
                 map.put("doCheck", doCheck);
                 this.networks[iES] = new Network(this.earthStations[iES], this.spaceStations[iSS], beam, this.losses, map);
@@ -665,16 +736,16 @@ public class System {
         int[] divisions_SS_Bm = new int[nNet];
         double[] dutyCycle_ES_Bm = new double[nNet];
         for (int iNet = 0; iNet < nNet; iNet++) {
-            this.networks[iNet].getEarthStation().getBeam().set_dutyCycle(
-                    100.0 / this.networks[iNet].getSpaceStationBeam().get_divisions());
+            this.networks[iNet].get_earthStation().get_beam().set_dutyCycle(
+                    100.0 / this.networks[iNet].get_spaceStationBeam().get_divisions());
 
             // Collect assignement properties
-            isAvailable_SS[iNet] = this.networks[iNet].getSpaceStation().isAvailable();
-            isAvailable_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().isAvailable();
-            isMultiplexed_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().isMultiplexed();
-            isMultiplexed_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().is_Multiplexed();
-            divisions_SS_Bm[iNet] = this.networks[iNet].getSpaceStationBeam().get_Divisions();
-            dutyCycle_ES_Bm[iNet] = this.networks[iNet].getEarthStationBeam().get_DutyCycle();
+            isAvailable_SS[iNet] = this.networks[iNet].get_spaceStation().isAvailable();
+            isAvailable_SS_Bm[iNet] = this.networks[iNet].get_spaceStationBeam().isAvailable();
+            isMultiplexed_SS_Bm[iNet] = this.networks[iNet].get_spaceStationBeam().isMultiplexed();
+            isMultiplexed_SS_Bm[iNet] = this.networks[iNet].get_spaceStationBeam().isMultiplexed();
+            divisions_SS_Bm[iNet] = this.networks[iNet].get_spaceStationBeam().get_divisions();
+            dutyCycle_ES_Bm[iNet] = this.networks[iNet].get_earthStationBeam().get_dutyCycle();
 
         }
 
@@ -715,7 +786,7 @@ public class System {
         for (int iNet = 0; iNet < nNet; iNet++) {
             try {
                 performances[iNet] = this.networks[iNet]
-                        .getUp_Link()
+                        .get_up_Link()
                         .computePerformance(dNm, interferingSystem, numSmpES, numSmpBm, ref_bw, options);
             } catch (ObjectDecayed objectDecayed) {
                 objectDecayed.printStackTrace();
@@ -745,7 +816,7 @@ public class System {
         for (int iNet = 0; iNet < nNet; iNet++) {
             try {
                 performances[iNet] = this.networks[iNet]
-                        .getDn_Link()
+                        .get_dn_Link()
                         .computePerformance(dNm, interferingSystem, numSmpES, numSmpBm, ref_bw, options);
             } catch (ObjectDecayed objectDecayed) {
                 objectDecayed.printStackTrace();
@@ -777,11 +848,11 @@ public class System {
         for (int iNet = 0; iNet < nNet; iNet++) {
             // Set derived properties of the associated space station,
             // space station beam, and Earth station beam instances.
-            this.networks[iNet].getSpaceStation().set_isAvailable(assignment.isAvailable_SS()[iNet]);
-            this.networks[iNet].getSpaceStationBeam().set_isAvailable(assignment.isAvailable_SS_Bm()[iNet]);
-            this.networks[iNet].getSpaceStationBeam().set_isMultiplexed(assignment.isMultiplexed_SS_Bm()[iNet]);
-            this.networks[iNet].getSpaceStationBeam().set_divisions(assignment.get_divisions_SS_Bm()[iNet]);
-            this.networks[iNet].getEarthStationBeam().set_dutyCycle(assignment.get_dutyCycle_ES_Bm()[iNet]);
+            this.networks[iNet].get_spaceStation().set_isAvailable(assignment.isAvailable_SS()[iNet]);
+            this.networks[iNet].get_spaceStationBeam().set_isAvailable(assignment.isAvailable_SS_Bm()[iNet]);
+            this.networks[iNet].get_spaceStationBeam().set_isMultiplexed(assignment.isMultiplexed_SS_Bm()[iNet]);
+            this.networks[iNet].get_spaceStationBeam().set_divisions(assignment.get_divisions_SS_Bm()[iNet]);
+            this.networks[iNet].get_earthStationBeam().set_dutyCycle(assignment.get_dutyCycle_ES_Bm()[iNet]);
         }
 
         // Consider each space station, assigned, or not, in order to

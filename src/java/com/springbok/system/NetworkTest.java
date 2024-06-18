@@ -57,14 +57,14 @@ public class NetworkTest {
     public void test_Network() {
         network = new Network();
         Assert.assertNull(this.network.getEarthStation());
-        Assert.assertNull(this.network.getSpaceStation());
-        Assert.assertNull(this.network.getSpaceStationBeam());
-        Assert.assertNull(this.network.getLosses());
-        Assert.assertEquals("both", this.network.getType());
-        Assert.assertTrue(this.network.isDoCheck());
+        Assert.assertNull(this.network.get_spaceStation());
+        Assert.assertNull(this.network.get_spaceStationBeam());
+        Assert.assertNull(this.network.get_losses());
+        Assert.assertEquals("both", this.network.get_type());
+        Assert.assertTrue(this.network.doCheck());
 
-        checkLink(new Link(), this.network.getUp_Link());
-        checkLink(new Link(), this.network.getDn_Link());
+        checkLink(new Link(), this.network.get_up_Link());
+        checkLink(new Link(), this.network.get_dn_Link());
     }
 
     private void checkLink(Link expected, Link actual) {

@@ -47,11 +47,11 @@ public class PerformanceTest {
     public void test_Performance() {
         Performance performance = new Performance(this.C, this.N, this.i, this.I, this.epfd, this.EPFD);
 
-        assertTrue(TestUtility.isDoublesEquals(C, performance.getC()));
-        assertTrue(TestUtility.isDoublesEquals(N, performance.getN()));
+        assertTrue(TestUtility.isDoublesEquals(C, performance.get_C()));
+        assertTrue(TestUtility.isDoublesEquals(N, performance.get_N()));
         assertTrue(Arrays.equals(i, performance.get_i()));
-        assertTrue(TestUtility.isDoublesEquals(I, performance.getI()));
-        assertTrue(Arrays.equals(epfd, performance.getEpfd()));
-        assertTrue(TestUtility.isDoublesEquals(EPFD, performance.getEPFD()));
+        assertTrue(TestUtility.isDoublesEquals(I, performance.get_I()));
+        assertTrue(Arrays.equals(epfd, performance.get_epfd()));
+        assertTrue(TestUtility.isDoublesEquals(EPFD, performance.get_EPFD()));
     }
 }
