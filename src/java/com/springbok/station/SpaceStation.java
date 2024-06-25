@@ -50,12 +50,12 @@ public class SpaceStation extends Station {
     /**
      * Constructs a SpaceStation.
      *
-     * @param stationId Identifier for station
+     * @param stationId       Identifier for station
      * @param transmitAntenna Transmit antenna gain, and pattern
-     * @param receiveAntenna Receive antenna gain, pattern, and noise temperature
-     * @param emission Signal power, frequency, and requirement
-     * @param beams Beam array
-     * @param orbit A satellite orbit
+     * @param receiveAntenna  Receive antenna gain, pattern, and noise temperature
+     * @param emission        Signal power, frequency, and requirement
+     * @param beams           Beam array
+     * @param orbit           A satellite orbit
      */
     public SpaceStation(String stationId, Antenna transmitAntenna, Antenna receiveAntenna, Emission emission, Beam[] beams,
                         Orbit orbit) {
@@ -74,7 +74,7 @@ public class SpaceStation extends Station {
     /**
      * Constructs a SpaceStation.
      */
-    public SpaceStation(){
+    public SpaceStation() {
         super();
     }
 
@@ -193,7 +193,6 @@ public class SpaceStation extends Station {
      * Computes geocentric equatorial inertial position vector.
      *
      * @param dNm Date number at which the position vector occurs
-     *
      * @return Geocentric equatorial inertial position vector [er]
      */
     public Matrix compute_r_gei(ModJulianDate dNm) throws ObjectDecayed {
@@ -217,7 +216,6 @@ public class SpaceStation extends Station {
      * Computes the geocentric equatorial rotating position vector.
      *
      * @param dNm Date number at which the position vector occurs
-     *
      * @return Geocentric equatorial rotating position vector [er]
      */
     public Matrix compute_r_ger(ModJulianDate dNm) throws ObjectDecayed {
@@ -241,8 +239,7 @@ public class SpaceStation extends Station {
      * Assign this station by assigning the first available beam.
      *
      * @param doMultiplexing Flag indicating whether to do
-     * multiplexing, or not
-     *
+     *                       multiplexing, or not
      * @return The assigned beam, or an empty array, if no beam
      */
     public Beam assign(boolean doMultiplexing) {
@@ -254,7 +251,7 @@ public class SpaceStation extends Station {
                 if (isAsigned) {
                     // This station remains available as long as it"s last
                     // beam remains available
-                    this.isAvailable = beams[beams.length-1].isAvailable();
+                    this.isAvailable = beams[beams.length - 1].isAvailable();
                     return beam;
                 }
             }
@@ -309,7 +306,6 @@ public class SpaceStation extends Station {
      * Indicates whether some other object is equal to this one.
      *
      * @param obj the reference object with which to compare
-     *
      * @return true if this object is the same as the obj argument; false otherwise
      */
     @Override

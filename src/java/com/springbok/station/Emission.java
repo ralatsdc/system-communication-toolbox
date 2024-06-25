@@ -37,11 +37,12 @@ public class Emission {
 
     /**
      * Constructs an Emission.
+     *
      * @param design_emi Emission designator
      * @param pwr_ds_max Maximum power density [dBW/Hz]
      * @param pwr_ds_min Minimum power density [dBW/Hz]
-     * @param freq_mhz Center frequency [MHz]
-     * @param c_to_n Required C/N [dB]
+     * @param freq_mhz   Center frequency [MHz]
+     * @param c_to_n     Required C/N [dB]
      * @param pwr_flx_ds Power flux density [dBW/Hz/m2]
      */
     public Emission(String design_emi, double pwr_ds_max, double pwr_ds_min, double freq_mhz, double c_to_n, double pwr_flx_ds) {
@@ -199,7 +200,6 @@ public class Emission {
      * Indicates whether some other object is equal to this one.
      *
      * @param obj the reference object with which to compare
-     *
      * @return true if this object is the same as the obj argument; false otherwise
      */
     @Override

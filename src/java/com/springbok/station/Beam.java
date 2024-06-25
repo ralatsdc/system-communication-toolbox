@@ -41,9 +41,9 @@ public class Beam {
     /**
      * Constructs a Beam.
      *
-     * @param name Beam name
+     * @param name         Beam name
      * @param multiplicity Maximum number of divisions allowed
-     * @param dutyCycle Duty cycle [%]
+     * @param dutyCycle    Duty cycle [%]
      */
     public Beam(String name, int multiplicity, double dutyCycle) {
 
@@ -193,7 +193,6 @@ public class Beam {
      * equal the multiplicity.
      *
      * @param doMultiplexing Flag indicating whether to do multiplexing, or not
-     *
      * @return Flag indicating whether the beam was assigned, or not.
      */
     public boolean assign(boolean doMultiplexing) {
@@ -274,7 +273,6 @@ public class Beam {
      * Indicates whether some other object is equal to this one.
      *
      * @param obj the reference object with which to compare
-     *
      * @return true if this object is the same as the obj argument; false otherwise
      */
     @Override

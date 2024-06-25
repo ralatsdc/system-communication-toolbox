@@ -47,10 +47,10 @@ public class Station {
     /**
      * Constructs a Station.
      *
-     * @param stationId Identifier for station
+     * @param stationId       Identifier for station
      * @param transmitAntenna Transmit antenna gain, and pattern
-     * @param receiveAntenna Receive antenna gain, pattern, and noise temperature
-     * @param emission Signal power, frequency, and requirement
+     * @param receiveAntenna  Receive antenna gain, pattern, and noise temperature
+     * @param emission        Signal power, frequency, and requirement
      */
     public Station(String stationId, Antenna transmitAntenna, Antenna receiveAntenna, Emission emission) {
         // Assign properties
@@ -63,7 +63,19 @@ public class Station {
     /**
      * Constructs a Station.
      */
-    public Station() {}
+    public Station() {
+    }
+
+    /**
+     * Copies a Station.
+     *
+     * @return A new Station instance
+     */
+    public Station copy() {
+        return new Station(this.stationId, this.transmitAntenna.copy(),
+                this.receiveAntenna.copy(),
+                this.emission.copy());
+    }
 
     /**
      * Sets the identifier station.
@@ -148,17 +160,6 @@ public class Station {
     }
 
     /**
-     * Copies a Station.
-     *
-     * @return A new Station instance
-     */
-    public Station copy() {
-        return new Station(this.stationId, this.transmitAntenna.copy(),
-                this.receiveAntenna.copy(),
-                this.emission.copy());
-    }
-
-    /**
      * Returns a hash code value for the object.
      *
      * @return A hash code value for this object
@@ -186,7 +187,6 @@ public class Station {
      * Indicates whether some other object is equal to this one.
      *
      * @param obj the reference object with which to compare
-     *
      * @return true if this object is the same as the obj argument; false otherwise
      */
     @Override

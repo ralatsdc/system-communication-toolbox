@@ -56,7 +56,7 @@ public class NetworkTest {
     @Test
     public void test_Network() {
         network = new Network();
-        Assert.assertNull(this.network.getEarthStation());
+        Assert.assertNull(this.network.get_earthStation());
         Assert.assertNull(this.network.get_spaceStation());
         Assert.assertNull(this.network.get_spaceStationBeam());
         Assert.assertNull(this.network.get_losses());
