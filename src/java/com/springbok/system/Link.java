@@ -67,7 +67,7 @@ public class Link {
         }
 
         /**
-         * Set angle.
+         * Sets angle.
          *
          * @param phi Angle
          */
@@ -306,26 +306,18 @@ public class Link {
         Station trnStn_w = this.transmitStation;
         Beam trnStnBm_w = this.transmitStationBeam;
         Station rcvStn_w = this.receiveStation;
+        // TODO: Check doIS value
 
-    /*    Performance performance;
-        Matrix trnStn_w_r_ger;
-        Matrix rcvStn_w_r_ger;
         // Assign positions for the wanted stations
-        //TODO: Probably error in code. EarthStation class does not have public method compute_r_ger with param dNm
-        if (trnStn_w instanceof SpaceStation) {
-            trnStn_w_r_ger = ((SpaceStation) trnStn_w).getR_ger();
-            rcvStn_w_r_ger = ((SpaceStation) rcvStn_w).compute_r_ger(dNm);
-        } else {
-            trnStn_w_r_ger = ((EarthStation) trnStn_w).compute_r_gei(dNm); //TODO: must be compute_r_ger
-            rcvStn_w_r_ger = ((EarthStation) rcvStn_w).get_R_ger();
-        }
+        Matrix trnStn_w_r_ger = trnStn_w.compute_r_ger(dNm);
+        Matrix rcvStn_w_r_ger = rcvStn_w.compute_r_ger(dNm);
 
         Station[] trnStns_i = new Station[]{};
         Beam[] trnStnsBms_i;
         Station[] rcvStns_i = new Station[]{};
         int idxVisSS, idxVisTx;
         int nNet = 0;
-            // Assign visible interfering transmit and receive stations
+        // Assign visible interfering transmit and receive stations
         if (interferingSystem != null) {
             if (!doIS) {
                 //  for consistency with wanted transmit station class
@@ -336,7 +328,8 @@ public class Link {
 
                     // This is an up link, so assign interfering system Earth
                     // stations visible to this link space station
-                    int[] arr = findIdxVisEStoSS(Arrays.copyOf(trnStns_i, trnStns_i.length, EarthStation[].class),
+                    // TODO: Start here
+                    Object[] arr = findIdxVisEStoSS(Arrays.copyOf(trnStns_i, trnStns_i.length, EarthStation[].class),
                             new SpaceStation[]{(SpaceStation) rcvStn_w}, dNm);
                     idxVisSS = arr[0];
                     idxVisTx = arr[1];
@@ -373,7 +366,7 @@ public class Link {
             rcvStns_i = new Station[]{rcvStns_i[idxVisTx]};
             nNet = trnStns_i.length;
         }
-
+/* START
         Matrix[] trnStns_i_r_ger = new Matrix[5];
         Matrix[] rcvStns_i_r_ger = new Matrix[5];
 
@@ -546,7 +539,8 @@ public class Link {
             // Assign carrier, noise, and interference power density
             performance = Performance(C, N, i, I, epfd, EPFD);
 
-            end         // computePerformance(*/
+            end
+END */
         return null;
     }
 
