@@ -15,7 +15,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.springbok.station;
 
+import Jama.Matrix;
+import com.celestrak.sgp4v.ObjectDecayed;
 import com.springbok.antenna.Antenna;
+import com.springbok.twobody.ModJulianDate;
 
 /**
  * Describes a space or Earth station.
@@ -157,6 +160,28 @@ public class Station {
      */
     public Emission get_emission() {
         return emission;
+    }
+
+    /**
+     * Computes geocentric equatorial inertial position vector.
+     *
+     * @param dNm Date number at which the position vector occurs
+     * @return Geocentric equatorial inertial position vector [er]
+     */
+    public Matrix compute_r_gei(ModJulianDate dNm) throws ObjectDecayed {
+        double[][] elements = {{}};
+        return new Matrix(elements);
+    }
+
+    /**
+     * Computes the geocentric equatorial rotating position vector.
+     *
+     * @param dNm Date number at which the position vector occurs
+     * @return Geocentric equatorial rotating position vector [er]
+     */
+    public Matrix compute_r_ger(ModJulianDate dNm) throws ObjectDecayed {
+        double[][] elements = {{}};
+        return new Matrix(elements);
     }
 
     /**

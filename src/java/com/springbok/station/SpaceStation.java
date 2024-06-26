@@ -196,20 +196,11 @@ public class SpaceStation extends Station {
      * @return Geocentric equatorial inertial position vector [er]
      */
     public Matrix compute_r_gei(ModJulianDate dNm) throws ObjectDecayed {
-        if (!dNm.equals(this.dNm_i)) {
+        if (dNm != null && this.dNm_i != null && !dNm.equals(this.dNm_i)) {
             this.dNm_i = dNm;
             this.r_gei = this.orbit.r_gei(dNm);
         }
         return this.r_gei;
-    }
-
-    /**
-     * Gets the r_gei matrix.
-     *
-     * @return The r_gei matrix
-     */
-    public Matrix get_r_gei() {
-        return r_gei;
     }
 
     /**
@@ -224,15 +215,6 @@ public class SpaceStation extends Station {
             this.r_ger = Coordinates.gei2ger(this.compute_r_gei(dNm), dNm);
         }
         return this.r_ger;
-    }
-
-    /**
-     * Gets the r_ger matrix.
-     *
-     * @return The r_ger matrix
-     */
-    public Matrix get_r_ger() {
-        return r_ger;
     }
 
     /**

@@ -15,15 +15,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.springbok.station;
 
-import java.io.Serializable;
-
 import Jama.Matrix;
-
 import com.springbok.antenna.Antenna;
 import com.springbok.twobody.Coordinates;
 import com.springbok.twobody.EarthConstants;
 import com.springbok.twobody.ModJulianDate;
 import com.springbok.utility.MException;
+
+import java.io.Serializable;
 
 /**
  * Describes the position of a ground based sensor.
@@ -47,7 +46,7 @@ public class EarthStation extends Station implements Serializable {
     private Matrix r_gei;
 
     // Geocentric equatorial rotating position [er]
-    protected Matrix R_ger;
+    protected Matrix r_ger;
 
     /**
      * Constructs an EarthStation.
@@ -64,7 +63,7 @@ public class EarthStation extends Station implements Serializable {
         this.lambda = lambda;
 
         // Derived values.
-        this.R_ger = compute_R_ger();
+        this.r_ger = compute_r_ger(null);
     }
 
     /**
@@ -84,7 +83,7 @@ public class EarthStation extends Station implements Serializable {
         this.doMultiplexing = doMultiplexing;
 
         // Derived values.
-        this.R_ger = compute_R_ger();
+        this.r_ger = compute_r_ger(null);
     }
 
     /**
@@ -114,7 +113,7 @@ public class EarthStation extends Station implements Serializable {
      */
     public void set_varphi(double varphi) {
         this.varphi = varphi;
-        this.R_ger = compute_R_ger();
+        this.r_ger = compute_r_ger(null);
     }
 
     /**
@@ -133,7 +132,7 @@ public class EarthStation extends Station implements Serializable {
      */
     public void set_lambda(double lambda) {
         this.lambda = lambda;
-        this.R_ger = compute_R_ger();
+        this.r_ger = compute_r_ger(null);
     }
 
     /**
@@ -188,55 +187,34 @@ public class EarthStation extends Station implements Serializable {
     }
 
     /**
-     * Computes the position vector in the Geocentric Equatorial Inertial (GEI) frame at a given modified Julian date.
+     * Computes geocentric equatorial inertial position vector.
      *
-     * @param dNm The modified Julian date for which to compute the position vector
-     * @return The position vector in the GEI frame
+     * @param dNm Date number at which the position vector occurs
+     * @return Geocentric equatorial inertial position vector [er]
      */
     public Matrix compute_r_gei(ModJulianDate dNm) {
         if (dNm != null && this.dNm != null && !dNm.equals(this.dNm)) {
             this.dNm = dNm;
-            this.r_gei = Coordinates.ger2gei(this.R_ger, dNm);
+            this.r_gei = Coordinates.ger2gei(this.r_ger, dNm);
         }
-
         return this.r_gei;
     }
 
     /**
-     * Gets geocentric equatorial rotating position [er].
+     * Computes the geocentric equatorial rotating position vector.
      *
-     * @return The geocentric equatorial rotating position [er]
+     * @param dNm Date number at which the position vector occurs
+     * @return Geocentric equatorial rotating position vector [er]
      */
-    public Matrix get_R_ger() {
-        return R_ger;
+    public Matrix compute_r_ger(ModJulianDate dNm) {
+        if (this.r_ger != null) {
+            double N = 1.0 / (Math.sqrt(1 - EarthConstants.f * (2 - EarthConstants.f) * Math.pow(Math.sin(varphi), 2)));
+            double h = 0.0;
+            double[][] elements = {{(N + h) * Math.cos(varphi) * Math.cos(lambda)},
+                    {(N + h) * Math.cos(varphi) * Math.sin(lambda)},
+                    {(Math.pow(1.0 - EarthConstants.f, 2) * N + h) * Math.sin(varphi)}};
+            this.r_ger = new Matrix(elements);
+        }
+        return this.r_ger;
     }
-
-    /**
-     * Computes geocentric equatorial inertial position vector (MG-2.50).
-     *
-     * @param dNm MJD calendar date at which the position vector occurs
-     * @return equatorial inertial position vector [er]
-     */
-    public Matrix r_gei(ModJulianDate dNm) {
-        Matrix r_gei = Coordinates.ger2gei(R_ger, dNm);
-        // System.out.println("r_gei"); r_gei.print(16, 8);
-        return r_gei;
-    }
-
-    /**
-     * Computes the geocentric equatorial rotating position vector. (MG-5.83)
-     *
-     * @return The geocentric equatorial rotating position [er]
-     */
-    private Matrix compute_R_ger() {
-        double N = 1.0 / (Math.sqrt(1 - EarthConstants.f * (2 - EarthConstants.f) * Math.pow(Math.sin(varphi), 2)));
-        double h = 0.0;
-        double[][] elements = {{(N + h) * Math.cos(varphi) * Math.cos(lambda)},
-                {(N + h) * Math.cos(varphi) * Math.sin(lambda)},
-                {(Math.pow(1.0 - EarthConstants.f, 2) * N + h) * Math.sin(varphi)}};
-        Matrix R_ger = new Matrix(elements);
-        // System.out.println("R_ger"); matrix.print(16, 8);
-        return R_ger;
-    }
-
 }
