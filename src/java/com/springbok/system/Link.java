@@ -26,6 +26,7 @@ import com.springbok.twobody.EarthConstants;
 import com.springbok.twobody.ModJulianDate;
 import com.springbok.utility.MException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -312,27 +313,26 @@ public class Link {
         Matrix trnStn_w_r_ger = trnStn_w.compute_r_ger(dNm);
         Matrix rcvStn_w_r_ger = rcvStn_w.compute_r_ger(dNm);
 
-        Station[] trnStns_i = new Station[]{};
-        Beam[] trnStnsBms_i;
-        Station[] rcvStns_i = new Station[]{};
-        int idxVisSS, idxVisTx;
-        int nNet = 0;
         // Assign visible interfering transmit and receive stations
+        Station[] trnStns_i;
+        Beam[] trnStnsBms_i;
+        Station[] rcvStns_i;
+        int[] idxVisTx, idxVisRx;
+        int nNet = 0;
         if (interferingSystem != null) {
             if (!doIS) {
-                //  for consistency with wanted transmit station class
+                //  For consistency with wanted transmit station class
                 if (trnStn_w instanceof EarthStation) {
                     trnStns_i = interferingSystem.get_assignedEarthStations();
                     trnStnsBms_i = interferingSystem.get_assignedEarthStationBeams();
                     rcvStns_i = interferingSystem.get_assignedSpaceStations();
-
                     // This is an up link, so assign interfering system Earth
                     // stations visible to this link space station
-                    // TODO: Start here
-                    Object[] arr = findIdxVisEStoSS(Arrays.copyOf(trnStns_i, trnStns_i.length, EarthStation[].class),
+                    // Arrays.copyOf(trnStns_i, trnStns_i.length, EarthStation[].class),
+                    Object[] arr = findIdxVisEStoSS((EarthStation[]) trnStns_i,
                             new SpaceStation[]{(SpaceStation) rcvStn_w}, dNm);
-                    idxVisSS = arr[0];
-                    idxVisTx = arr[1];
+                    idxVisTx = (int[]) arr[0];  // ES
+                    idxVisRx = (int[]) arr[1];  // SS
                 } else {
                     trnStns_i = interferingSystem.get_assignedSpaceStations();
                     trnStnsBms_i = interferingSystem.get_assignedSpaceStationBeams();
@@ -340,10 +340,9 @@ public class Link {
 
                     // This is a down link, so assign interfering system space
                     // stations visible to this link Earth station
-                    int[] arr = findIdxVisEStoSS(new EarthStation[]{(EarthStation) rcvStn_w},
-                            Arrays.copyOf(trnStns_i, trnStns_i.length, SpaceStation[].class), dNm);
-                    idxVisSS = arr[0];
-                    idxVisTx = arr[1];
+                    Object[] arr = findIdxVisEStoSS(new EarthStation[]{(EarthStation) rcvStn_w}, (SpaceStation[]) trnStns_i, dNm);
+                    idxVisRx = (int[]) arr[0];  // ES
+                    idxVisTx = (int[]) arr[1];  // SS
                 }
             } else {
                 if (!(trnStn_w instanceof EarthStation)) {
@@ -356,14 +355,19 @@ public class Link {
 
                 // This is an inter-satellite link, so assign interfering
                 // system space stations visible to this link space station
-                int[] arr = findIdxVisSStoSS(new Station[]{rcvStn_w}, trnStns_i, dNm);
-                idxVisSS = arr[0];
-                idxVisTx = arr[1];
+                Object[] arr = findIdxVisSStoSS(new Station[]{rcvStn_w}, trnStns_i, dNm);
+                idxVisRx = (int[]) arr[0];
+                idxVisTx = (int[]) arr[1];
             }
             // Select visible interfering transmit and receive stations
-            trnStns_i = new Station[]{trnStns_i[idxVisSS]};
+            for (int idxVis = 0; idxVis < idxVisTx.length; idxVis++) {
+                trnStns_i[idxVis] = 0;
+            }
+
+            }
+            trnStns_i = new Station[]{trnStns_i[idxVisTx]};
             trnStnsBms_i = new Beam[]{trnStnsBms_i[idxVisTx]};
-            rcvStns_i = new Station[]{rcvStns_i[idxVisTx]};
+            rcvStns_i = new Station[]{rcvStns_i[idxVisRx]};
             nNet = trnStns_i.length;
         }
 /* START
@@ -722,44 +726,40 @@ END */
      * @param dNm           Date number at which the position vectors occur
      */
     public Object[] findIdxVisEStoSS(EarthStation[] earthStations, SpaceStation[] spaceStations, ModJulianDate dNm) {
+
+        ArrayList<Integer> idxVisES = new ArrayList<Integer>();
+        ArrayList<Integer> idxVisSS = new ArrayList<Integer>();
+
         int nSS = spaceStations.length;
         int nES = earthStations.length;
 
-        int[][] idxVisES = new int[nSS][nES];
-        int[][] idxVisSS = new int[nSS][nES];
+        Matrix[] r_ger_ES = new Matrix[nES];
+        for (int iES = 0; iES < nES; iES++) {
+            r_ger_ES[iES] = earthStations[iES].compute_r_ger(dNm);
+        }
 
         Matrix[] r_ger_SS = new Matrix[nSS];
-
         for (int iSS = 0; iSS < nSS; iSS++) {
             try {
                 r_ger_SS[iSS] = spaceStations[iSS].compute_r_ger(dNm);
             } catch (ObjectDecayed objectDecayed) {
                 objectDecayed.printStackTrace();
             }
-            int[] tmpVisES = new int[nES];
-            int[] tmpVisSS = new int[nES];
 
             for (int iES = 0; iES < nES; iES++) {
-                Matrix r_ger_ES = earthStations[iES].get_R_ger();
-                double theta = System.computeAngleFromZenith(r_ger_SS[iSS], r_ger_ES);
+                double theta = System.computeAngleFromZenith(r_ger_SS[iSS], r_ger_ES[iES]);
 
                 if (theta < 90) {
-                    tmpVisES[iES] = iES;
-                    tmpVisSS[iES] = iSS;
+                    if (!idxVisES.contains(iES)) {
+                        idxVisES.add(iES);
+                    }
+                    if (!idxVisSS.contains(iSS)) {
+                        idxVisSS.add(iSS);
+                    }
                 }
             }
-            idxVisES[iSS] = tmpVisES;
-            idxVisSS[iSS] = tmpVisSS;
         }
-
-        idxVisES = SystemUtils.findUniqueBiggerThenZero(idxVisES);
-        idxVisSS = SystemUtils.findUniqueBiggerThenZero(idxVisSS);
-
-        idxVisES = SystemUtils.reshape(idxVisES, 1, idxVisES.length); //TODO: size could be wrong
-
-        idxVisSS = SystemUtils.reshape(idxVisSS, 1, idxVisSS.length); //TODO: size could be wrong
-
-        return new Object[]{idxVisES, idxVisSS, r_ger_SS};
+        return new Object[]{idxVisES.toArray(), idxVisSS.toArray(), r_ger_SS};
     }
 
     /**

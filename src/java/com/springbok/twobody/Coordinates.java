@@ -271,7 +271,7 @@ public final class Coordinates implements Serializable {
 	 * @return Local tangent position vector [er]
 	 */
 	public static Matrix gei2ltp(Matrix r_gei, EarthStation sensor, ModJulianDate dNm) {
-		Matrix r_ltp = E_e2t(sensor).times(R_z(EarthConstants.Theta(dNm)).times(r_gei).minus(sensor.get_R_ger()));
+		Matrix r_ltp = E_e2t(sensor).times(R_z(EarthConstants.Theta(dNm)).times(r_gei).minus(sensor.compute_r_ger(dNm)));
 		// System.out.println("r_ltp"); r_ltp.print(16, 8);
 		return r_ltp;
 	}
@@ -333,7 +333,7 @@ public final class Coordinates implements Serializable {
 	 */
 	public static Matrix ltp2gei(Matrix r_ltp, EarthStation sensor, ModJulianDate dNm) {
 		Matrix r_gei = R_z(EarthConstants.Theta(dNm)).transpose()
-				.times(E_t2e(sensor).times(r_ltp).plus(sensor.get_R_ger()));
+				.times(E_t2e(sensor).times(r_ltp).plus(sensor.compute_r_ger(dNm)));
 		// System.out.println("r_gei"); r_gei.print(16, 8);
 		return r_gei;
 	}

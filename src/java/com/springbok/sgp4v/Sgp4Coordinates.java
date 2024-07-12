@@ -65,7 +65,7 @@ public final class Sgp4Coordinates implements Serializable {
 		Matrix CIRS = TETEDToCIRS(dNm, TETED);
 		Matrix TIRS = CIRSToTIRS(dNm, CIRS);
 		Matrix ITRS = TIRS; // Ignores polar motion
-		Matrix ITRS_0 = sensor.get_R_ger();
+		Matrix ITRS_0 = sensor.compute_r_ger(dNm);
 		double geodetic_latitude = sensor.get_varphi();
 		double longitude = sensor.get_lambda();
 		Matrix SEZ = ITRSToSEZ(ITRS, ITRS_0, geodetic_latitude, longitude);
@@ -212,7 +212,7 @@ public final class Sgp4Coordinates implements Serializable {
 	 */
 	public static Matrix ltp2gei(Matrix r_ltp, EarthStation sensor, ModJulianDate dNm) {
 		Matrix SEZ = com.springbok.twobody.Coordinates.R_z(-Math.PI / 2.0).times(r_ltp);
-		Matrix ITRS_0 = sensor.get_R_ger();
+		Matrix ITRS_0 = sensor.compute_r_ger(dNm);
 		double geodetic_latitude = sensor.get_varphi();
 		double longitude = sensor.get_lambda();
 		Matrix ITRS = SEZToITRS(SEZ, ITRS_0, geodetic_latitude, longitude);
