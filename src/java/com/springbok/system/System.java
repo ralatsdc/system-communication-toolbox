@@ -35,6 +35,8 @@ import static com.springbok.system.SystemUtils.randperm;
  */
 public class System {
 
+    public static Logger logger = LogManager.getLogger(System.class.getName());
+
     // An Earth station array
     private EarthStation[] earthStations;
     // A space station array
@@ -148,6 +150,15 @@ public class System {
         that.set_idxNetSS(this.idxNetSS);
 
         return that;
+    }
+
+    /**
+     * Determines if System properties are empty, or not.
+     */
+    public boolean isEmpty() {
+        return this.earthStations == null &&
+                this.spaceStations == null &&
+                this.losses == null;
     }
 
     /**
@@ -442,9 +453,12 @@ public class System {
         this.theta_g = SystemUtils.getNanArray(nES, nSS);
         this.theta_z = SystemUtils.getNanArray(nES, nSS);
         this.metrics = SystemUtils.getNanArray(nES, nSS);
-        this.networks = new Network[nES];
-        this.idxNetES = new int[nES];
-        this.idxNetSS = new int[nES];
+//        this.networks = new Network[nES];
+        ArrayList<Network> networks = new ArrayList<Network>();
+//        this.idxNetES = new int[nES];
+        ArrayList<Integer> idxNetES = new ArrayList<Integer>();
+//        this.idxNetSS = new int[nES];
+        ArrayList<Integer> idxNetSS = new ArrayList<Integer>();
 
         // Compute position of all space stations
         Matrix[] r_ger_SS = new Matrix[nSelSS];
@@ -566,27 +580,19 @@ public class System {
             Beam beam = this.spaceStations[iSS_sel].assign(this.earthStations[iES].doMultiplexing());
             Map map = new HashMap();
             map.put("doCheck", doCheck);
-            // TODO: Start here with Will: Understand assignment and number of SS
-            this.networks[iSelES] = new Network(this.earthStations[iES],
-                    this.spaceStations[iSS_sel], beam, this.losses, map);
-            this.idxNetES[iSelES] = iES;
-            this.idxNetSS[iSelES] = iSS_sel;
-
-            // Eliminate the space station index and position from
-            // further assignment, if unavailable. Note that the space
-            // station array is not used in the Earth station loop.
-//            if (!this.spaceStations[iSS_sel].isAvailable()) {
-//                idxSelSS.set(iSS_sel, 0.0);
-//                r_ger_SS[iSS_sel] = null;
-//            }
-//            idxEmpty = SystemUtils.findReverse(this.idxNetES);
+//            this.networks[iSelES] = new Network(this.earthStations[iES],
+//                    this.spaceStations[iSS_sel], beam, this.losses, map);
+//            this.idxNetES[iSelES] = iES;
+//            this.idxNetSS[iSelES] = iSS_sel;
+            networks.add(new Network(this.earthStations[iES],
+                    this.spaceStations[iSS_sel], beam, this.losses, map));
+            idxNetES.add(iES);
+            idxNetSS.add(iSS_sel);
         }
+        this.networks = networks.toArray(new Network[0]);
+        this.idxNetES = idxNetES.stream().mapToInt(i -> i).toArray();
+        this.idxNetSS = idxNetSS.stream().mapToInt(i -> i).toArray();
 
-        // Eliminate empty networks
-        // int[] idxEmpty = SystemUtils.findReverse(this.idxNetES);
-        this.networks = SystemUtils.eliminateEmpty(this.networks, idxEmpty);
-        this.idxNetES = SystemUtils.eliminateEmpty(this.idxNetES, idxEmpty);
-        this.idxNetSS = SystemUtils.eliminateEmpty(this.idxNetSS, idxEmpty);
 
         // Consider each network
         int nNet = this.networks.length;
@@ -610,7 +616,7 @@ public class System {
         }
 
         // Check the number of networks
-        if (nNet != idxSelES.length) {
+        if (nNet != nSelES) {
             logger.warn("The number of networks and selected Earth stations are not equal");
         }
 
@@ -619,7 +625,7 @@ public class System {
                 theta_g,
                 theta_z,
                 metrics,
-                networks,
+                this.networks,
                 this.idxNetES,
                 this.idxNetSS,
                 isAvailable_SS,
@@ -627,6 +633,99 @@ public class System {
                 isMultiplexed_SS_Bm,
                 divisions_SS_Bm,
                 dutyCycle_ES_Bm);
+    }
+
+    /**
+     * Compute performance measures for the up link of each wanted
+     * network.
+     *
+     * @param dNm               Current date number
+     * @param interferingSystem Interfering system
+     * @param ref_bw            Reference bandwidth [kHz]
+     * @param DoIS              Flag for computing up link performance in the
+     *                          presence of inter-satellite interference (default is 0)
+     * @return Up link performance
+     */
+    public Performance[] computeUpLinkPerformance(ModJulianDate dNm, System interferingSystem, double ref_bw, Map options) {
+        // Compute up link performance
+        int nNet = this.networks.length;
+        Performance[] performances = new Performance[nNet];
+        for (int iNet = 0; iNet < nNet; iNet++) {
+            try {
+                performances[iNet] = this.networks[iNet]
+                        .get_up_Link()
+                        .computePerformance(dNm, interferingSystem, ref_bw, options);
+            } catch (ObjectDecayed objectDecayed) {
+                objectDecayed.printStackTrace();
+            }
+        }
+        return performances;
+    }
+
+    /**
+     * Compute performance measures for the down link of each wanted
+     * network.
+     *
+     * @param dNm               Current date number
+     * @param interferingSystem Interfering system
+     * @param ref_bw            Reference bandwidth [kHz]
+     * @return Down link performance
+     */
+    public Performance[] computeDownLinkPerformance(ModJulianDate dNm, System interferingSystem,
+                                                    double ref_bw, Map options) {
+        int nNet = this.networks.length;
+        Performance[] performances = new Performance[nNet];
+        for (int iNet = 0; iNet < nNet; iNet++) {
+            try {
+                performances[iNet] = this.networks[iNet]
+                        .get_dn_Link()
+                        .computePerformance(dNm, interferingSystem, ref_bw, options);
+            } catch (ObjectDecayed objectDecayed) {
+                objectDecayed.printStackTrace();
+            }
+        }
+        return performances;
+    }
+
+    /**
+     * Set derived properties of associated stations to values from
+     * specified assignment.
+     */
+    public void apply(Assignment assignment) {
+        // TODO: Assignment needs a reference to system, which needs
+        // to be tested here
+
+        // Set derived properties of this System instance
+        this.dNm = assignment.get_dNm();
+        this.theta_g = assignment.get_theta_g();
+        this.theta_z = assignment.get_theta_z();
+        this.metrics = assignment.get_metrics();
+        this.networks = assignment.get_networks();
+        this.idxNetES = assignment.get_idxNetES();
+        this.idxNetSS = assignment.get_idxNetSS();
+
+        // Consider each network
+        int nNet = assignment.get_networks().length;
+        for (int iNet = 0; iNet < nNet; iNet++) {
+            // Set derived properties of the associated space station,
+            // space station beam, and Earth station beam instances.
+            this.networks[iNet].get_spaceStation().set_isAvailable(assignment.isAvailable_SS()[iNet]);
+            this.networks[iNet].get_spaceStationBeam().set_isAvailable(assignment.isAvailable_SS_Bm()[iNet]);
+            this.networks[iNet].get_spaceStationBeam().set_isMultiplexed(assignment.isMultiplexed_SS_Bm()[iNet]);
+            this.networks[iNet].get_spaceStationBeam().set_divisions(assignment.get_divisions_SS_Bm()[iNet]);
+            this.networks[iNet].get_earthStationBeam().set_dutyCycle(assignment.get_dutyCycle_ES_Bm()[iNet]);
+        }
+
+        // Consider each space station, assigned, or not, in order to
+        // compute positions at the date number specified
+        int nSS = this.spaceStations.length;
+        for (int iSS = 0; iSS < nSS; iSS++) {
+            try {
+                this.spaceStations[iSS].compute_r_ger(this.dNm);
+            } catch (ObjectDecayed objectDecayed) {
+                objectDecayed.printStackTrace();
+            }
+        }
     }
 
     /**

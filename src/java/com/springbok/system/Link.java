@@ -294,9 +294,9 @@ public class Link {
      *                          default is 0)
      * @return Link performance
      */
-    public Performance computePerformance(ModJulianDate dNm, System interferingSystem, double numSmpES, double numSmpBm,
+    public Performance computePerformance(ModJulianDate dNm, System interferingSystem,
                                           double ref_bw, Map options) throws ObjectDecayed {
-        if (this.isEmpty()) {
+        if (this.isEmpty() || interferingSystem.isEmpty()) {
             return new Performance();
         }
 
@@ -307,7 +307,6 @@ public class Link {
         Station trnStn_w = this.transmitStation;
         Beam trnStnBm_w = this.transmitStationBeam;
         Station rcvStn_w = this.receiveStation;
-        // TODO: Check doIS value
 
         // Assign positions for the wanted stations
         Matrix trnStn_w_r_ger = trnStn_w.compute_r_ger(dNm);
@@ -319,57 +318,58 @@ public class Link {
         Station[] rcvStns_i;
         int[] idxVisTx, idxVisRx;
         int nNet = 0;
-        if (interferingSystem != null) {
-            if (!doIS) {
-                //  For consistency with wanted transmit station class
-                if (trnStn_w instanceof EarthStation) {
-                    trnStns_i = interferingSystem.get_assignedEarthStations();
-                    trnStnsBms_i = interferingSystem.get_assignedEarthStationBeams();
-                    rcvStns_i = interferingSystem.get_assignedSpaceStations();
-                    // This is an up link, so assign interfering system Earth
-                    // stations visible to this link space station
-                    // Arrays.copyOf(trnStns_i, trnStns_i.length, EarthStation[].class),
-                    Object[] arr = findIdxVisEStoSS((EarthStation[]) trnStns_i,
-                            new SpaceStation[]{(SpaceStation) rcvStn_w}, dNm);
-                    idxVisTx = (int[]) arr[0];  // ES
-                    idxVisRx = (int[]) arr[1];  // SS
-                } else {
-                    trnStns_i = interferingSystem.get_assignedSpaceStations();
-                    trnStnsBms_i = interferingSystem.get_assignedSpaceStationBeams();
-                    rcvStns_i = interferingSystem.get_assignedEarthStations();
-
-                    // This is a down link, so assign interfering system space
-                    // stations visible to this link Earth station
-                    Object[] arr = findIdxVisEStoSS(new EarthStation[]{(EarthStation) rcvStn_w}, (SpaceStation[]) trnStns_i, dNm);
-                    idxVisRx = (int[]) arr[0];  // ES
-                    idxVisTx = (int[]) arr[1];  // SS
-                }
+        if (!doIS) {
+            //  For consistency with wanted transmit station class
+            if (trnStn_w instanceof EarthStation) {
+                trnStns_i = interferingSystem.get_assignedEarthStations();
+                trnStnsBms_i = interferingSystem.get_assignedEarthStationBeams();
+                rcvStns_i = interferingSystem.get_assignedSpaceStations();
+                // This is an up link, so assign interfering system Earth
+                // stations visible to this link space station
+                // Arrays.copyOf(trnStns_i, trnStns_i.length, EarthStation[].class),
+                Object[] arr = findIdxVisEStoSS((EarthStation[]) trnStns_i,
+                        new SpaceStation[]{(SpaceStation) rcvStn_w}, dNm);
+                idxVisTx = (int[]) arr[0];  // ES
+                idxVisRx = (int[]) arr[1];  // SS
             } else {
-                if (!(trnStn_w instanceof EarthStation)) {
-                    throw new MException("Springbok:IllegalArgumentException",
-                            "IS case only applicable for an uplink");
-                }
                 trnStns_i = interferingSystem.get_assignedSpaceStations();
                 trnStnsBms_i = interferingSystem.get_assignedSpaceStationBeams();
                 rcvStns_i = interferingSystem.get_assignedEarthStations();
 
-                // This is an inter-satellite link, so assign interfering
-                // system space stations visible to this link space station
-                Object[] arr = findIdxVisSStoSS(new Station[]{rcvStn_w}, trnStns_i, dNm);
-                idxVisRx = (int[]) arr[0];
-                idxVisTx = (int[]) arr[1];
+                // This is a down link, so assign interfering system space
+                // stations visible to this link Earth station
+                Object[] arr = findIdxVisEStoSS(new EarthStation[]{(EarthStation) rcvStn_w}, (SpaceStation[]) trnStns_i, dNm);
+                idxVisRx = (int[]) arr[0];  // ES
+                idxVisTx = (int[]) arr[1];  // SS
             }
-            // Select visible interfering transmit and receive stations
-            for (int idxVis = 0; idxVis < idxVisTx.length; idxVis++) {
-                trnStns_i[idxVis] = 0;
+        } else {
+            if (!(trnStn_w instanceof EarthStation)) {
+                throw new MException("Springbok:IllegalArgumentException",
+                        "IS case only applicable for an uplink");
             }
+            trnStns_i = interferingSystem.get_assignedSpaceStations();
+            trnStnsBms_i = interferingSystem.get_assignedSpaceStationBeams();
+            rcvStns_i = interferingSystem.get_assignedEarthStations();
 
-            }
-            trnStns_i = new Station[]{trnStns_i[idxVisTx]};
-            trnStnsBms_i = new Beam[]{trnStnsBms_i[idxVisTx]};
-            rcvStns_i = new Station[]{rcvStns_i[idxVisRx]};
-            nNet = trnStns_i.length;
+            // This is an inter-satellite link, so assign interfering
+            // system space stations visible to this link space station
+            Object[] arr = findIdxVisSStoSS(new Station[]{rcvStn_w}, trnStns_i, dNm);
+            idxVisRx = (int[]) arr[0];
+            idxVisTx = (int[]) arr[1];
         }
+        // Select visible interfering transmit and receive stations
+        for (int idxVis = 0; idxVis < idxVisTx.length; idxVis++) {
+            trnStns_i[idxVis] = 0;
+        }
+
+
+        trnStns_i = new Station[]{trnStns_i[idxVisTx]};
+        trnStnsBms_i = new Beam[]{trnStnsBms_i[idxVisTx]};
+        rcvStns_i = new Station[]{rcvStns_i[idxVisRx]};
+        nNet = trnStns_i.length;
+
+        return new Performance();
+    }
 /* START
         Matrix[] trnStns_i_r_ger = new Matrix[5];
         Matrix[] rcvStns_i_r_ger = new Matrix[5];
@@ -773,6 +773,7 @@ END */
      *                       visibility is determined
      * @param dNm            Date number at which the position vectors occur
      */
+    //TODO: Fix method with Will
     public Object[] findIdxVisSStoSS(Station[] spaceStationsA, Station[] spaceStationsB, ModJulianDate dNm) {
         if (!(spaceStationsA instanceof SpaceStation[])) {
             throw new MException("Springbok:IllegalArgumentException",
