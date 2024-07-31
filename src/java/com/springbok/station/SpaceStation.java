@@ -210,7 +210,7 @@ public class SpaceStation extends Station {
      * @return Geocentric equatorial rotating position vector [er]
      */
     public Matrix compute_r_ger(ModJulianDate dNm) throws ObjectDecayed {
-        if (dNm != null && this.dNm_r != null && !dNm.equals(this.dNm_r)) {
+        if (dNm != null && (this.dNm_r == null || !dNm.equals(this.dNm_r))) {
             this.dNm_r = dNm;
             this.r_ger = Coordinates.gei2ger(this.compute_r_gei(dNm), dNm);
         }

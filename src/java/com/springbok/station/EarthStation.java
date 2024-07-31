@@ -207,7 +207,7 @@ public class EarthStation extends Station implements Serializable {
      * @return Geocentric equatorial rotating position vector [er]
      */
     public Matrix compute_r_ger(ModJulianDate dNm) {
-        if (this.r_ger != null) {
+        if (this.r_ger == null) {
             double N = 1.0 / (Math.sqrt(1 - EarthConstants.f * (2 - EarthConstants.f) * Math.pow(Math.sin(varphi), 2)));
             double h = 0.0;
             double[][] elements = {{(N + h) * Math.cos(varphi) * Math.cos(lambda)},
