@@ -169,7 +169,7 @@ public class LinkTest {
 
         Link link = new Link();
 
-        Link.Angle angle = link.computeAngles(new EarthStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
+        Link.Angle angle = link.computeAnglesFromZenith(new EarthStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
         Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
         Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
@@ -187,7 +187,7 @@ public class LinkTest {
         azm_expected = 0;
         elv_expected = 15;
 
-        angle = link.computeAngles(new EarthStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
+        angle = link.computeAnglesFromZenith(new EarthStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
         Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
         Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
@@ -201,7 +201,7 @@ public class LinkTest {
         azm_expected = 90;
         elv_expected = 69.295188945364572;
 
-        angle = link.computeAngles(new EarthStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
+        angle = link.computeAnglesFromZenith(new EarthStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
         Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
         Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
@@ -215,7 +215,7 @@ public class LinkTest {
         azm_expected = -90;
         elv_expected = 69.295188945364572;
 
-        angle = link.computeAngles(new EarthStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
+        angle = link.computeAnglesFromZenith(new EarthStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
         Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
         Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
@@ -237,7 +237,7 @@ public class LinkTest {
         azm_expected = 0;
         elv_expected = 0;
 
-        angle = link.computeAngles(new SpaceStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
+        angle = link.computeAnglesFromZenith(new SpaceStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
         Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
         Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
@@ -255,7 +255,7 @@ public class LinkTest {
         azm_expected = 0;
         elv_expected = 15;
 
-        angle = link.computeAngles(new SpaceStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
+        angle = link.computeAnglesFromZenith(new SpaceStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
         Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
         Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
@@ -269,7 +269,7 @@ public class LinkTest {
         azm_expected = -90;
         elv_expected = 69.295188945364572;
 
-        angle = link.computeAngles(new SpaceStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
+        angle = link.computeAnglesFromZenith(new SpaceStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
         Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
         Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);
@@ -283,7 +283,7 @@ public class LinkTest {
         azm_expected = 90;
         elv_expected = 69.295188945364572;
 
-        angle = link.computeAngles(new SpaceStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
+        angle = link.computeAnglesFromZenith(new SpaceStation(), new Matrix(r_ref), new Matrix(r_one), new Matrix(r_two));
 
         Assert.assertTrue(Math.abs(angle.get_phi() - phi_expected) < TestUtility.HIGH_PRECISION);
         Assert.assertTrue(Math.abs(angle.get_azimuth() - azm_expected) < TestUtility.HIGH_PRECISION);

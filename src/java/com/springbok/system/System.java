@@ -511,8 +511,8 @@ public class System {
      * specified assignment.
      */
     public void apply(Assignment assignment) {
-        // TODO: Assignment needs a reference to system, which needs
-        // to be tested here
+
+        // TODO: Assignment needs a reference to system, which needs to be tested here
 
         // Set derived properties of this System instance
         this.dNm = assignment.get_dNm();

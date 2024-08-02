@@ -18,6 +18,7 @@ package com.springbok.system;
 import com.springbok.utility.TestUtility;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertTrue;
@@ -32,11 +33,11 @@ public class PerformanceTest {
     // Noise power density [dBW/Hz]
     private final double N = 2;
     // Interference power density for each network [dBW/Hz]
-    private final double[] i = new double[]{3, 4};
+    private final ArrayList<Double> i = new ArrayList<Double>(Arrays.asList(3.0, 4.0));
     // Interference power density total [dBW/Hz]
     private final double I = 5;
     // Equivalent power flux density for each network [dBW/m^2 in reference bandwidth]
-    private final double[] epfd = new double[]{6, 7};
+    private final ArrayList<Double> epfd = new ArrayList<Double>(Arrays.asList(6.0, 7.0));
     // Equivalent power flux density total [dBW/m^2 in reference bandwidth]
     private final double EPFD = 8;
 
@@ -49,9 +50,9 @@ public class PerformanceTest {
 
         assertTrue(TestUtility.isDoublesEquals(C, performance.get_C()));
         assertTrue(TestUtility.isDoublesEquals(N, performance.get_N()));
-        assertTrue(Arrays.equals(i, performance.get_i()));
+        assertTrue(i.equals(performance.get_i()));
         assertTrue(TestUtility.isDoublesEquals(I, performance.get_I()));
-        assertTrue(Arrays.equals(epfd, performance.get_epfd()));
+        assertTrue(epfd.equals(performance.get_epfd()));
         assertTrue(TestUtility.isDoublesEquals(EPFD, performance.get_EPFD()));
     }
 }

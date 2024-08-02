@@ -22,7 +22,6 @@ import com.springbok.station.Beam;
 import com.springbok.station.EarthStation;
 import com.springbok.station.SpaceStation;
 import com.springbok.station.Station;
-import com.springbok.twobody.Coordinates;
 import com.springbok.twobody.EarthConstants;
 import com.springbok.twobody.ModJulianDate;
 import com.springbok.utility.MException;
@@ -36,91 +35,6 @@ import java.util.Map;
  * Describes a link between two stations.
  */
 public class Link {
-
-    /**
-     * Describes angles between two stations.
-     */
-    protected static class Angle {
-
-        // Angle [deg]
-        private double phi;
-        // Azimuth [deg]
-        private double azm;
-        // Elevation [deg]
-        private double elv;
-
-        /**
-         * Constructs an Angle.
-         *
-         * @param phi Angle
-         * @param azm Azimuth
-         * @param elv Elevation
-         */
-        public Angle(double phi, double azm, double elv) {
-            this.phi = phi;
-            this.azm = azm;
-            this.elv = elv;
-        }
-
-        /**
-         * Constructs an Angle.
-         */
-        public Angle() {
-        }
-
-        /**
-         * Sets angle.
-         *
-         * @param phi Angle
-         */
-        public void set_phi(double phi) {
-            this.phi = phi;
-        }
-
-        /**
-         * Gets angle
-         *
-         * @return Angle
-         */
-        public double get_phi() {
-            return this.phi;
-        }
-
-        /**
-         * Sets azimuth.
-         *
-         * @param azm Azimuth
-         */
-        public void set_azimuth(double azm) {
-            this.azm = azm;
-        }
-
-        /** Gets azimuth
-         *
-         * @return Azimuth
-         */
-        public double get_azimuth() {
-            return this.azm;
-        }
-
-        /**
-         *  Sets elevation.
-         *
-         * @param elv
-         */
-        public void set_elevation(double elv) {
-            this.elv = elv;
-        }
-
-        /**
-         * Gets elevation.
-         *
-         * @return Elevation
-         */
-        public double get_elevation() {
-            return this.elv;
-        }
-    }
 
     // A transmit station
     private Station transmitStation;
@@ -286,13 +200,9 @@ public class Link {
      *
      * @param dNm               Current date number
      * @param interferingSystem Interfering system
-     * @param numSmpES          Factor of Earth stations to which a space station
-     *                          was assigned
-     * @param numSmpBm          Factor of Space station beams assigned
-     *                          ref_bw - Reference bandwidth [kHz]
-     * @param DoIS              Flag for computing up link performance in the
-     *                          presence of inter-satellite interference (optional,
-     *                          default is 0)
+     * @param options           Map of options containing:
+     *                          DoIS  Flag for computing up link performance in the
+     *                          presence of inter-satellite interference (default is 0)
      * @return Link performance
      */
     public Performance computePerformance(ModJulianDate dNm, System interferingSystem,
@@ -303,71 +213,98 @@ public class Link {
 
         // Parse variable input arguments
         boolean doIS = (boolean) options.getOrDefault("DoIS", false);
+        // TODO: Ask about polarization discrimination (PlDs)
+        double PlDs = 0.0;
 
         // Assign wanted transmit and receive station, for clarity
         Station trnStn_w = this.transmitStation;
         Station rcvStn_w = this.receiveStation;
         Beam trnStnBm_w = this.transmitStationBeam;
-
         if (doIS && rcvStn_w instanceof EarthStation) {
             throw new IllegalArgumentException("The inter-satellite case requires the receive station to be a space station");
         }
 
-          // Assign interfering transmit and receive stations ...
-            if (doIS) {
-
-                    % ...for the IS
-                case trnStns_i = interferingSystem.get_assignedSpaceStations()
-                    ;
-                    trnStnsBms_i = interferingSystem.get_assignedSpaceStationBeams();
-                    rcvStns_i = interferingSystem.get_assignedEarthStations();
-
-              %This is an up link for the IS
-                case , so assign
-                    interfering
-                            % system space stations visible to this link space station
-                        [idxVisRx, idxVisTx] =Link.findIdxVisSStoSS(rcvStn_w, trnStns_i, dNm);
-
-                    elseif doIE
-
-              % ...for the IE
-                case trnStns_i = interferingSystem.get_assignedEarthStations()
-                    ;
-                    trnStnsBms_i = interferingSystem.get_assignedEarthStationBeams();
-                    rcvStns_i = interferingSystem.get_assignedSpaceStations();
-
-              %This is a terrestrial link for the IE
-                case , so assign
-              %interfering system earth stations visible to this link
-                        % receive station
-                        [idxVisRx, idxVisTx] =Link.findIdxVisEStoS(rcvStn_w, trnStns_i, dNm);
-
-            else
-
-              % ...for consistency with wanted transmit station class
-                    if isUpLink
-                        trnStns_i = interferingSystem.get_assignedEarthStations();
-                    trnStnsBms_i = interferingSystem.get_assignedEarthStationBeams();
-                    rcvStns_i = interferingSystem.get_assignedSpaceStations();
-
-                %This is an up link, so assign interfering system Earth
-                %stations visible to this link space station
-                        [idxVisTx, idxVisRx] =Link.findIdxVisEStoS(trnStns_i, rcvStn_w, dNm);
-
-              else %isDnLink
-                        trnStns_i = interferingSystem.get_assignedSpaceStations();
-                    trnStnsBms_i = interferingSystem.get_assignedSpaceStationBeams();
-                    rcvStns_i = interferingSystem.get_assignedEarthStations();
-
-                %This is a down link, so assign interfering system space
-                %stations visible to this link Earth station
-                        [idxVisRx, idxVisTx] =Link.findIdxVisEStoS(rcvStn_w, trnStns_i, dNm);
-
-            }
-
         // Compute positions of wanted transmit and receive station
         Matrix trnStn_w_r_ger = trnStn_w.compute_r_ger(dNm);
         Matrix rcvStn_w_r_ger = rcvStn_w.compute_r_ger(dNm);
+
+        // Assign interfering transmit and receive station, for clarity ...
+        ArrayList<Station> trnStns_i = new ArrayList<Station>();
+        ArrayList<Beam> trnStnsBms_i = new ArrayList<Beam>();
+        ArrayList<Station> rcvStns_i = new ArrayList<Station>();
+        ArrayList<Boolean> isVisible = new ArrayList<Boolean>();
+        boolean isUpLink = false;
+        if (doIS) {
+
+            // ...for the IS case. Use a loop to auto cast.
+            for (SpaceStation spaceStation : interferingSystem.get_assignedSpaceStations()) {
+                SpaceStation trnStn_i = spaceStation;
+                boolean isVis = Link.findIdxVisSStoSS((SpaceStation) rcvStn_w, trnStn_i, dNm);
+                if (isVis) {
+                    trnStns_i.add(trnStn_i);
+                }
+                isVisible.add(isVis);
+            }
+            trnStnsBms_i = interferingSystem.get_assignedSpaceStationBeams();  // No cast required
+            int iES = -1;
+            for (EarthStation earthStation : interferingSystem.get_assignedEarthStations()) {
+                if (isVisible.get(iES++)) {
+                    rcvStns_i.add(earthStation);
+                }
+            }
+
+        } else {
+
+            if (trnStn_w instanceof EarthStation && rcvStn_w instanceof SpaceStation) {
+
+                // ... for an up link. Use a loop to auto cast.
+                isUpLink = true;
+                for (EarthStation earthStation : interferingSystem.get_assignedEarthStations()) {
+                    EarthStation trnStn_i = earthStation;
+                    boolean isVis = Link.findIdxVisEStoSS(trnStn_i, (SpaceStation) rcvStn_w, dNm);  // No cast required
+                    if (isVis) {
+                        trnStns_i.add(trnStn_i);
+                    }
+                    isVisible.add(isVis);
+                }
+                trnStnsBms_i = interferingSystem.get_assignedEarthStationBeams();
+                int iSS = -1;
+                for (SpaceStation spaceStation : interferingSystem.get_assignedSpaceStations()) {
+                    if (isVisible.get(iSS++)) {
+                        rcvStns_i.add(spaceStation);
+                    }
+                }
+
+            } else {
+
+                // ... for a down link. Use a loop to auto cast.
+                isUpLink = false;
+                for (SpaceStation spaceStation : interferingSystem.get_assignedSpaceStations()) {
+                    SpaceStation trnStn_i = spaceStation;
+                    boolean isVis = Link.findIdxVisEStoSS((EarthStation) rcvStn_w, trnStn_i, dNm);
+                    if (isVis) {
+                        trnStns_i.add(trnStn_i);
+                    }
+                    isVisible.add(isVis);
+                }
+                trnStnsBms_i = interferingSystem.get_assignedSpaceStationBeams();
+                int iES = -1;
+                for (EarthStation earthStation : interferingSystem.get_assignedEarthStations()) {
+                    if (isVisible.get(iES++)) {
+                        rcvStns_i.add(earthStation);
+                    }
+                }
+            }
+        }
+
+        // Compute positions of interfering transmit and receive stations
+        int nInt = trnStns_i.size();
+        Matrix[] trnStns_i_r_ger = new Matrix[nInt];
+        Matrix[] rcvStns_i_r_ger = new Matrix[nInt];
+        for (int iInt = 0; iInt < nInt; ++iInt) {
+            trnStns_i_r_ger[iInt] = trnStns_i.get(iInt).compute_r_ger(dNm);
+            rcvStns_i_r_ger[iInt] = rcvStns_i.get(iInt).compute_r_ger(dNm);
+        }
 
         // Assign frequency and propagation path length
         double f_w = trnStn_w.get_emission().get_freq_mhz();
@@ -404,17 +341,44 @@ public class Link {
         double N = Propagation.k + 10 * Math.log10(T_w);
 
         // Consider each interfering network
-        // TODO: make i and epfd ArrayLists, loop through interfering system, do visibility test and do computation (if applicable)
         ArrayList<Double> i = new ArrayList<Double>(); // Negative_Infinity
         double I = Double.NEGATIVE_INFINITY;
         ArrayList<Double> epfd = new ArrayList<Double>(); // Negative_Infinity
         double EPFD = Double.NEGATIVE_INFINITY;
+        for (int iInt = 0; iInt < nInt; ++iInt) {
 
-        for (Network network : interferingSystem.get_networks()){
+            // Assign frequency and propagation path length
+            double f_i = trnStns_i.get(iInt).get_emission().get_freq_mhz();
+            double d_i_i = Link.computeDistance(trnStns_i_r_ger[iInt], rcvStns_i_r_ger[iInt]);
+            double d_i_w = Link.computeDistance(trnStns_i_r_ger[iInt], rcvStn_w_r_ger);
 
+            // Assign power density, transmit and receive gain, and propagation path and spreading loss
+            double theta_t_i = Link.computeTheta(trnStns_i_r_ger[iInt], rcvStns_i_r_ger[iInt], rcvStn_w_r_ger);
+            Gain G_t_i = trnStns_i.get(iInt).get_transmitAntenna().get_pattern().gain(theta_t_i, trnStns_i.get(iInt).get_transmitAntenna().get_options());
+            double SL_i_w = Propagation.computeSL(d_i_w);
+            double theta_r_w = Link.computeTheta(rcvStn_w_r_ger, trnStn_w_r_ger, trnStns_i_r_ger[iInt]);
+            Gain G_r_w = rcvStn_w.get_receiveAntenna().get_pattern().gain(theta_r_w, rcvStn_w.get_receiveAntenna().get_options());
+            double PwDn_i;
+            if (trnStns_i.get(iInt).get_emission().get_pwr_flx_ds() != 0.0) {
+                Gain G_t_i_0 = trnStns_i.get(iInt).get_transmitAntenna().get_pattern().gain(0, trnStns_i.get(iInt).get_transmitAntenna().get_options());
+                double SL_i_i = Propagation.computeSL(d_i_i);
+                PwDn_i = trnStns_i.get(iInt).get_emission().get_pwr_flx_ds() - G_t_i_0.G + SL_i_i;
+            } else {
+                PwDn_i = trnStns_i.get(iInt).get_emission().get_pwr_ds_max();
+            }
+            double ML_i = 10 * Math.log10(trnStnsBms_i.get(iInt).get_divisions());
+            double DCL_i = 10 * Math.log10(100 / trnStnsBms_i.get(iInt).get_dutyCycle());
+            double PL_i = Propagation.computeFSL(f_i, d_i_w);
+
+            // Compute interference power density
+            i.add(PwDn_i + G_t_i.G - PL_i + G_r_w.G - PlDs - ML_i - DCL_i);  // Including multiplexing and dutycycle
+            I = 10 * Math.log10(Math.pow(10, I / 10) + Math.pow(10, i.get(iInt) / 10));
+
+            // Compute equivalent power flux density
+            epfd.add(PwDn_i + G_t_i.G - SL_i_w + G_r_w.G - PlDs - G_r_w_0.G + 10 * Math.log10(ref_bw * 1000) - ML_i - DCL_i);  // Including multiplexing and dutycycle
+            EPFD = 10 * Math.log10(Math.pow(10, EPFD / 10) + Math.pow(10, epfd.get(iInt) / 10));
         }
-
-        return new Performance();
+        return new Performance(C, N, i, I, epfd, EPFD);
     }
 
     /**
@@ -433,7 +397,7 @@ public class Link {
      * @param r_two Second station position
      * @return Distance [km]
      */
-    public double computeDistance(Matrix r_one, Matrix r_two) {
+    public static double computeDistance(Matrix r_one, Matrix r_two) {
         if (r_one.getRowDimension() != 3 && r_one.getColumnDimension() != 1
                 || r_two.getRowDimension() != 3 && r_two.getColumnDimension() != 1) {
             throw new MException("Springbok:IllegalArgumentException",
@@ -458,13 +422,7 @@ public class Link {
      * @param r_two Second station position
      * @return Angle between unit vectors [deg]
      */
-    public double computeTheta(Matrix r_ref, Matrix r_one, Matrix r_two) {
-        if (r_ref.getRowDimension() != 3 && r_ref.getColumnDimension() != 1
-                || r_one.getRowDimension() != 3 && r_one.getColumnDimension() != 1
-                || r_two.getRowDimension() != 3 && r_two.getColumnDimension() != 1) {
-            throw new MException("Springbok:IllegalArgumentException",
-                    "Positions must be column vectors");
-        }
+    public static double computeTheta(Matrix r_ref, Matrix r_one, Matrix r_two) {
 
         // Compute relative position vectors
         Matrix r_one_ref = r_one.minus(r_ref);
@@ -490,112 +448,16 @@ public class Link {
     }
 
     /**
-     * Computes the angles from boresight, defined by the reference
-     * position, and the first and second position relative to the
-     * reference position. As a result, the first angle from boresight
-     * is the scan angle, and the second angle from boresight is the
-     * elevation. Defines a local coordinate system with z axis aligned
-     * with boresight, x axis such that the x-z axis contains the first
-     * relative position vector, and y axis giving a right handed
-     * system. Computes the azimuth (from the x axis) corresponding to
-     * the second position.
-     *
-     * @param refStn Reference station
-     * @param r_ref  Reference station position
-     * @param r_one  First station position
-     * @param r_two  Second station position
-     * @return Elevation (corresponds to second position) [deg]
-     */
-    public Angle computeAngles(Station refStn, Matrix r_ref, Matrix... r_one_two) {
-        if (r_one_two.length < 1 || r_one_two.length > 2) {
-            throw new MException("Springbok:IllegalArgumentException",
-                    "Two or threes position vectors are required");
-        } else {
-            boolean isValid = r_ref.getRowDimension() == 3 && r_ref.getColumnDimension() == 1
-                    && r_one_two[0].getRowDimension() == 3 && r_one_two[0].getColumnDimension() == 1;
-            if (r_one_two.length == 2) {
-                isValid = isValid && r_one_two[1].getRowDimension() == 3 && r_one_two[1].getColumnDimension() == 1;
-            }
-            if (!isValid) {
-                throw new MException("Springbok:IllegalArgumentException",
-                        "Positions must be column vectors");
-            }
-        }
-
-        Matrix r_one = r_one_two[0];
-
-        // Compute first relative position vector
-        Matrix r_one_ref = r_one.minus(r_ref);
-
-        // Compute unit vectors
-        Matrix u_ref = r_ref.times(1 / Math.sqrt(r_ref.transpose().times(r_ref).get(0, 0)));
-
-        if (refStn instanceof SpaceStation) {
-            // Space station antennas point toward the center of the
-            // Earth
-            u_ref = u_ref.uminus();
-        }
-        Matrix u_one_ref = r_one_ref.times(1 / Math.sqrt(r_one_ref.transpose().times(r_one_ref).get(0, 0)));
-
-        // Compute scan angle (angle between boresight and first
-        // position directions)
-        double phi = Math.toDegrees(Math.acos(u_ref.transpose().times(u_one_ref).get(0, 0)));
-
-        double azm = 0;
-        double elv = 0;
-        if (r_one_two.length == 2) {
-            Matrix z_hat = u_ref;
-            Matrix y_hat = new Matrix(3, 1);
-
-            // Compute second relative position vector
-            Matrix r_two = r_one_two[1];
-            Matrix r_two_ref = r_two.minus(r_ref);
-
-            // Compute unit vector
-            Matrix u_two_ref = r_two_ref.times(1 / Math.sqrt(r_two_ref.transpose().times(r_two_ref).get(0, 0)));
-
-            // Compute elevation (angle between scan and second position
-            // directions)
-            double s = u_one_ref.transpose().times(u_two_ref).get(0, 0);
-            elv = Math.toDegrees(Math.acos(u_one_ref.transpose().times(u_two_ref).get(0, 0)));
-
-            // Compute local coordinate system unit vectors
-            if (Double.compare(u_one_ref.minus(z_hat).transpose().times(u_one_ref.minus(z_hat)).get(0, 0), 0) == 0) {
-                // Reference and first relative position vectors are aligned
-                y_hat.set(0, 0, 0);
-                y_hat.set(1, 0, z_hat.get(2, 0));
-                y_hat.set(2, 0, z_hat.get(1, 0));
-            } else {
-                y_hat = Coordinates.cross(z_hat, u_one_ref);
-            }
-            y_hat = y_hat.times(1 / Math.sqrt(y_hat.transpose().times(y_hat).get(0, 0)));
-            Matrix x_hat = Coordinates.cross(y_hat, z_hat);
-
-            // Compute azimuth (angle in the array plane between the
-            // plane containing scan and boresight directions and plane
-            // containing second position and boresight directions)
-            double x_two_ref = u_two_ref.transpose().times(x_hat).get(0, 0);
-            double y_two_ref = u_two_ref.transpose().times(y_hat).get(0, 0);
-
-            azm = Math.atan2(y_two_ref, x_two_ref) * 180 / Math.PI;
-        }
-
-        return new Angle(phi, azm, elv);
-    }
-
-    /**
      * Find if Earth station is visible to space station, and conversely.
      *
      * @param earthStation Earth station with which visibility is
-     *                      determined
+     *                     determined
      * @param spaceStation Space station with which visibility is
-     *                      determined
-     * @param dNm           Date number at which the position vectors occur
-     *
+     *                     determined
+     * @param dNm          Date number at which the position vectors occur
      * @return boolean
      */
-    public boolean findIdxVisEStoSS(EarthStation earthStation, SpaceStation spaceStation, ModJulianDate dNm) {
-
+    public static boolean findIdxVisEStoSS(EarthStation earthStation, SpaceStation spaceStation, ModJulianDate dNm) {
 
         Matrix r_ger_ES = earthStation.compute_r_ger(dNm);
         Matrix r_ger_SS = null;
@@ -608,11 +470,7 @@ public class Link {
 
         double theta = System.computeAngleFromZenith(r_ger_SS, r_ger_ES);
 
-        if (theta < 90) {
-            return true;
-        } else {
-            return false;
-        }
+        return theta < 90;
     }
 
     /**
@@ -624,7 +482,7 @@ public class Link {
      *                       visibility is determined
      * @param dNm            Date number at which the position vectors occur
      */
-    public boolean findIdxVisSStoSS(Station spaceStation_A, Station spaceStation_B, ModJulianDate dNm) {
+    public static boolean findIdxVisSStoSS(SpaceStation spaceStation_A, SpaceStation spaceStation_B, ModJulianDate dNm) {
 
         Matrix r_ger_SS_A = null;
         Matrix d_ger_SS_A = null;
@@ -652,11 +510,7 @@ public class Link {
 
         double theta = Math.toDegrees(Math.acos((r_ger_SS_A.arrayRightDivide(d_ger_SS_A)).transpose()
                 .times(r_ger_SS_B.arrayRightDivide(d_ger_SS_B)).get(0, 0)));
-        if (theta < alpha_A + alpha_B) {
-            return true;
-        } else {
-            return false;
-        }
+        return theta < alpha_A + alpha_B;
     }
 
 
@@ -714,5 +568,92 @@ public class Link {
             return false;
         }
         return doCheck == other.doCheck;
+    }
+
+    // TODO: Remove this inner class
+    /**
+     * Describes angles between two stations.
+     */
+    protected static class Angle {
+
+        // Angle [deg]
+        private double phi;
+        // Azimuth [deg]
+        private double azm;
+        // Elevation [deg]
+        private double elv;
+
+        /**
+         * Constructs an Angle.
+         *
+         * @param phi Angle
+         * @param azm Azimuth
+         * @param elv Elevation
+         */
+        public Angle(double phi, double azm, double elv) {
+            this.phi = phi;
+            this.azm = azm;
+            this.elv = elv;
+        }
+
+        /**
+         * Constructs an Angle.
+         */
+        public Angle() {
+        }
+
+        /**
+         * Sets angle.
+         *
+         * @param phi Angle
+         */
+        public void set_phi(double phi) {
+            this.phi = phi;
+        }
+
+        /**
+         * Gets angle
+         *
+         * @return Angle
+         */
+        public double get_phi() {
+            return this.phi;
+        }
+
+        /**
+         * Sets azimuth.
+         *
+         * @param azm Azimuth
+         */
+        public void set_azimuth(double azm) {
+            this.azm = azm;
+        }
+
+        /**
+         * Gets azimuth
+         *
+         * @return Azimuth
+         */
+        public double get_azimuth() {
+            return this.azm;
+        }
+
+        /**
+         * Sets elevation.
+         *
+         * @param elv
+         */
+        public void set_elevation(double elv) {
+            this.elv = elv;
+        }
+
+        /**
+         * Gets elevation.
+         *
+         * @return Elevation
+         */
+        public double get_elevation() {
+            return this.elv;
+        }
     }
 }

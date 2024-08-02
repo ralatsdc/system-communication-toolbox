@@ -15,6 +15,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.springbok.system;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -27,11 +29,11 @@ public class Performance {
     // Noise power density [dBW/Hz]
     private double N;
     // Interference power density for each network [dBW/Hz]
-    private double[] i;
+    private ArrayList<Double> i;
     // Interference power density total [dBW/Hz]
     private double I;
     // Equivalent power flux density for each network [dBW/m^2 in reference bandwidth]
-    private double[] epfd;
+    private ArrayList<Double> epfd;
     // Equivalent power flux density total [dBW/m^2 in reference bandwidth]
     private double EPFD;
 
@@ -47,7 +49,7 @@ public class Performance {
      * @param EPFD Equivalent power flux density total [dBW/m^2 in
      *             reference bandwidth]
      */
-    public Performance(double C, double N, double[] i, double I, double[] epfd, double EPFD) {
+    public Performance(double C, double N, ArrayList<Double> i, double I, ArrayList<Double> epfd, double EPFD) {
         // Assign properties
         this.set_C(C);
         this.set_N(N);
@@ -67,7 +69,7 @@ public class Performance {
      */
     public Performance copy() {
         return new Performance(
-                this.C, this.N, this.i.clone(), this.I, this.epfd.clone(), this.EPFD);
+                this.C, this.N, (ArrayList<Double>) this.i.clone(), this.I, (ArrayList<Double>) this.epfd.clone(), this.EPFD);
     }
 
     /**
@@ -111,7 +113,7 @@ public class Performance {
      *
      * @param i Interference power density for each network [dBW/Hz]
      */
-    public void set_i(double[] i) {
+    public void set_i(ArrayList<Double> i) {
         this.i = i;
     }
 
@@ -120,7 +122,7 @@ public class Performance {
      *
      * @return Interference power density for each network [dBW/Hz]
      */
-    public double[] get_i() {
+    public ArrayList<Double> get_i() {
         return this.i;
     }
 
@@ -149,7 +151,7 @@ public class Performance {
      * @param epfd Equivalent power flux density for each network
      *             [dBW/m^2 in reference bandwidth]
      */
-    public void set_epfd(double[] epfd) {
+    public void set_epfd(ArrayList<Double> epfd) {
         this.epfd = epfd;
     }
 
@@ -160,7 +162,7 @@ public class Performance {
      * @return Equivalent power flux density for each network
      *             [dBW/m^2 in reference bandwidth]
      */
-    public double[] get_epfd() {
+    public ArrayList<Double> get_epfd() {
         return this.epfd;
     }
 
@@ -198,11 +200,11 @@ public class Performance {
         result = prime * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(N);
         result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(Arrays.hashCode(i));
+        temp = Double.doubleToLongBits(i.hashCode());
         result = prime * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(I);
         result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(Arrays.hashCode(epfd));
+        temp = Double.doubleToLongBits(epfd.hashCode());
         result = prime * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(EPFD);
         result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -232,14 +234,14 @@ public class Performance {
                 .doubleToLongBits(other.N)) {
             return false;
         }
-        if (!Arrays.equals(i, other.i)) {
+        if (!i.equals(other.i)) {
             return false;
         }
         if (Double.doubleToLongBits(I) != Double
                 .doubleToLongBits(other.I)) {
             return false;
         }
-        if (!Arrays.equals(epfd, other.epfd)) {
+        if (!epfd.equals(other.epfd)) {
             return false;
         }
         return Double.doubleToLongBits(EPFD) == Double
