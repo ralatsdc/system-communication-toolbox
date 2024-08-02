@@ -17,6 +17,7 @@ package com.springbok.system;
 
 import Jama.Matrix;
 import com.celestrak.sgp4v.ObjectDecayed;
+import com.springbok.pattern.Gain;
 import com.springbok.station.Beam;
 import com.springbok.station.EarthStation;
 import com.springbok.station.SpaceStation;
@@ -305,249 +306,116 @@ public class Link {
 
         // Assign wanted transmit and receive station, for clarity
         Station trnStn_w = this.transmitStation;
-        Beam trnStnBm_w = this.transmitStationBeam;
         Station rcvStn_w = this.receiveStation;
+        Beam trnStnBm_w = this.transmitStationBeam;
 
-        // Assign positions for the wanted stations
+        if (doIS && rcvStn_w instanceof EarthStation) {
+            throw new IllegalArgumentException("The inter-satellite case requires the receive station to be a space station");
+        }
+
+          // Assign interfering transmit and receive stations ...
+            if (doIS) {
+
+                    % ...for the IS
+                case trnStns_i = interferingSystem.get_assignedSpaceStations()
+                    ;
+                    trnStnsBms_i = interferingSystem.get_assignedSpaceStationBeams();
+                    rcvStns_i = interferingSystem.get_assignedEarthStations();
+
+              %This is an up link for the IS
+                case , so assign
+                    interfering
+                            % system space stations visible to this link space station
+                        [idxVisRx, idxVisTx] =Link.findIdxVisSStoSS(rcvStn_w, trnStns_i, dNm);
+
+                    elseif doIE
+
+              % ...for the IE
+                case trnStns_i = interferingSystem.get_assignedEarthStations()
+                    ;
+                    trnStnsBms_i = interferingSystem.get_assignedEarthStationBeams();
+                    rcvStns_i = interferingSystem.get_assignedSpaceStations();
+
+              %This is a terrestrial link for the IE
+                case , so assign
+              %interfering system earth stations visible to this link
+                        % receive station
+                        [idxVisRx, idxVisTx] =Link.findIdxVisEStoS(rcvStn_w, trnStns_i, dNm);
+
+            else
+
+              % ...for consistency with wanted transmit station class
+                    if isUpLink
+                        trnStns_i = interferingSystem.get_assignedEarthStations();
+                    trnStnsBms_i = interferingSystem.get_assignedEarthStationBeams();
+                    rcvStns_i = interferingSystem.get_assignedSpaceStations();
+
+                %This is an up link, so assign interfering system Earth
+                %stations visible to this link space station
+                        [idxVisTx, idxVisRx] =Link.findIdxVisEStoS(trnStns_i, rcvStn_w, dNm);
+
+              else %isDnLink
+                        trnStns_i = interferingSystem.get_assignedSpaceStations();
+                    trnStnsBms_i = interferingSystem.get_assignedSpaceStationBeams();
+                    rcvStns_i = interferingSystem.get_assignedEarthStations();
+
+                %This is a down link, so assign interfering system space
+                %stations visible to this link Earth station
+                        [idxVisRx, idxVisTx] =Link.findIdxVisEStoS(rcvStn_w, trnStns_i, dNm);
+
+            }
+
+        // Compute positions of wanted transmit and receive station
         Matrix trnStn_w_r_ger = trnStn_w.compute_r_ger(dNm);
         Matrix rcvStn_w_r_ger = rcvStn_w.compute_r_ger(dNm);
 
-        // Assign visible interfering transmit and receive stations
-        Station[] trnStns_i;
-        Beam[] trnStnsBms_i;
-        Station[] rcvStns_i;
-        int[] idxVisTx, idxVisRx;
-        int nNet = 0;
-        if (!doIS) {
-            //  For consistency with wanted transmit station class
-            if (trnStn_w instanceof EarthStation) {
-                trnStns_i = interferingSystem.get_assignedEarthStations();
-                trnStnsBms_i = interferingSystem.get_assignedEarthStationBeams();
-                rcvStns_i = interferingSystem.get_assignedSpaceStations();
-                // This is an up link, so assign interfering system Earth
-                // stations visible to this link space station
-                // Arrays.copyOf(trnStns_i, trnStns_i.length, EarthStation[].class),
-                Object[] arr = findIdxVisEStoSS((EarthStation[]) trnStns_i,
-                        new SpaceStation[]{(SpaceStation) rcvStn_w}, dNm);
-                idxVisTx = (int[]) arr[0];  // ES
-                idxVisRx = (int[]) arr[1];  // SS
-            } else {
-                trnStns_i = interferingSystem.get_assignedSpaceStations();
-                trnStnsBms_i = interferingSystem.get_assignedSpaceStationBeams();
-                rcvStns_i = interferingSystem.get_assignedEarthStations();
-
-                // This is a down link, so assign interfering system space
-                // stations visible to this link Earth station
-                Object[] arr = findIdxVisEStoSS(new EarthStation[]{(EarthStation) rcvStn_w}, (SpaceStation[]) trnStns_i, dNm);
-                idxVisRx = (int[]) arr[0];  // ES
-                idxVisTx = (int[]) arr[1];  // SS
-            }
-        } else {
-            if (!(trnStn_w instanceof EarthStation)) {
-                throw new MException("Springbok:IllegalArgumentException",
-                        "IS case only applicable for an uplink");
-            }
-            trnStns_i = interferingSystem.get_assignedSpaceStations();
-            trnStnsBms_i = interferingSystem.get_assignedSpaceStationBeams();
-            rcvStns_i = interferingSystem.get_assignedEarthStations();
-
-            // This is an inter-satellite link, so assign interfering
-            // system space stations visible to this link space station
-            Object[] arr = findIdxVisSStoSS(new Station[]{rcvStn_w}, trnStns_i, dNm);
-            idxVisRx = (int[]) arr[0];
-            idxVisTx = (int[]) arr[1];
-        }
-        // Select visible interfering transmit and receive stations
-        for (int idxVis = 0; idxVis < idxVisTx.length; idxVis++) {
-            trnStns_i[idxVis] = 0;
-        }
-
-
-        trnStns_i = new Station[]{trnStns_i[idxVisTx]};
-        trnStnsBms_i = new Beam[]{trnStnsBms_i[idxVisTx]};
-        rcvStns_i = new Station[]{rcvStns_i[idxVisRx]};
-        nNet = trnStns_i.length;
-
-        return new Performance();
-    }
-/* START
-        Matrix[] trnStns_i_r_ger = new Matrix[5];
-        Matrix[] rcvStns_i_r_ger = new Matrix[5];
-
-            // Assign positions for the interfering stations
-        if (interferingSystem != null) {
-            if (!doIS) {
-                if (trnStn_w instanceof EarthStation) {
-                    //  for consistency with wanted transmit station class
-                    for (int iNet = 0; iNet <= nNet; iNet++) {
-                        trnStns_i_r_ger[iNet] = ((EarthStation) trnStns_i[iNet]).get_R_ger();
-                        rcvStns_i_r_ger[iNet] = ((EarthStation) rcvStns_i[iNet]).compute_r_gei(dNm);
-                    }
-                } else {
-                    for (int iNet = 0; iNet <= nNet; iNet++) {
-                        trnStns_i_r_ger[iNet] = ((SpaceStation) trnStns_i[iNet]).compute_r_ger(dNm);
-                        rcvStns_i_r_ger[iNet] = ((SpaceStation) rcvStns_i[iNet]).getR_ger();
-                    }
-                }
-            } else {
-                for (int iNet = 0; iNet <= nNet; iNet++) {
-                    //TODO: variables trnStns_i and rcvStns_i are Earth or Space stations?
-                    trnStns_i_r_ger[iNet] = ((SpaceStation) trnStns_i[iNet]).compute_r_ger(dNm);
-                    rcvStns_i_r_ger[iNet] = ((SpaceStation) rcvStns_i[iNet]).getR_ger();
-                }
-            }
-        }
-
         // Assign frequency and propagation path length
-        double f_w = trnStn_w.getEmission().getFreq_mhz();
+        double f_w = trnStn_w.get_emission().get_freq_mhz();
         double d_w = computeDistance(trnStn_w_r_ger, rcvStn_w_r_ger);
 
         // Assign power density, transmit and receive gain, and
         // propagation path loss
-        //TODO: uncomment when antenna will have pattern property
-            if (trnStn_w.getTransmitAntenna().getPattern() instanceof SampledPattern) {
-            phi_t_w = computeAngles(trnStn_w, trnStn_w_r_ger, rcvStn_w_r_ger);
-            G_t_w_0 = trnStn_w.transmitAntenna.pattern.gain(
-                    phi_t_w, 0, phi_t_w, trnStn_w.transmitAntenna.options {:});
+        Gain G_t_w_0 = trnStn_w.get_transmitAntenna().get_pattern().gain(
+                0, trnStn_w.get_transmitAntenna().get_options());
 
-      else
-            G_t_w_0 = trnStn_w.transmitAntenna.pattern.gain(
-                    0, trnStn_w.transmitAntenna.options {:});
+        Gain G_r_w_0 = rcvStn_w.get_receiveAntenna().get_pattern().gain(
+                0, rcvStn_w.get_receiveAntenna().get_options());
 
-            end         // if
-            if isa(rcvStn_w.receiveAntenna.pattern, "SampledPattern")
-            phi_r_w = Link.computeAngles(rcvStn_w, rcvStn_w_r_ger, trnStn_w_r_ger);
-            G_r_w_0 = rcvStn_w.receiveAntenna.pattern.gain(
-                    phi_r_w, 0, phi_r_w, rcvStn_w.receiveAntenna.options {:});
-
-      else
-            G_r_w_0 = rcvStn_w.receiveAntenna.pattern.gain(
-                    0, rcvStn_w.receiveAntenna.options {:});
-
-            end         // if
         double SL_w = 0;
         double PD_w = 0;
-        if (trnStn_w.getEmission().getPwr_flx_ds() != 0) {
+        if (trnStn_w.get_emission().get_pwr_flx_ds() != 0) {
             SL_w = Propagation.computeSL(d_w);
-            //PD_w = trnStn_w.emission.pwr_flx_ds - G_t_w_0 + SL_w;
+            PD_w = trnStn_w.get_emission().get_pwr_flx_ds() - G_t_w_0.G + SL_w;
         } else {
-            PD_w = trnStn_w.getEmission().getPwr_ds_max();
+            PD_w = trnStn_w.get_emission().get_pwr_ds_max();
         }
 
-        double ML_w = 10 * Math.log10(trnStnBm_w.getDivisions());
-        double DCL_w = 10 * Math.log10(100 / trnStnBm_w.getDutyCycle());
+        double ML_w = 10 * Math.log10(trnStnBm_w.get_divisions());
+        double DCL_w = 10 * Math.log10(100 / trnStnBm_w.get_dutyCycle());
         double PL_w = Propagation.computeFSL(f_w, d_w);
 
         // Compute carrier power density
-            C = PD_w - ML_w - DCL_w + G_t_w_0 - PL_w + G_r_w_0;
+        double C = PD_w - ML_w - DCL_w + G_t_w_0.G - PL_w + G_r_w_0.G;
 
-            // Assign receiver noise temperature
-        double T_w = rcvStn_w.getReceiveAntenna().get_noise_t();
+        // Assign receiver noise temperature
+        double T_w = rcvStn_w.get_receiveAntenna().get_noise_t();
 
         // Compute noise power density
         double N = Propagation.k + 10 * Math.log10(T_w);
 
         // Consider each interfering network
-        double[] i = new double[]{Double.NEGATIVE_INFINITY};
+        // TODO: make i and epfd ArrayLists, loop through interfering system, do visibility test and do computation (if applicable)
+        ArrayList<Double> i = new ArrayList<Double>(); // Negative_Infinity
         double I = Double.NEGATIVE_INFINITY;
-        double[] epfd = new double[]{Double.NEGATIVE_INFINITY};
+        ArrayList<Double> epfd = new ArrayList<Double>(); // Negative_Infinity
         double EPFD = Double.NEGATIVE_INFINITY;
 
-        if (interferingSystem != null) {
-            i = SystemUtils.negativeInf(nNet);
-            epfd = SystemUtils.negativeInf(nNet);
-            for (int iNet = 0; iNet < nNet; iNet++) {
-                // Assign frequency and propagation path length
-                double f_i = trnStns_i[iNet].getEmission().getFreq_mhz();
-                double d_i_i = computeDistance(trnStns_i_r_ger[iNet], rcvStns_i_r_ger[iNet]);
-                double d_i_w = computeDistance(trnStns_i_r_ger[iNet], rcvStn_w_r_ger);
+        for (Network network : interferingSystem.get_networks()){
 
-                // Assign power density, transmit and receive gain, and
-                // propagation path and spreading loss
-                    if isa(trnStns_i(iNet).transmitAntenna.pattern, "SampledPattern")
-                            [phi_t_i, azm_r_w, elv_r_w] =Link.computeAngles(
-                            trnStns_i(iNet), trnStns_i_r_ger {
-                        iNet
-                    },rcvStns_i_r_ger {
-                        iNet
-                    },rcvStn_w_r_ger);
-                    G_t_i = trnStns_i(iNet).transmitAntenna.pattern.gain(
-                            phi_t_i, azm_r_w, elv_r_w, trnStns_i(iNet).transmitAntenna.options {:});
-            else
-                    theta_t_i = Link.computeTheta(
-                            trnStns_i_r_ger {
-                        iNet
-                    },rcvStns_i_r_ger {
-                        iNet
-                    },rcvStn_w_r_ger);
-                    G_t_i = trnStns_i(iNet).transmitAntenna.pattern.gain(
-                            theta_t_i, trnStns_i(iNet).transmitAntenna.options {:});
-
-                    end         // if
-                double SL_i_w = Propagation.computeSL(d_i_w);
-                    if isa(rcvStn_w.receiveAntenna.pattern, "SampledPattern")
-                            [phi_r_w, azm_t_i, elv_t_i] =Link.computeAngles(
-                            rcvStn_w, rcvStn_w_r_ger, trnStn_w_r_ger, trnStns_i_r_ger {
-                        iNet
-                    });
-                    G_r_w = rcvStn_w.receiveAntenna.pattern.gain(
-                            phi_r_w, azm_t_i, elv_t_i, rcvStn_w.receiveAntenna.options {:});
-
-          else
-                    theta_r_w = Link.computeTheta(
-                            rcvStn_w_r_ger, trnStn_w_r_ger, trnStns_i_r_ger {
-                        iNet
-                    });
-                    G_r_w = rcvStn_w.receiveAntenna.pattern.gain(
-                            theta_r_w, rcvStn_w.receiveAntenna.options {:});
-
-                    end         // if
-            }
         }
 
-        if ~isempty(trnStns_i(iNet).emission.pwr_flx_ds)
-        if isa(trnStns_i(iNet).transmitAntenna.pattern, "SampledPattern")
-        G_t_i_0 = trnStns_i(iNet).transmitAntenna.pattern.gain(
-                phi_t_i, 0, phi_t_i, trnStns_i(iNet).transmitAntenna.options {:});
-
-            else
-        G_t_i_0 = trnStns_i(iNet).transmitAntenna.pattern.gain(
-                0, trnStns_i(iNet).transmitAntenna.options {:});
-
-        end         // if
-                SL_i_i = Propagation.computeSL(d_i_i);
-        PD_i = trnStns_i(iNet).emission.pwr_flx_ds - G_t_i_0 + SL_i_i;
-
-          else
-        PD_i = trnStns_i(iNet).emission.pwr_ds_max;
-
-        end         // if
-                ML_i = 10 * log10(trnStnsBms_i(iNet).divisions);
-        DCL_i = 10 * log10(100 / trnStnsBms_i(iNet).dutyCycle);
-        PL_i = Propagation.computeFSL(f_i, d_i_w);
-
-        // Compute interference power density
-        i(iNet) = PD_i - ML_i - DCL_i + G_t_i - PL_i + G_r_w
-                + 10 * log10(numSmpES * numSmpBm);         // Due to sampling
-        I = 10 * log10(10 ^ (I / 10) + 10 ^ (i(iNet) / 10));
-
-        // Compute equivalent power flux density
-        epfd(iNet) = PD_i - ML_i - DCL_i + G_t_i - SL_i_w + G_r_w - G_r_w_0 + 10 * log10(ref_bw * 1000)
-                + 10 * log10(numSmpES * numSmpBm);         // Due to sampling
-        EPFD = 10 * log10(10 ^ (EPFD / 10) + 10 ^ (epfd(iNet) / 10));
-
-        end         // for
-
-                    end         // if
-
-            // Assign carrier, noise, and interference power density
-            performance = Performance(C, N, i, I, epfd, EPFD);
-
-            end
-END */
-        return null;
+        return new Performance();
     }
-
 
     /**
      * Determines if Link properties are empty, or not.
@@ -716,133 +584,79 @@ END */
     }
 
     /**
-     * Finds index of each Earth station which is visible to at least
-     * one space station, and conversely.
+     * Find if Earth station is visible to space station, and conversely.
      *
-     * @param earthStations Earth stations with which visibility is
+     * @param earthStation Earth station with which visibility is
      *                      determined
-     * @param spaceStations Space stations with which visibility is
+     * @param spaceStation Space station with which visibility is
      *                      determined
      * @param dNm           Date number at which the position vectors occur
+     *
+     * @return boolean
      */
-    public Object[] findIdxVisEStoSS(EarthStation[] earthStations, SpaceStation[] spaceStations, ModJulianDate dNm) {
+    public boolean findIdxVisEStoSS(EarthStation earthStation, SpaceStation spaceStation, ModJulianDate dNm) {
 
-        ArrayList<Integer> idxVisES = new ArrayList<Integer>();
-        ArrayList<Integer> idxVisSS = new ArrayList<Integer>();
 
-        int nSS = spaceStations.length;
-        int nES = earthStations.length;
+        Matrix r_ger_ES = earthStation.compute_r_ger(dNm);
+        Matrix r_ger_SS = null;
 
-        Matrix[] r_ger_ES = new Matrix[nES];
-        for (int iES = 0; iES < nES; iES++) {
-            r_ger_ES[iES] = earthStations[iES].compute_r_ger(dNm);
+        try {
+            r_ger_SS = spaceStation.compute_r_ger(dNm);
+        } catch (ObjectDecayed objectDecayed) {
+            objectDecayed.printStackTrace();
         }
 
-        Matrix[] r_ger_SS = new Matrix[nSS];
-        for (int iSS = 0; iSS < nSS; iSS++) {
-            try {
-                r_ger_SS[iSS] = spaceStations[iSS].compute_r_ger(dNm);
-            } catch (ObjectDecayed objectDecayed) {
-                objectDecayed.printStackTrace();
-            }
+        double theta = System.computeAngleFromZenith(r_ger_SS, r_ger_ES);
 
-            for (int iES = 0; iES < nES; iES++) {
-                double theta = System.computeAngleFromZenith(r_ger_SS[iSS], r_ger_ES[iES]);
-
-                if (theta < 90) {
-                    if (!idxVisES.contains(iES)) {
-                        idxVisES.add(iES);
-                    }
-                    if (!idxVisSS.contains(iSS)) {
-                        idxVisSS.add(iSS);
-                    }
-                }
-            }
+        if (theta < 90) {
+            return true;
+        } else {
+            return false;
         }
-        return new Object[]{idxVisES.toArray(), idxVisSS.toArray(), r_ger_SS};
     }
 
     /**
-     * Finds index of each space station in the first array of space
-     * stations which is visible to at least one space station in the
-     * second array of space stations, and conversely.
+     * Find if first space station is visible to second space station, and conversely.
      *
-     * @param spaceStationsA First array space stations with which
+     * @param spaceStation_A First space station with which
      *                       visibility is determined
-     * @param spaceStationsB Second array of space stations with which
+     * @param spaceStation_B Second space station with which
      *                       visibility is determined
      * @param dNm            Date number at which the position vectors occur
      */
-    //TODO: Fix method with Will
-    public Object[] findIdxVisSStoSS(Station[] spaceStationsA, Station[] spaceStationsB, ModJulianDate dNm) {
-        if (!(spaceStationsA instanceof SpaceStation[])) {
-            throw new MException("Springbok:IllegalArgumentException",
-                    "Input must be an array of class 'SpaceStation' instances");
+    public boolean findIdxVisSStoSS(Station spaceStation_A, Station spaceStation_B, ModJulianDate dNm) {
+
+        Matrix r_ger_SS_A = null;
+        Matrix d_ger_SS_A = null;
+        double alpha_A = 0.0;
+        try {
+            r_ger_SS_A = spaceStation_A.compute_r_ger(dNm);
+            d_ger_SS_A = new Matrix(1, 1, Math.sqrt(r_ger_SS_A.transpose().times(r_ger_SS_A)
+                    .get(0, 0)));
+            alpha_A = Math.toDegrees(Math.acos(1.0 / d_ger_SS_A.get(0, 0)));
+        } catch (ObjectDecayed objectDecayed) {
+            objectDecayed.printStackTrace();
         }
 
-        if (!(spaceStationsB instanceof EarthStation[])) {
-            throw new MException("Springbok:IllegalArgumentException",
-                    "Input must be an array of class 'SpaceStation' instances");
+        Matrix r_ger_SS_B = null;
+        Matrix d_ger_SS_B = null;
+        double alpha_B = 0.0;
+        try {
+            r_ger_SS_B = spaceStation_B.compute_r_ger(dNm);
+            d_ger_SS_B = new Matrix(1, 1, Math.sqrt(r_ger_SS_B.transpose().times(r_ger_SS_B)
+                    .get(0, 0)));
+            alpha_B = Math.toDegrees(Math.acos(1.0 / d_ger_SS_B.get(0, 0)));
+        } catch (ObjectDecayed objectDecayed) {
+            objectDecayed.printStackTrace();
         }
 
-        int nSS_A = spaceStationsA.length;
-        Matrix[] r_ger_SS_A = new Matrix[nSS_A];
-        Matrix[] d_ger_SS_A = new Matrix[nSS_A];
-        double[] alpha = new double[nSS_A];
-        for (int iSS_A = 0; iSS_A < nSS_A; iSS_A++) {
-            try {
-                r_ger_SS_A[iSS_A] = ((SpaceStation) spaceStationsA[iSS_A]).compute_r_ger(dNm);
-                d_ger_SS_A[iSS_A] = new Matrix(1, 1, Math.sqrt(r_ger_SS_A[iSS_A].transpose().times(r_ger_SS_A[iSS_A])
-                        .get(0, 0)));
-                alpha[iSS_A] = Math.toDegrees(Math.acos(1.0 / d_ger_SS_A[iSS_A].get(0, 0)));
-            } catch (ObjectDecayed objectDecayed) {
-                objectDecayed.printStackTrace();
-            }
+        double theta = Math.toDegrees(Math.acos((r_ger_SS_A.arrayRightDivide(d_ger_SS_A)).transpose()
+                .times(r_ger_SS_B.arrayRightDivide(d_ger_SS_B)).get(0, 0)));
+        if (theta < alpha_A + alpha_B) {
+            return true;
+        } else {
+            return false;
         }
-
-
-        int nSS_B = spaceStationsB.length;
-        Matrix[] r_ger_SS_B = new Matrix[nSS_B];
-        Matrix[] d_ger_SS_B = new Matrix[nSS_B];
-        double[] beta = new double[nSS_B];
-        for (int iSS_B = 0; iSS_B < nSS_B; iSS_B++) {
-            try {
-                r_ger_SS_B[iSS_B] = ((SpaceStation) spaceStationsB[iSS_B]).compute_r_ger(dNm);
-                d_ger_SS_B[iSS_B] = new Matrix(1, 1, Math.sqrt(r_ger_SS_B[iSS_B].transpose().times(r_ger_SS_B[iSS_B]).get(0, 0)));
-                beta[iSS_B] = Math.toDegrees(Math.acos(1.0 / d_ger_SS_B[iSS_B].get(0, 0)));
-            } catch (ObjectDecayed objectDecayed) {
-                objectDecayed.printStackTrace();
-            }
-
-        }
-
-        int[][] idxVisSS_A = new int[nSS_A][nSS_B];
-        int[][] idxVisSS_B = new int[nSS_A][nSS_B];
-
-        for (int iSS_A = 0; iSS_A < nSS_A; iSS_A++) {
-            int[] tmpVisSS_A = new int[nSS_B];
-            int[] tmpVisSS_B = new int[nSS_B];
-
-            for (int iSS_B = 0; iSS_B < nSS_B; iSS_B++) {
-                double theta = Math.toDegrees(Math.acos((r_ger_SS_A[iSS_A].arrayRightDivide(d_ger_SS_A[iSS_A])).transpose()
-                        .times(r_ger_SS_B[iSS_B].arrayRightDivide(d_ger_SS_B[iSS_B])).get(0, 0)));
-                if (theta < alpha[iSS_A] + beta[iSS_B]) {
-                    tmpVisSS_A[iSS_B] = iSS_A;
-                    tmpVisSS_B[iSS_B] = iSS_B;
-                }
-            }
-
-            idxVisSS_A[iSS_A] = tmpVisSS_A;
-            idxVisSS_B[iSS_A] = tmpVisSS_B;
-        }
-
-        idxVisSS_A = SystemUtils.findUniqueBiggerThenZero(idxVisSS_A);
-        idxVisSS_B = SystemUtils.findUniqueBiggerThenZero(idxVisSS_B);
-
-        idxVisSS_A = SystemUtils.reshape(idxVisSS_A, 1, idxVisSS_A.length);
-        idxVisSS_B = SystemUtils.reshape(idxVisSS_B, 1, idxVisSS_B.length);
-
-        return new Object[]{idxVisSS_A, idxVisSS_B, r_ger_SS_A, r_ger_SS_B};
     }
 
 

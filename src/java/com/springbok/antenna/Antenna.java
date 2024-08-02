@@ -15,6 +15,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.springbok.antenna;
 
+import com.springbok.pattern.Pattern;
+
+import java.util.Map;
+
 /**
  * Describes a space or an Earth station antenna.
  *
@@ -41,6 +45,15 @@ public class Antenna {
         this.set_name(name);
         this.set_gain(gain);
         this.set_noise_t(Double.NaN);
+    }
+
+    //TODO: Clean up these get methods
+    public Pattern get_pattern() {
+        return null;
+    }
+
+    public Map get_options() {
+        return null;
     }
 
     /**
