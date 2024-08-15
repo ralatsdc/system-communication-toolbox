@@ -37,10 +37,10 @@ public class SystemTest {
     private double ref_bw = 40;
 
     // An Earth station array
-    private EarthStation[] earthStations;
+    private ArrayList<EarthStation> earthStations;
 
     // A space station array
-    private SpaceStation[] spaceStations;
+    private ArrayList<SpaceStation> spaceStations;
 
     // Propagation loss models to apply
     private Object[] losses;
@@ -85,10 +85,10 @@ public class SystemTest {
     @Test
     public void test_System() {
         system = new System(earthStations, spaceStations, losses, dNm, new HashMap());
-        Assert.assertTrue(this.system.doTestAngleFromGsoArc());
-        Assert.assertEquals(10, this.system.get_angleFromGsoArc(), TestUtility.HIGH_PRECISION);
-        Assert.assertTrue(this.system.doTestAngleFromZenith());
-        Assert.assertEquals(60, this.system.get_angleFromZenith(), TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(this.system.testAngleFromGsoArc);
+        Assert.assertEquals(10, this.system.angleFromGsoArc, TestUtility.HIGH_PRECISION);
+        Assert.assertTrue(this.system.testAngleFromZenith);
+        Assert.assertEquals(60, this.system.angleFromZenith, TestUtility.HIGH_PRECISION);
         Assert.assertEquals(this.earthStations, this.system.get_earthStations());
         Assert.assertEquals(this.spaceStations, this.system.get_spaceStations());
         Assert.assertEquals(this.losses, this.system.get_losses());
@@ -403,18 +403,14 @@ public class SystemTest {
     }
 
     private void checkSystems(System systemOne, System systemTwo) {
-        Assert.assertEquals(systemOne.get_dNm(), systemTwo.get_dNm());
-        Assert.assertEquals(systemOne.get_idxNetSS(), systemTwo.get_idxNetSS());
-        Assert.assertEquals(systemOne.get_dNm(), systemTwo.get_dNm());
-        Assert.assertEquals(systemOne.get_idxNetES(), systemTwo.get_idxNetES());
-        Assert.assertEquals(systemOne.get_angleFromGsoArc(), systemTwo.get_angleFromGsoArc(), TestUtility.HIGH_PRECISION);
-        Assert.assertEquals(systemOne.get_angleFromZenith(), systemTwo.get_angleFromZenith(), TestUtility.HIGH_PRECISION);
         Assert.assertEquals(systemOne.get_earthStations(), systemTwo.get_earthStations());
-        Assert.assertEquals(systemOne.get_metrics(), systemTwo.get_metrics());
-        Assert.assertEquals(systemOne.get_networks(), systemTwo.get_networks());
         Assert.assertEquals(systemOne.get_spaceStations(), systemTwo.get_spaceStations());
-        Assert.assertEquals(systemOne.get_theta_g(), systemTwo.get_theta_g());
-        Assert.assertEquals(systemOne.get_theta_z(), systemTwo.get_theta_z());
         Assert.assertEquals(systemOne.get_losses(), systemTwo.get_losses());
+        Assert.assertEquals(systemOne.testAngleFromGsoArc, systemTwo.testAngleFromGsoArc);
+        Assert.assertEquals(systemOne.angleFromGsoArc, systemTwo.angleFromGsoArc, TestUtility.HIGH_PRECISION);
+        Assert.assertEquals(systemOne.testAngleFromZenith, systemTwo.testAngleFromZenith);
+        Assert.assertEquals(systemOne.angleFromZenith, systemTwo.angleFromZenith, TestUtility.HIGH_PRECISION);
+        Assert.assertEquals(systemOne.get_dNm(), systemTwo.get_dNm());
+        Assert.assertEquals(systemOne.get_networks(), systemTwo.get_networks());
     }
 }

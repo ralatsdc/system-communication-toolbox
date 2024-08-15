@@ -43,13 +43,13 @@ public class System {
     private Object[] losses;
 
     // Flag for avoiding GSO arc
-    private final boolean testAngleFromGsoArc;
+    public final boolean testAngleFromGsoArc;
     // Angle for avoiding GSO arc
-    private final double angleFromGsoArc;
+    public final double angleFromGsoArc;
     // Flag for avoiding low passes
-    private final boolean testAngleFromZenith;
+    public final boolean testAngleFromZenith;
     // Angle for avoiding low passes
-    private final double angleFromZenith;
+    public final double angleFromZenith;
 
     // Current date number
     private ModJulianDate dNm;
@@ -260,6 +260,15 @@ public class System {
             spaceStationBeams.add(network.get_spaceStationBeam());
         }
         return spaceStationBeams;
+    }
+
+    /**
+     * Gets assigned dNm.
+     *
+     * @return assigned dNm as ModJulianDate.
+     */
+    public ModJulianDate get_dNm() {
+        return this.dNm;
     }
 
     /**
