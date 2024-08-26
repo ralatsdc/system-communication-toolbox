@@ -30,10 +30,7 @@ import com.springbok.twobody.KeplerianOrbit;
 import com.springbok.twobody.ModJulianDate;
 import com.springbok.utility.TimeUtility;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Gso_gso {
     public static SpaceStation getWntGsoSpaceSegment(ModJulianDate epoch_0) {
@@ -163,8 +160,8 @@ public class Gso_gso {
         options.put("TestAngleFromGsoArc", false);
 
         return new System(
-                new EarthStation[]{earthStation},
-                new SpaceStation[]{spaceStation},
+                new ArrayList<EarthStation>(Arrays.asList(earthStation)),
+                new ArrayList<SpaceStation>(Arrays.asList(spaceStation)),
                 losses,
                 new ModJulianDate(epoch_0),
                 options
@@ -475,7 +472,7 @@ public class Gso_gso {
         options.put("TestAngleFromGsoArc", 0);
 
         Object[] losses = new Object[0];
-        return new System(new EarthStation[]{earthStation}, new SpaceStation[]{spaceStation}, losses, new ModJulianDate(epoch_0), options);
+        return new System(new ArrayList<EarthStation>(Arrays.asList(earthStation)), new ArrayList<SpaceStation>(Arrays.asList(spaceStation)), losses, new ModJulianDate(epoch_0), options);
     }
 
     public static EarthStation getWntGsoEarthSegment(SpaceStation spaceStation) {
@@ -584,7 +581,7 @@ public class Gso_gso {
                 lambda, doMultiplexing);
     }
 
-    public static SpaceStation[] getIntLeoSpaceSegment(ModJulianDate epoch_0) {
+    public static ArrayList<SpaceStation> getIntLeoSpaceSegment(ModJulianDate epoch_0) {
 
         // = Interfering system
         // == Space stations
@@ -671,7 +668,7 @@ public class Gso_gso {
         String method = "halley"; //Method to solve Kepler "s equation: " newton " or " halley
 
         int nBeams = 4;
-        List<SpaceStation> spaceStations = new ArrayList<>();
+        ArrayList<SpaceStation> spaceStations = new ArrayList<>();
         int d_Omega = 360 / 30;
         int d_M = 360 / 30;
         for (int delta_Omega = 0; delta_Omega < (360 - d_Omega) * (Math.PI / 180); delta_Omega += d_Omega) {
@@ -688,10 +685,10 @@ public class Gso_gso {
                         new KeplerianOrbit(a, e, i, Omega + delta_Omega, omega, M + delta_M, epoch, method)));
             }
         }
-        return spaceStations.toArray(new SpaceStation[spaceStations.size()]);
+        return spaceStations;
     }
 
-    public static EarthStation[] getIntLeoEarthSegment(SpaceStation spaceStation) {
+    public static ArrayList<EarthStation> getIntLeoEarthSegment(SpaceStation spaceStation) {
 
         //= Interfering system
         //== Earth stations
@@ -792,7 +789,7 @@ public class Gso_gso {
         double lambda = lla.get(1,0);   //Longitude[rad]
         boolean doMultiplexing = false;        //Flag indicating whether to do multiplexing, or not
 
-        List<EarthStation> earthStations = new ArrayList<>();
+        ArrayList<EarthStation> earthStations = new ArrayList<>();
         double d_angle = 12;
         for (int d_varphi = 0; d_varphi < (24 - d_angle) * (Math.PI / 180); d_varphi+=d_angle) {
             for (int d_lambda = 0; d_lambda < (60 - d_angle) * (Math.PI / 180); d_lambda++) {
@@ -805,6 +802,6 @@ public class Gso_gso {
                         varphi + d_varphi, lambda + d_lambda, doMultiplexing));
             }
         }
-        return earthStations.toArray(new EarthStation[earthStations.size()]);
+        return earthStations;
     }
 }

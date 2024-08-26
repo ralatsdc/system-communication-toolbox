@@ -239,7 +239,7 @@ public class Link {
             // ...for the IS case. Use a loop to auto cast.
             for (SpaceStation spaceStation : interferingSystem.get_assignedSpaceStations()) {
                 SpaceStation trnStn_i = spaceStation;
-                boolean isVis = Link.findIdxVisSStoSS((SpaceStation) rcvStn_w, trnStn_i, dNm);
+                boolean isVis = Link.isVisSStoSS((SpaceStation) rcvStn_w, trnStn_i, dNm);
                 if (isVis) {
                     trnStns_i.add(trnStn_i);
                 }
@@ -261,7 +261,7 @@ public class Link {
                 isUpLink = true;
                 for (EarthStation earthStation : interferingSystem.get_assignedEarthStations()) {
                     EarthStation trnStn_i = earthStation;
-                    boolean isVis = Link.findIdxVisEStoSS(trnStn_i, (SpaceStation) rcvStn_w, dNm);  // No cast required
+                    boolean isVis = Link.isVisEStoSS(trnStn_i, (SpaceStation) rcvStn_w, dNm);  // No cast required
                     if (isVis) {
                         trnStns_i.add(trnStn_i);
                     }
@@ -281,7 +281,7 @@ public class Link {
                 isUpLink = false;
                 for (SpaceStation spaceStation : interferingSystem.get_assignedSpaceStations()) {
                     SpaceStation trnStn_i = spaceStation;
-                    boolean isVis = Link.findIdxVisEStoSS((EarthStation) rcvStn_w, trnStn_i, dNm);
+                    boolean isVis = Link.isVisEStoSS((EarthStation) rcvStn_w, trnStn_i, dNm);
                     if (isVis) {
                         trnStns_i.add(trnStn_i);
                     }
@@ -457,7 +457,7 @@ public class Link {
      * @param dNm          Date number at which the position vectors occur
      * @return boolean
      */
-    public static boolean findIdxVisEStoSS(EarthStation earthStation, SpaceStation spaceStation, ModJulianDate dNm) {
+    public static boolean isVisEStoSS(EarthStation earthStation, SpaceStation spaceStation, ModJulianDate dNm) {
 
         Matrix r_ger_ES = earthStation.compute_r_ger(dNm);
         Matrix r_ger_SS = null;
@@ -482,7 +482,7 @@ public class Link {
      *                       visibility is determined
      * @param dNm            Date number at which the position vectors occur
      */
-    public static boolean findIdxVisSStoSS(SpaceStation spaceStation_A, SpaceStation spaceStation_B, ModJulianDate dNm) {
+    public static boolean isVisSStoSS(SpaceStation spaceStation_A, SpaceStation spaceStation_B, ModJulianDate dNm) {
 
         Matrix r_ger_SS_A = null;
         Matrix d_ger_SS_A = null;
